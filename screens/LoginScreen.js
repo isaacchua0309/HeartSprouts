@@ -13,6 +13,10 @@ const LoginScreen = ({ navigation }) => {
     navigation.goBack();
   };
 
+  function signInHandler(){
+    navigation.navigate('Home');
+  }
+
   return (
     <SafeAreaView style={styles.container}>
       <TouchableOpacity onPress={goBack} style={styles.backButton}>
@@ -41,7 +45,7 @@ const LoginScreen = ({ navigation }) => {
             <Text style={styles.resetPassword}> Reset Password</Text>
           </TouchableOpacity>
         </View>
-        <TouchableOpacity style={styles.signInButton}>
+        <TouchableOpacity style={styles.signInButton} onPress={signInHandler}>
           <Text style={styles.signInText}>SIGN IN</Text>
         </TouchableOpacity>
       </View>
