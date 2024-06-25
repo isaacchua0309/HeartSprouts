@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, SafeAreaView } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
+import Colors from '../constants/colors';
 
 const LoginScreen = ({ navigation }) => {
   const [passwordVisible, setPasswordVisible] = useState(false);
@@ -22,13 +23,13 @@ const LoginScreen = ({ navigation }) => {
         <TextInput 
           style={styles.input}
           placeholder="Email"
-          placeholderTextColor="#9A9A9A"
+          placeholderTextColor={Colors.white700}
         />
         <View style={styles.passwordContainer}>
           <TextInput 
             style={styles.passwordInput}
             placeholder="Password"
-            placeholderTextColor="#9A9A9A"
+            placeholderTextColor={Colors.white700}
             secureTextEntry={!passwordVisible}
           />
           <TouchableOpacity onPress={togglePasswordVisibility} style={styles.eyeIcon}>
@@ -38,7 +39,7 @@ const LoginScreen = ({ navigation }) => {
         <View style={styles.forgotPasswordContainer}>
           <Text style={styles.forgotPassword}>Forgot Password?</Text>
           <TouchableOpacity onPress={() => alert('Reset Password Pressed')}>
-            <Text style={styles.resetPassword}> Reset Password</Text>
+            <Text style={styles.resetPassword}>    Reset Password</Text>
           </TouchableOpacity>
         </View>
         <TouchableOpacity style={styles.signInButton}>
@@ -52,7 +53,7 @@ const LoginScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#1A1A2E',
+    backgroundColor: Colors.green500,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -66,7 +67,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   input: {
-    backgroundColor: '#0E0E1F',
+    backgroundColor: Colors.green700,
     color: '#FFFFFF',
     width: '100%',
     height: 50,
@@ -77,7 +78,7 @@ const styles = StyleSheet.create({
   passwordContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#0E0E1F',
+    backgroundColor: Colors.green700,
     width: '100%',
     height: 50,
     borderRadius: 25,
@@ -97,13 +98,13 @@ const styles = StyleSheet.create({
     marginBottom: 30,
   },
   forgotPassword: {
-    color: '#9A9A9A',
+    color: Colors.black300
   },
   resetPassword: {
-    color: '#FFFFFF',
+    color: Colors.white700
   },
   signInButton: {
-    backgroundColor: '#F2D492',
+    backgroundColor: Colors.pink500,
     width: '100%',
     height: 50,
     borderRadius: 25,
@@ -111,7 +112,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   signInText: {
-    color: '#000000',
+    color: Colors.black300,
     fontSize: 18,
   },
 });

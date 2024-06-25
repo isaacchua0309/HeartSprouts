@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
+import Colors from '../constants/colors';
 
 function PassWordInputScreen({ navigation,route }) {
   const [password, setPassword] = useState('');
@@ -53,7 +54,7 @@ function PassWordInputScreen({ navigation,route }) {
           <TextInput
             style={styles.input}
             placeholder="Password"
-            placeholderTextColor="#aaa"
+            placeholderTextColor={Colors.white700}
             secureTextEntry={!isPasswordVisible}
             value={password}
             onChangeText={handlePasswordChange}
@@ -74,7 +75,7 @@ function PassWordInputScreen({ navigation,route }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#1B0638',
+    backgroundColor: Colors.green500,
     padding: 20,
   },
   header: {
@@ -86,6 +87,7 @@ const styles = StyleSheet.create({
   progressBar: {
     flexDirection: 'row',
     alignItems: 'center',
+    paddingRight: 32
   },
   progressStep: {
     flex: 1,
@@ -107,7 +109,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     textAlign: 'center',
-    marginBottom: 10,
+    marginBottom: 16,
   },
   validationContainer: {
     flexDirection: 'row',
@@ -120,8 +122,11 @@ const styles = StyleSheet.create({
     margin: 4,
     paddingVertical: 4,
     paddingHorizontal: 8,
+    borderWidth: 2,
     borderRadius: 12,
+    borderColor: '#333',
     backgroundColor: '#333',
+    overflow: 'hidden'
   },
   valid: {
     backgroundColor: '#28a745',
@@ -129,14 +134,14 @@ const styles = StyleSheet.create({
   inputContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#333',
-    borderRadius: 25,
+    backgroundColor: Colors.green700,
+    borderRadius: 24,
     padding: 10,
     paddingHorizontal: 20,
   },
   input: {
     flex: 1,
-    color: '#fff',
+    color: Colors.white70,
     fontSize: 16,
   },
   sendButton: {

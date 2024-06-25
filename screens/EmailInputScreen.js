@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TextInput, Pressable, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons'; // Ensure you have react-native-vector-icons installed
+import Colors from '../constants/colors';
 
 function EmailInputScreen({navigation, route}){
   const [email, setEmail] = useState('');
@@ -27,7 +28,7 @@ function EmailInputScreen({navigation, route}){
         <TextInput
           style={styles.input}
           placeholder="Email"
-          placeholderTextColor="#aaa"
+          placeholderTextColor={Colors.white700}
           keyboardType="email-address"
           value = {email}
           onChangeText={setEmail}
@@ -43,7 +44,7 @@ function EmailInputScreen({navigation, route}){
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#1B0638',
+        backgroundColor: Colors.green500,
         padding: 20,
       },
       header: {
@@ -55,6 +56,7 @@ const styles = StyleSheet.create({
       progressBar: {
         flexDirection: 'row',
         alignItems: 'center',
+        paddingRight: 32
       },
       progressStep: {
         flex:1,
@@ -76,12 +78,12 @@ const styles = StyleSheet.create({
         fontSize: 24,
         fontWeight: 'bold',
         textAlign: 'center',
-        marginBottom: 10,
+        marginBottom: 20,
       },
       inputContainer: {
         flexDirection: 'row',
         alignItems: 'center',
-        backgroundColor: '#333',
+        backgroundColor: Colors.green700,
         borderRadius: 25,
         padding: 10,
         paddingHorizontal: 20,

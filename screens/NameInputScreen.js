@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TextInput, Pressable, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons'; // Ensure you have react-native-vector-icons installed
+import Colors from '../constants/colors';
 
 function NameInputScreen({navigation}){
     const [name, setName] = useState('');
@@ -30,7 +31,7 @@ function NameInputScreen({navigation}){
         <TextInput
           style={styles.input}
           placeholder="Jane Doe"
-          placeholderTextColor="#aaa"
+          placeholderTextColor={Colors.white700}
           onChangeText={setName}
           value = {name}
         />
@@ -46,7 +47,7 @@ function NameInputScreen({navigation}){
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#1B0638',
+        backgroundColor: Colors.green500,
         padding: 20,
       },
       header: {
@@ -58,6 +59,7 @@ const styles = StyleSheet.create({
       progressBar: {
         flexDirection: 'row',
         alignItems: 'center',
+        paddingRight: 32
       },
       progressStep: {
         flex:1,
@@ -75,30 +77,31 @@ const styles = StyleSheet.create({
         alignItems: 'center',
       },
       title: {
-        color: '#fff',
+        color: Colors.white500,
         fontSize: 24,
         fontWeight: 'bold',
         textAlign: 'center',
         marginBottom: 10,
       },
       subtitle: {
-        color: '#aaa',
+        color: Colors.pink500,
         fontSize: 16,
         textAlign: 'center',
         marginBottom: 30,
         paddingHorizontal: 20,
+        fontWeight: '600'
       },
       inputContainer: {
         flexDirection: 'row',
         alignItems: 'center',
-        backgroundColor: '#333',
+        backgroundColor: Colors.green700,
         borderRadius: 25,
         padding: 10,
         paddingHorizontal: 20,
       },
       input: {
         flex: 1,
-        color: '#fff',
+        color: Colors.white500,
         fontSize: 16,
       },
       sendButton: {

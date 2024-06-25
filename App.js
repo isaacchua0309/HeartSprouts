@@ -9,12 +9,13 @@ import EmailInputScreen from './screens/EmailInputScreen';
 import PassWordInputScreen from './screens/PasswordInputScreen';
 import CreationSuccessScreen from './screens/CreationSuccessScreen';
 import LoginScreen from './screens/LoginScreen';
+import Colors from './constants/colors';
 
 const Stack = createStackNavigator();
 
 export default function App() {
   return (
-    
+    <View style={styles.rootScreen}>
     <NavigationContainer>
       <SafeAreaView style = {{flex:1}}>
         <Stack.Navigator screenOptions={{headerShown:false}}>
@@ -28,6 +29,7 @@ export default function App() {
         </Stack.Navigator>
       </SafeAreaView>
     </NavigationContainer>
+    </View>
   );
 }
 
@@ -38,4 +40,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  rootScreen: {
+    flex: 1,
+    backgroundColor: Colors.green500
+  }
 });

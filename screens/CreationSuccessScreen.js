@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import Colors from '../constants/colors';
 
 function CreationSuccessScreen(){
     function handlePress() {
@@ -19,7 +20,7 @@ function CreationSuccessScreen(){
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#1B0638',
+        backgroundColor: Colors.green500,
         justifyContent: 'center',
         alignItems: 'center',
         padding: 20,
