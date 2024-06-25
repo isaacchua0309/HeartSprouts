@@ -10,6 +10,8 @@ import PassWordInputScreen from './screens/PasswordInputScreen';
 import CreationSuccessScreen from './screens/CreationSuccessScreen';
 import LoginScreen from './screens/LoginScreen';
 import Colors from './constants/colors';
+import UserProfilesScreen from './screens/UserProfilesScreen';
+import HomeScreen from './screens/HomeScreen';
 
 const Stack = createStackNavigator();
 
@@ -21,6 +23,8 @@ export default function App() {
         <Stack.Navigator screenOptions={{headerShown:false}}>
           <Stack.Screen name = 'Getting Started' component = {GettingStartedScreen}/>
           <Stack.Screen name = 'Login' component = {LoginScreen}/>
+          <Stack.Screen name = 'Home' component = {HomeScreen}/>
+          <Stack.Screen name = 'Users' component = {UserProfilesScreen}/>
           <Stack.Screen name = 'Name Input' component = {NameInputScreen}/>
           <Stack.Screen name = 'Birthday Input' component = {BirthdayInputScreen}/>
           <Stack.Screen name = 'Email Input' component = {EmailInputScreen}/>
