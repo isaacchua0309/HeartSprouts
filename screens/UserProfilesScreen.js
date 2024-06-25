@@ -1,33 +1,34 @@
 import React from 'react';
 import { View, Text, Image, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
+import Icon from 'react-native-vector-icons/FontAwesome'; // Make sure to install this package
+
+const friends = [
+  { id: 1, name: 'Alice', status: 'Busy', image: 'link-to-image' },
+  { id: 2, name: 'Bob', status: 'Available', image: 'link-to-image' },
+  { id: 3, name: 'Charlie', status: 'At the gym', image: 'link-to-image' },
+  { id: 4, name: 'Dana', status: 'Sleeping', image: 'link-to-image' },
+];
 
 const UserProfilesScreen = ({navigation}) => {
   return (
     <ScrollView style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.headerText}>Fruits</Text>
+        <Text style={styles.headerText}>Close Friends</Text>
         <TouchableOpacity style={styles.searchButton}>
-          {/* Add search icon here */}
+          <Icon name="search" size={20} color="#fff" />
         </TouchableOpacity>
       </View>
       <View style={styles.featured}>
-        <Text style={styles.featuredText}>Featured in Fruits</Text>
-        <Text style={styles.discountText}>40% off</Text>
-      </View>
-      <View style={styles.filterSortContainer}>
-        <TouchableOpacity style={styles.filterButton}>
-          <Text>Filter</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.sortButton}>
-          <Text>Sort</Text>
-        </TouchableOpacity>
+        <Text style={styles.featuredText}>Catch up with Friends!</Text>
+        <Text style={styles.discountText}>Your personal connections</Text>
       </View>
       <View style={styles.productContainer}>
-        {[1, 2, 3, 4, 5, 6].map((item, index) => (
-          <View key={index} style={styles.productCard}>
-            <Text style={styles.productName}>Product Name</Text>
-            <Text style={styles.productPrice}>$25</Text>
-          </View>
+        {friends.map((friend, index) => (
+          <TouchableOpacity key={index} style={styles.productCard} onPress={() => alert(`Navigating to ${friend.name}'s profile`)}>
+            <Image style={styles.productImage} source={{ uri: friend.image }} />
+            <Text style={styles.productName}>{friend.name}</Text>
+            <Text style={styles.productPrice}>{friend.status}</Text>
+          </TouchableOpacity>
         ))}
       </View>
       <View style={styles.navBar}>
@@ -38,8 +39,8 @@ const UserProfilesScreen = ({navigation}) => {
         </TouchableOpacity>
         <TouchableOpacity 
           style={styles.navButton}
-          onPress={() => navigation.navigate('Users')}>
-          <Text style={styles.navText}>Another Screen</Text>
+          onPress={() => navigation.navigate('More Friends')}>
+          <Text style={styles.navText}>More Friends</Text>
         </TouchableOpacity>
       </View>
     </ScrollView>
@@ -63,17 +64,12 @@ const styles = StyleSheet.create({
     color: '#fff',
   },
   searchButton: {
-    // Add styles for the search button
+    padding: 5,
   },
   featured: {
     padding: 10,
     backgroundColor: '#4CAF50',
     alignItems: 'center',
-  },
-  featuredImage: {
-    width: 100,
-    height: 100,
-    marginBottom: 10,
   },
   featuredText: {
     fontSize: 18,
@@ -82,22 +78,6 @@ const styles = StyleSheet.create({
   discountText: {
     fontSize: 16,
     color: '#fff',
-  },
-  filterSortContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    padding: 10,
-    backgroundColor: '#fff',
-  },
-  filterButton: {
-    padding: 10,
-    backgroundColor: '#e0e0e0',
-    borderRadius: 5,
-  },
-  sortButton: {
-    padding: 10,
-    backgroundColor: '#e0e0e0',
-    borderRadius: 5,
   },
   productContainer: {
     flexDirection: 'row',
@@ -112,6 +92,11 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     alignItems: 'center',
     padding: 10,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.2,
+    shadowRadius: 1,
+    elevation: 2,
   },
   productImage: {
     width: 80,
