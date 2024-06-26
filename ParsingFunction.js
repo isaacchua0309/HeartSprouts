@@ -1,56 +1,47 @@
-// Import a date parsing library (date-fns)
-import { parse, format } from 'date-fns';
+const nlp = require('compromise');
+const chrono = require('chrono-node');
 
 // Function to parse dynamic input
 function parseDynamicInput(input) {
-  // Regular expression patterns
-  const datePatterns = [
-    /\b(\d{1,2}(?:st|nd|rd|th)?\s+of\s+\w+)\b/i, // 16th of June
-    /\b(\w+\s+\d{1,2}(?:st|nd|rd|th)?)\b/i,       // May 13th
-  ];
-  const userPattern = /\b(?:with|for|to)\s+(\w+)\b/i; // with Darren
-  const eventPattern = /^(.+?)\s+(?:on|at|by|in)\b/i; // Dinner with Darren
+  // Use chrono-node to parse dates
+  const parsedDate = chrono.parseDate(input);
+  const date = parsedDate ? parsedDate.toISOString().split('T')[0] : 'Unknown';
 
-  let date = null;
-  let user = null;
-  let eventName = null;
+  // Use compromise to process the text
+  const doc = nlp(input);
 
-  // Extract date
-  for (let pattern of datePatterns) {
-    const dateMatch = input.match(pattern);
-    if (dateMatch) {
-      date = parse(dateMatch[1], 'MMMM do', new Date());
-      if (isNaN(date)) {
-        date = parse(dateMatch[1], 'do MMMM', new Date());
+  // Extract user (assuming the user is a proper noun or noun after "with", "for", "to")
+  const userMatch = doc.match('(with|for|to) [#ProperNoun]').out('array');
+  const user = userMatch.length > 0 ? userMatch[0].split(' ')[1] : 'Unknown';
+
+  // Extract event name (everything before "on", "at", "by", "in" that is not a date)
+  const eventPrepositions = ['on', 'at', 'by', 'in'];
+  let eventName = input;
+  eventPrepositions.forEach(preposition => {
+    const prepositionIndex = input.toLowerCase().indexOf(` ${preposition} `);
+    if (prepositionIndex !== -1) {
+      const potentialEventName = input.substring(0, prepositionIndex).trim();
+      if (!chrono.parseDate(potentialEventName)) {
+        eventName = potentialEventName;
       }
-      break;
     }
-  }
+  });
 
-  // Extract user
-  const userMatch = input.match(userPattern);
-  if (userMatch) {
-    user = userMatch[1];
-  }
-
-  // Extract event name
-  const eventMatch = input.match(eventPattern);
-  if (eventMatch) {
-    eventName = eventMatch[1];
-  }
-
-  // Return the parsed data
   return {
-    user: user || 'Unknown',
-    date: date ? format(date, 'yyyy-MM-dd') : 'Unknown',
-    eventName: eventName || 'Unknown'
+    user,
+    date,
+    eventName,
   };
 }
 
 // Example usage
 const inputs = [
   "Dinner with Darren on May 13th",
-  "Darren's wedding on the 16th of June"
+  "Darren's wedding on the 16th of June",
+  "Meeting with Alice at 3 PM",
+  "Conference call with Bob on July 5th",
+  "Lunch with Sarah tomorrow",
+  "Project deadline on 10th August",
 ];
 
 inputs.forEach(input => {
