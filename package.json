@@ -16,6 +16,8 @@
     "@react-navigation/bottom-tabs": "^6.5.20",
     "@react-navigation/native": "^6.1.17",
     "@react-navigation/stack": "^6.3.29",
+    "chrono-node": "^2.7.6",
+    "compromise": "^14.13.0",
     "date-fns": "^3.6.0",
     "expo": "^51.0.14",
     "expo-linear-gradient": "~13.0.2",
