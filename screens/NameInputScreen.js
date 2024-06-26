@@ -25,7 +25,7 @@ function NameInputScreen({navigation}){
     <View style={styles.contentContainer}>
       <Text style={styles.title}>What’s your full name?</Text>
       <Text style={styles.subtitle}>
-        This is so your connections can recognize you when you have a convo with them on Agapé.
+        A nickname will do too, this is for other sprouts to connect and recognize you
       </Text>
       <View style={styles.inputContainer}>
         <TextInput

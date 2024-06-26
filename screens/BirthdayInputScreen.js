@@ -26,7 +26,7 @@ function BirthdayInputScreen({navigation,route}){
     <View style={styles.contentContainer}>
       <Text style={styles.title}>When is your birthday?</Text>
       <Text style={styles.subtitle}>
-        We use this to personalize your Agapé experience.
+        So we know when to give you a lil birthday gift :)
       </Text>
       <View style={styles.inputContainer}>
         <TextInput

@@ -22,7 +22,7 @@ function GettingStartedScreen({ navigation }) {
         </Pressable>
       </View>
       <View style={styles.contentContainer}>
-        <Text style={styles.mainText}>Welcome to HeartSprouts :)</Text>
+        <Text style={styles.mainText}>Welcome to HeartSprouts !</Text>
         <ImageBackground
           source={{ uri: 'https://your-image-url.com/image.png' }} // Replace with your image URL or local path
           style={styles.image}

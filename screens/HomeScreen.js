@@ -1,9 +1,8 @@
 // HomeScreen.js
 import React from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
-import parseDynamicInput from '../ParsingFunction'
 
-const HomeScreen = ({ navigation }) => {
+function HomeScreen({ navigation }){
   return (
     <View style={styles.container}>
       <Text style={styles.greeting}>Hi there! What's up?</Text>

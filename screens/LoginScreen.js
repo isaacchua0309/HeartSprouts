@@ -99,12 +99,14 @@ const styles = StyleSheet.create({
   forgotPasswordContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 30,
+    marginBottom: 20,
   },
   forgotPassword: {
+    fontWeight: 'bold',
     color: Colors.black300
   },
   resetPassword: {
+    fontWeight: 'bold',
     color: Colors.white700
   },
   signInButton: {
@@ -116,7 +118,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   signInText: {
-    color: Colors.black300,
+    fontWeight: 'semibold',
+    color: Colors.white300,
     fontSize: 18,
   },
 });
