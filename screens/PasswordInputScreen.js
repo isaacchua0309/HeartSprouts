@@ -3,6 +3,9 @@ import { View, Text, StyleSheet, TextInput, TouchableOpacity, Alert } from 'reac
 import Icon from 'react-native-vector-icons/Ionicons';
 import Colors from '../constants/colors';
 import { useDispatch } from 'react-redux';
+import { getAuth, createUserWithEmailAndPassword } from '@firebase/auth';
+import { signUp } from '../utils/actions/authActions';
+import { getFirebaseApp } from '../utils/firebaseHelper';
 
 function PassWordInputScreen({ navigation,route }) {
   const [password, setPassword] = useState('');
@@ -13,9 +16,9 @@ function PassWordInputScreen({ navigation,route }) {
   const [hasNumber, setHasNumber] = useState(false);
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
-  const [error, setError] = useState(null);
-  const dispatch = useDispatch();
-
+  const [loading, setLoading] = useState(false);
+  const app = getFirebaseApp();
+  const auth = getAuth(app);
 
   function nextScreenHandler() {
     if (hasEightCharacters && hasCapitalLetter && hasLowercaseLetter && hasNumber) {
@@ -26,14 +29,6 @@ function PassWordInputScreen({ navigation,route }) {
     }
   }
 
-  const signUpTestFn = () => {
-    auth().createUserWithEmailAndPassword("email", "password").then(() => {
-      Alert.alert("User Successfully Created")
-    })
-    .catch((err)=> {
-      console.log(err)
-    })
-  }
 
   function handlePasswordChange(input) {
     setPassword(input);
@@ -43,26 +38,17 @@ function PassWordInputScreen({ navigation,route }) {
     setHasNumber(/[0-9]/.test(input));
   }
 
-
-  const authHandler = async ()=>{
-    try{
-      setIsLoading(true);
-      const action = signUp(
-        name,
-        email,
-        password
-      );
-
-      await dispatch(action);
-
-      Alert.alert("Account Successfully Created", "Account Created")
-      setError(null);
-      setIsLoading(false);
-
-    }catch(error){
-      console.log(error);
-      setIsLoading(false);
-      setError(error.message);
+  async function register() {
+    setLoading(true)
+    try {
+      const auth = getAuth(app);
+      await createUserWithEmailAndPassword(auth, email, password);
+      setLoading(false);
+      nextScreenHandler();
+      return;
+    } catch (error) {
+      setLoading(false);
+      Alert.alert('Registration Failed!', 'Email has already been registered')
     }
   }
 
@@ -100,7 +86,7 @@ function PassWordInputScreen({ navigation,route }) {
           <TouchableOpacity onPress={() => setIsPasswordVisible(!isPasswordVisible)}>
             <Icon name={isPasswordVisible ? "eye-off" : "eye"} size={24} color="#fff" />
           </TouchableOpacity>
-          <TouchableOpacity style={styles.sendButton} onPress={nextScreenHandler}>
+          <TouchableOpacity style={styles.sendButton} onPress={register}>
             <Icon name="send" size={24} color="#fff" />
           </TouchableOpacity>
         </View>
