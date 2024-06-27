@@ -15,8 +15,7 @@ import UserProfilesScreen from './screens/UserProfilesScreen';
 import HomeScreen from './screens/HomeScreen';
 import Colors from './constants/colors';
 import { store } from './store/store';
-import { getFirebaseApp } from './utils/firebaseHelper';
-import { getAuth } from '@firebase/auth';
+import AddFriendScreen from './screens/AddFriendScreen'
 
 const Stack = createStackNavigator();
 
@@ -31,6 +30,7 @@ export default function App() {
               <Stack.Screen name="Login" component={LoginScreen} />
               <Stack.Screen name="Home" component={HomeScreen} />
               <Stack.Screen name="Users" component={UserProfilesScreen} />
+              <Stack.Screen name="Friend Creation" component={AddFriendScreen} />
               <Stack.Screen name="Name Input" component={NameInputScreen} />
               <Stack.Screen name="Birthday Input" component={BirthdayInputScreen} />
               <Stack.Screen name="Email Input" component={EmailInputScreen} />
