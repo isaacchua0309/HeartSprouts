@@ -19,9 +19,14 @@ const UserProfilesScreen = ({ navigation }) => {
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         <View style={styles.header}>
           <Text style={styles.headerText}>Close Friends</Text>
-          <TouchableOpacity style={styles.searchButton}>
-            <Icon name="search" size={20} color="#fff" />
-          </TouchableOpacity>
+          <View style={styles.headerButtons}>
+            <TouchableOpacity style={styles.addButton} onPress={() => navigation.navigate('Friend Creation')}>
+              <Icon name="plus" size={20} color="#fff" />
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.searchButton}>
+              <Icon name="search" size={20} color="#fff" />
+            </TouchableOpacity>
+          </View>
         </View>
         <View style={styles.featured}>
           <Text style={styles.featuredText}>Catch up with Friends!</Text>
@@ -46,7 +51,7 @@ const UserProfilesScreen = ({ navigation }) => {
           <Icon name="home" size={24} color="#000" />
           <Text style={styles.navText}>Home</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.navButton} onPress={() => navigation.navigate('MoreFriends')}>
+        <TouchableOpacity style={styles.navButton}>
           <Icon name="users" size={24} color="#000" />
           <Text style={styles.navText}>Friends</Text>
         </TouchableOpacity>
@@ -73,6 +78,13 @@ const styles = StyleSheet.create({
   headerText: {
     fontSize: 24,
     color: '#fff',
+  },
+  headerButtons: {
+    flexDirection: 'row',
+  },
+  addButton: {
+    marginRight: 15,
+    padding: 5,
   },
   searchButton: {
     padding: 5,
