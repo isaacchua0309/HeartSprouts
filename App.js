@@ -4,7 +4,6 @@ import { StyleSheet, View, SafeAreaView } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { Provider } from 'react-redux';
-
 import GettingStartedScreen from './screens/GettingStartedScreen';
 import NameInputScreen from './screens/NameInputScreen';
 import BirthdayInputScreen from './screens/BirthdayInputScreen';
@@ -14,7 +13,6 @@ import CreationSuccessScreen from './screens/CreationSuccessScreen';
 import LoginScreen from './screens/LoginScreen';
 import UserProfilesScreen from './screens/UserProfilesScreen';
 import HomeScreen from './screens/HomeScreen';
-
 import Colors from './constants/colors';
 import { store } from './store/store';
 
