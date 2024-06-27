@@ -1,0 +1,6 @@
+module Pods_HeartSprouts_HeartSproutsTests {
+  umbrella header "Pods-HeartSprouts-HeartSproutsTests-umbrella.h"
+
+  export *
+  module * { export * }
+}
