@@ -23,7 +23,7 @@ function EmailInputScreen({navigation, route}){
       </View>
     </View>
     <View style={styles.contentContainer}>
-      <Text style={styles.title}>What email would you like to use to sign in?</Text>
+      <Text style={styles.title}>What email would you like to use?</Text>
       <View style={styles.inputContainer}>
         <TextInput
           style={styles.input}
