@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TextInput, TouchableOpacity, Alert } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Colors from '../constants/colors';
+import { useDispatch } from 'react-redux';
 
 function PassWordInputScreen({ navigation,route }) {
   const [password, setPassword] = useState('');
@@ -11,6 +12,9 @@ function PassWordInputScreen({ navigation,route }) {
   const [hasLowercaseLetter, setHasLowercaseLetter] = useState(false);
   const [hasNumber, setHasNumber] = useState(false);
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+
+  const [error, setError] = useState(null);
+  const dispatch = useDispatch();
 
   function nextScreenHandler() {
     if (hasEightCharacters && hasCapitalLetter && hasLowercaseLetter && hasNumber) {
@@ -27,6 +31,28 @@ function PassWordInputScreen({ navigation,route }) {
     setHasCapitalLetter(/[A-Z]/.test(input));
     setHasLowercaseLetter(/[a-z]/.test(input));
     setHasNumber(/[0-9]/.test(input));
+  }
+
+  const authHandler = async ()=>{
+    try{
+      setIsLoading(true);
+      const action = signUp(
+        name,
+        email,
+        password
+      );
+
+      await dispatch(action);
+
+      Alert.alert("Account Successfully Created", "Account Created")
+      setError(null);
+      setIsLoading(false);
+
+    }catch(error){
+      console.log(error);
+      setIsLoading(false);
+      setError(error.message);
+    }
   }
 
   return (
@@ -150,3 +176,4 @@ const styles = StyleSheet.create({
 });
 
 export default PassWordInputScreen;
+
