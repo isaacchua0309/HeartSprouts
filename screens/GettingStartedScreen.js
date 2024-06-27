@@ -13,14 +13,16 @@ function GettingStartedScreen({ navigation }) {
 
   return (
     <View style={styles.container}>
-      <View>
+
+      <View style={styles.signInBox}>
         <Text style={styles.signInText}>
-          Have an account?{' '}
+          Already have an account?     {' '}
         </Text>
         <Pressable onPress={signInHandler} style={styles.signInText}>
             <Text style={styles.signInLink}>Sign In Here</Text>
         </Pressable>
       </View>
+
       <View style={styles.contentContainer}>
         <Text style={styles.mainText}>Welcome to HeartSprouts !</Text>
         <ImageBackground
@@ -28,9 +30,11 @@ function GettingStartedScreen({ navigation }) {
           style={styles.image}
         />
       </View>
+
       <Pressable style={styles.button} onPress={nextScreenHandler}>
         <Text style={styles.buttonText}>GET STARTED</Text>
       </Pressable>
+
     </View>
   );
 }
@@ -45,11 +49,16 @@ const styles = StyleSheet.create({
   signInText: {
     color: Colors.white500,
     textAlign: 'center',
+    fontSize: '16'
+  },
+  signInBox: {
+    flexDirection: 'row',
+    justifyContent: 'center',
   },
   signInLink: {
     fontWeight: 'bold',
     color: Colors.white500,
-  
+    fontSize: '16'
   },
   contentContainer: {
     flex: 1,
@@ -73,13 +82,14 @@ const styles = StyleSheet.create({
     padding: 15,
     borderRadius: 30,
     alignItems: 'center',
-    marginBottom: 40, // Adjust as needed
+    marginBottom: 24, // Adjust as needed
   },
   buttonText: {
     color: '#1B0638', // Use the appropriate text color
     fontSize: 16,
     fontWeight: 'bold',
   },
+
 });
 
 export default GettingStartedScreen;

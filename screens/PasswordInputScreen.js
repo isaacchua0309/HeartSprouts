@@ -2,9 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, TextInput, TouchableOpacity, Alert } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Colors from '../constants/colors';
-import { useDispatch } from 'react-redux';
 import { getAuth, createUserWithEmailAndPassword } from '@firebase/auth';
-import { signUp } from '../utils/actions/authActions';
 import { getFirebaseApp } from '../utils/firebaseHelper';
 import { createUserDocumentWithFriends } from '../utils/actions/userCollectionCreation';
 

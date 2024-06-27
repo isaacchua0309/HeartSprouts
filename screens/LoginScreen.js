@@ -1,10 +1,15 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, SafeAreaView } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, SafeAreaView, Alert } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Colors from '../constants/colors';
+import { getAuth, signInWithEmailAndPassword } from '@firebase/auth';
+import { getFirebaseApp } from '../utils/firebaseHelper';
 
 const LoginScreen = ({ navigation }) => {
   const [passwordVisible, setPasswordVisible] = useState(false);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
 
   const togglePasswordVisibility = () => {
     setPasswordVisible(!passwordVisible);
@@ -14,9 +19,21 @@ const LoginScreen = ({ navigation }) => {
     navigation.goBack();
   };
 
-  function signInHandler(){
-    navigation.navigate('Home');
-  }
+  const app = getFirebaseApp();
+  const auth = getAuth(app);
+
+  const handleSignIn = async () => {
+    try {
+      await signInWithEmailAndPassword(auth, email, password);
+      // Sign-in successful
+      Alert.alert('Log In Successful', 'Glad to have you back!');
+      navigation.navigate('Home');
+    } catch (error) {
+      // Handle errors here
+      setError(error.message);
+      Alert.alert('Log In Failed', 'Please Check Email and Password');
+    }
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -24,10 +41,15 @@ const LoginScreen = ({ navigation }) => {
         <Icon name="arrow-back" size={24} color="#FFFFFF" />
       </TouchableOpacity>
       <View style={styles.body}>
+        <Text style={styles.mainText}> Welcome Back to HeartSprouts! </Text>
         <TextInput 
           style={styles.input}
           placeholder="Email"
           placeholderTextColor={Colors.white700}
+          value={email}
+          onChangeText={setEmail}
+          keyboardType="email-address"
+          autoCapitalize="none"
         />
         <View style={styles.passwordContainer}>
           <TextInput 
@@ -35,6 +57,8 @@ const LoginScreen = ({ navigation }) => {
             placeholder="Password"
             placeholderTextColor={Colors.white700}
             secureTextEntry={!passwordVisible}
+            value={password}
+            onChangeText={setPassword}
           />
           <TouchableOpacity onPress={togglePasswordVisibility} style={styles.eyeIcon}>
             <Icon name={passwordVisible ? "eye-off" : "eye"} size={20} color="#FFFFFF" />
@@ -46,7 +70,8 @@ const LoginScreen = ({ navigation }) => {
             <Text style={styles.resetPassword}>    Reset Password</Text>
           </TouchableOpacity>
         </View>
-        <TouchableOpacity style={styles.signInButton} onPress={signInHandler}>
+        {error ? <Text style={styles.errorText}>{error}</Text> : null}
+        <TouchableOpacity style={styles.signInButton} onPress={handleSignIn}>
           <Text style={styles.signInText}>SIGN IN</Text>
         </TouchableOpacity>
       </View>
@@ -60,6 +85,13 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.green500,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  mainText: {
+    color: Colors.white500,
+    fontSize: 24,
+    textAlign: 'center',
+    marginBottom: 36,
+    fontWeight: 'bold'
   },
   backButton: {
     position: 'absolute',
@@ -110,7 +142,7 @@ const styles = StyleSheet.create({
     color: Colors.white700
   },
   signInButton: {
-    backgroundColor: Colors.pink500,
+    backgroundColor: Colors.white500,
     width: '100%',
     height: 50,
     borderRadius: 25,
@@ -121,6 +153,10 @@ const styles = StyleSheet.create({
     fontWeight: 'semibold',
     color: Colors.white300,
     fontSize: 18,
+  },
+  errorText: {
+    color: 'red',
+    marginBottom: 12,
   },
 });
 

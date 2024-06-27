@@ -24,7 +24,7 @@ function BirthdayInputScreen({ navigation, route }) {
     if (validateDate(birthday)) {
       navigation.navigate('Email Input', { name, birthday });
     } else {
-      Alert.alert('Invalid Date', 'Please enter a valid date in MM/DD/YYYY format.');
+      Alert.alert('Invalid Date', 'Please enter a valid date MM/DD/YYYY format.');
     }
   }
 
