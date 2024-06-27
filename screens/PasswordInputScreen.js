@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, TextInput, TouchableOpacity, Alert } from 'reac
 import Icon from 'react-native-vector-icons/Ionicons';
 import Colors from '../constants/colors';
 import { useDispatch } from 'react-redux';
+import { auth } from 'react-native-firebase';
 
 function PassWordInputScreen({ navigation,route }) {
   const [password, setPassword] = useState('');
@@ -16,6 +17,7 @@ function PassWordInputScreen({ navigation,route }) {
   const [error, setError] = useState(null);
   const dispatch = useDispatch();
 
+
   function nextScreenHandler() {
     if (hasEightCharacters && hasCapitalLetter && hasLowercaseLetter && hasNumber) {
       
@@ -25,6 +27,15 @@ function PassWordInputScreen({ navigation,route }) {
     }
   }
 
+  const signUpTestFn = () => {
+    auth().createUserWithEmailAndPassword("email", "password").then(() => {
+      Alert.alert("User Successfully Created")
+    })
+    .catch((err)=> {
+      console.log(err)
+    })
+  }
+
   function handlePasswordChange(input) {
     setPassword(input);
     setHasEightCharacters(input.length >= 8);
@@ -32,6 +43,7 @@ function PassWordInputScreen({ navigation,route }) {
     setHasLowercaseLetter(/[a-z]/.test(input));
     setHasNumber(/[0-9]/.test(input));
   }
+
 
   const authHandler = async ()=>{
     try{
