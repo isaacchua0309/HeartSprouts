@@ -6,6 +6,7 @@ import { useDispatch } from 'react-redux';
 import { getAuth, createUserWithEmailAndPassword } from '@firebase/auth';
 import { signUp } from '../utils/actions/authActions';
 import { getFirebaseApp } from '../utils/firebaseHelper';
+import { createUserDocumentWithFriends } from '../utils/actions/userCollectionCreation';
 
 function PassWordInputScreen({ navigation,route }) {
   const [password, setPassword] = useState('');
@@ -43,6 +44,7 @@ function PassWordInputScreen({ navigation,route }) {
     try {
       const auth = getAuth(app);
       await createUserWithEmailAndPassword(auth, email, password);
+      await createUserDocumentWithFriends(name,birthday,email,password);
       setLoading(false);
       nextScreenHandler();
       return;
