@@ -15,6 +15,8 @@ import UserProfilesScreen from './screens/UserProfilesScreen';
 import HomeScreen from './screens/HomeScreen';
 import Colors from './constants/colors';
 import { store } from './store/store';
+import { getFirebaseApp } from './utils/firebaseHelper';
+import { getAuth } from '@firebase/auth';
 
 const Stack = createStackNavigator();
 
