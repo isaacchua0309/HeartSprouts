@@ -1,0 +1,16 @@
+current directory: /Users/cheerfuldino/Downloads/HeartSprouts-main/HeartSprouts/vendor/bundle/ruby/3.3.0/gems/json-2.7.2/ext/json
+/opt/homebrew/opt/ruby/bin/ruby extconf.rb
+creating Makefile
+
+current directory: /Users/cheerfuldino/Downloads/HeartSprouts-main/HeartSprouts/vendor/bundle/ruby/3.3.0/gems/json-2.7.2/ext/json
+make DESTDIR\= sitearchdir\=./.gem.20240627-15607-ai95d0 sitelibdir\=./.gem.20240627-15607-ai95d0 clean
+
+current directory: /Users/cheerfuldino/Downloads/HeartSprouts-main/HeartSprouts/vendor/bundle/ruby/3.3.0/gems/json-2.7.2/ext/json
+make DESTDIR\= sitearchdir\=./.gem.20240627-15607-ai95d0 sitelibdir\=./.gem.20240627-15607-ai95d0
+make: Nothing to be done for `all'.
+
+current directory: /Users/cheerfuldino/Downloads/HeartSprouts-main/HeartSprouts/vendor/bundle/ruby/3.3.0/gems/json-2.7.2/ext/json
+make DESTDIR\= sitearchdir\=./.gem.20240627-15607-ai95d0 sitelibdir\=./.gem.20240627-15607-ai95d0 install
+
+current directory: /Users/cheerfuldino/Downloads/HeartSprouts-main/HeartSprouts/vendor/bundle/ruby/3.3.0/gems/json-2.7.2/ext/json
+make DESTDIR\= sitearchdir\=./.gem.20240627-15607-ai95d0 sitelibdir\=./.gem.20240627-15607-ai95d0 clean

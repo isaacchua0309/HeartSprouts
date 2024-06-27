@@ -1,0 +1,20 @@
+current directory: /Users/cheerfuldino/Downloads/HeartSprouts-main/HeartSprouts/vendor/bundle/ruby/3.3.0/gems/strscan-3.1.0/ext/strscan
+/opt/homebrew/opt/ruby/bin/ruby extconf.rb
+checking for onig_region_memsize() in ruby.h... yes
+checking for rb_reg_onig_match() in ruby.h... yes
+creating Makefile
+
+current directory: /Users/cheerfuldino/Downloads/HeartSprouts-main/HeartSprouts/vendor/bundle/ruby/3.3.0/gems/strscan-3.1.0/ext/strscan
+make DESTDIR\= sitearchdir\=./.gem.20240627-15607-m1fw94 sitelibdir\=./.gem.20240627-15607-m1fw94 clean
+
+current directory: /Users/cheerfuldino/Downloads/HeartSprouts-main/HeartSprouts/vendor/bundle/ruby/3.3.0/gems/strscan-3.1.0/ext/strscan
+make DESTDIR\= sitearchdir\=./.gem.20240627-15607-m1fw94 sitelibdir\=./.gem.20240627-15607-m1fw94
+compiling strscan.c
+linking shared-object strscan.bundle
+
+current directory: /Users/cheerfuldino/Downloads/HeartSprouts-main/HeartSprouts/vendor/bundle/ruby/3.3.0/gems/strscan-3.1.0/ext/strscan
+make DESTDIR\= sitearchdir\=./.gem.20240627-15607-m1fw94 sitelibdir\=./.gem.20240627-15607-m1fw94 install
+/usr/bin/install -c -m 0755 strscan.bundle ./.gem.20240627-15607-m1fw94
+
+current directory: /Users/cheerfuldino/Downloads/HeartSprouts-main/HeartSprouts/vendor/bundle/ruby/3.3.0/gems/strscan-3.1.0/ext/strscan
+make DESTDIR\= sitearchdir\=./.gem.20240627-15607-m1fw94 sitelibdir\=./.gem.20240627-15607-m1fw94 clean

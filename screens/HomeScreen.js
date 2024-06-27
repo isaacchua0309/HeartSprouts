@@ -1,11 +1,14 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, ScrollView } from 'react-native';
 import { Ionicons } from '@expo/vector-icons'; // Import Ionicons from Expo
+import Icon from 'react-native-vector-icons/FontAwesome'; 
 import nlp from 'compromise';
 import * as chrono from 'chrono-node';
 
 function HomeScreen({ navigation }) {
+  
   const [searchText, setSearchText] = useState('');
+
   const handleSubmit = () => {
     const parsedData = parseEventDetails(searchText);
     if (parsedData) {
@@ -35,37 +38,41 @@ function HomeScreen({ navigation }) {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.greeting}>Enter your events with friends to set up reminders!</Text>
-      <View style={styles.searchContainer}>
-        <View style={styles.inputContainer}>
-          <TextInput
-            style={styles.searchInput}
-            placeholder="Search Commands"
-            value={searchText}
-            onChangeText={(text) => setSearchText(text)}
-          />
-          <TouchableOpacity style={styles.iconButton} onPress={handleSubmit}>
-            <Ionicons name="send" size={24} color="black" />
+      <ScrollView contentContainerStyle={styles.scrollContainer}>
+        <Text style={styles.greeting}>Enter your events with friends to set up reminders!</Text>
+        <View style={styles.searchContainer}>
+          <View style={styles.inputContainer}>
+            <TextInput
+              style={styles.searchInput}
+              placeholder="Search Commands"
+              value={searchText}
+              onChangeText={(text) => setSearchText(text)}
+            />
+            <TouchableOpacity style={styles.iconButton} onPress={handleSubmit}>
+              <Ionicons name="send" size={24} color="black" />
+            </TouchableOpacity>
+          </View>
+        </View>
+        <View style={styles.optionsContainer}>
+          <TouchableOpacity style={styles.optionButton}>
+            <Text style={styles.optionText}>Dinner with Darren tomorrow</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.optionButton}>
+            <Text style={styles.optionText}>Add Shannon's Birthday on 13th May</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.optionButton}>
+            <Text style={styles.optionText}>Kelly relationship struggles</Text>
           </TouchableOpacity>
         </View>
-      </View>
-      <View style={styles.optionsContainer}>
-        <TouchableOpacity style={styles.optionButton}>
-          <Text style={styles.optionText}>Dinner with Darren tomorrow</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.optionButton}>
-          <Text style={styles.optionText}>Add Shannon's Birthday on 13th May</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.optionButton}>
-          <Text style={styles.optionText}>Kelly relationship struggles</Text>
-        </TouchableOpacity>
-      </View>
+      </ScrollView>
       <View style={styles.navBar}>
         <TouchableOpacity style={styles.navButton} onPress={() => navigation.navigate('Home')}>
+          <Ionicons name="home" size={24} color="black" />
           <Text style={styles.navText}>Home</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.navButton} onPress={() => navigation.navigate('Users')}>
-          <Text style={styles.navText}>Another Screen</Text>
+        <Icon name="users" size={24} color="#000" />
+          <Text style={styles.navText}>Friends</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -75,10 +82,10 @@ function HomeScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
     backgroundColor: '#e8e8e8',
-    padding: 20,
+  },
+  scrollContainer: {
+    paddingBottom: 60, // Space for the fixed navbar
   },
   greeting: {
     fontSize: 24,
@@ -132,12 +139,15 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     borderTopWidth: 1,
     borderColor: '#ccc',
+    position: 'absolute',
+    bottom: 0,
   },
   navButton: {
-    paddingVertical: 10,
+    alignItems: 'center',
   },
   navText: {
     fontSize: 16,
+    marginTop: 5,
   },
 });
 
