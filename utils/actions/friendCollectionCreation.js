@@ -1,19 +1,25 @@
 import { firestore } from '../firebaseHelper';
-import { collection, doc, setDoc } from 'firebase/firestore';
+import { collection, doc, setDoc, getDoc, Timestamp } from 'firebase/firestore';
 
 export const createFriendDocumentWithEvents = async (email, name, birthday) => {
   try {
-    // Reference to the 'Users' collection with the document ID as email
-    const userDocRef = doc(firestore, `Users/${email}/Friends`, name);
+    // Reference to the 'Friends' subcollection
+    const friendDocRef = doc(firestore, `Users/${email}/Friends`, name);
 
-    // Set the document data
-    await setDoc(userDocRef, {
+    // Check if a friend with the same name already exists
+    const friendDoc = await getDoc(friendDocRef);
+    if (friendDoc.exists()) {
+      throw new Error('A friend with this name already exists.');
+    }
+
+    // Set the document data with the birthday as a Firebase Timestamp
+    await setDoc(friendDocRef, {
       name: name,
-      birthday: birthday,
+      birthday: Timestamp.fromDate(birthday),
     });
 
     // Reference to the 'Events' subcollection in the 'Friends' document
-    const eventsCollectionRef = collection(userDocRef, 'Events');
+    const eventsCollectionRef = collection(friendDocRef, 'Events');
 
     // Add a temporary document to the 'Events' subcollection
     const tempDocRef = doc(eventsCollectionRef, 'EventsInit');
@@ -24,5 +30,6 @@ export const createFriendDocumentWithEvents = async (email, name, birthday) => {
     console.log('User document created with Friends subcollection');
   } catch (error) {
     console.error('Error creating user document: ', error);
+    throw error; // Rethrow error for higher-level error handling
   }
 };

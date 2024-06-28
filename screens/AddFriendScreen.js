@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, Alert, TouchableOpacity } from 'react-native';
+import { View, Text, TextInput, Button, StyleSheet, Alert, TouchableOpacity, ActivityIndicator } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { createFriendDocumentWithEvents } from '../utils/actions/friendCollectionCreation';
@@ -9,10 +9,12 @@ function AddFriendScreen({ navigation, route }) {
   const [name, setName] = useState('');
   const [birthday, setBirthday] = useState(new Date());
   const [showPicker, setShowPicker] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const handleAddFriend = async () => {
     if (name.trim()) {
       try {
+        setLoading(true);
         await createFriendDocumentWithEvents(email, name, birthday);
         setName('');
         setBirthday(new Date());
@@ -20,8 +22,13 @@ function AddFriendScreen({ navigation, route }) {
           { text: 'OK', onPress: () => navigation.navigate('Users', { email }) }
         ]);
       } catch (error) {
-        console.error('Error adding friend: ', error);
-        Alert.alert('Error', 'There was an error adding the friend. Please try again.');
+        setLoading(false);
+        if (error.message === 'A friend with this name already exists.') {
+          Alert.alert('Error', 'A friend with this name already exists.');
+        } else {
+          console.error('Error adding friend: ', error);
+          Alert.alert('Error', 'There was an error adding the friend. Please try again.');
+        }
       }
     } else {
       Alert.alert('Error', 'Please enter both name and birthday');
@@ -45,9 +52,12 @@ function AddFriendScreen({ navigation, route }) {
         value={name}
         onChangeText={setName}
         placeholder="Enter name"
+        accessible={true}
+        accessibilityLabel="Friend's Name"
+        accessibilityHint="Enter your friend's name"
       />
       <Text style={styles.label}>Friend's Birthday</Text>
-      <TouchableOpacity style={styles.dateInput} onPress={() => setShowPicker(true)}>
+      <TouchableOpacity style={styles.dateInput} onPress={() => setShowPicker(true)} accessible={true} accessibilityLabel="Friend's Birthday" accessibilityHint="Select your friend's birthday">
         <Text>{birthday.toDateString()}</Text>
       </TouchableOpacity>
       {showPicker && (
@@ -58,7 +68,11 @@ function AddFriendScreen({ navigation, route }) {
           onChange={handleDateChange}
         />
       )}
-      <Button title="Add Friend" onPress={handleAddFriend} />
+      {loading ? (
+        <ActivityIndicator size="large" color="#0000ff" />
+      ) : (
+        <Button title="Add Friend" onPress={handleAddFriend} />
+      )}
     </View>
   );
 }
