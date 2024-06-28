@@ -43,6 +43,7 @@ function EmailInputScreen({ navigation, route }) {
             keyboardType="email-address"
             value={email}
             onChangeText={setEmail}
+            autoCapitalize="none"
           />
           <TouchableOpacity style={styles.sendButton} onPress={nextScreenHandler}>
             <Icon name="send" size={24} color="#fff" />
