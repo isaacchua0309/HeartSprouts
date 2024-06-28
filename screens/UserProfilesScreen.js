@@ -13,10 +13,12 @@ const UserProfilesScreen = ({ navigation, route }) => {
       try {
         const friendsCollectionRef = collection(firestore, `Users/${email}/Friends`);
         const querySnapshot = await getDocs(friendsCollectionRef);
-        const friendsList = querySnapshot.docs.map(doc => ({
-          id: doc.id,
-          ...doc.data(),
-        }));
+        const friendsList = querySnapshot.docs
+          .filter(doc => doc.id !== 'Friends Init') // Filter out the temp doc
+          .map(doc => ({
+            id: doc.id,
+            ...doc.data(),
+          }));
         setFriends(friendsList);
       } catch (error) {
         console.error('Error fetching friends: ', error);
