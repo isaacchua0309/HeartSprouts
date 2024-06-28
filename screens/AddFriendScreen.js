@@ -16,11 +16,11 @@ function AddFriendScreen({ navigation, route }) {
       try {
         setLoading(true);
         await createFriendDocumentWithEvents(email, name, birthday);
-        setLoading(false);
-        // Reset the input fields
         setName('');
         setBirthday(new Date());
-        Alert.alert('Success', 'Friend added successfully');
+        Alert.alert('Success', 'Friend added successfully', [
+          { text: 'OK', onPress: () => navigation.navigate('Users', { email }) }
+        ]);
       } catch (error) {
         setLoading(false);
         if (error.message === 'A friend with this name already exists.') {
@@ -43,7 +43,7 @@ function AddFriendScreen({ navigation, route }) {
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity style={styles.backButton} onPress={() => navigation.navigate('Users',{email})} accessible={true} accessibilityLabel="Go back" accessibilityHint="Navigates to the previous screen">
+      <TouchableOpacity style={styles.backButton} onPress={() => navigation.navigate('Users', { email })}>
         <Icon name="arrow-left" size={24} color="#000" />
       </TouchableOpacity>
       <Text style={styles.label}>Friend's Name</Text>
