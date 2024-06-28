@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity, ScrollView, Alert, TextInput, Button, ActivityIndicator } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import DateTimePicker from '@react-native-community/datetimepicker';
@@ -13,10 +13,17 @@ const FriendProfileScreen = ({ navigation, route }) => {
   const [showPicker, setShowPicker] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isFetching, setIsFetching] = useState(true);
+  const scrollViewRef = useRef(null);
 
   useEffect(() => {
     fetchEvents();
   }, [friend]);
+
+  useEffect(() => {
+    if (events.length > 0) {
+      scrollToClosestEvent();
+    }
+  }, [events]);
 
   const fetchEvents = async () => {
     try {
@@ -80,6 +87,16 @@ const FriendProfileScreen = ({ navigation, route }) => {
     setEventDate(currentDate);
   };
 
+  const scrollToClosestEvent = () => {
+    const today = new Date();
+    const closestEventIndex = events.findIndex(event => new Date(event.date.seconds * 1000) >= today);
+    if (closestEventIndex !== -1 && scrollViewRef.current) {
+      setTimeout(() => {
+        scrollViewRef.current.scrollTo({ y: closestEventIndex * 150, animated: true });
+      }, 500);
+    }
+  };
+
   if (!friend) {
     return (
       <View style={styles.container}>
@@ -128,8 +145,8 @@ const FriendProfileScreen = ({ navigation, route }) => {
       {isFetching ? (
         <ActivityIndicator size="large" color="#0000ff" />
       ) : (
-        <ScrollView style={styles.eventsContainer}>
-          {events.map(event => (
+        <ScrollView style={styles.eventsContainer} ref={scrollViewRef}>
+          {events.map((event, index) => (
             <View key={event.id} style={styles.eventCard}>
               <Text style={styles.eventTitle}>{event.title}</Text>
               {event.date && event.date.seconds && (
