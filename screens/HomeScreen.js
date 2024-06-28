@@ -1,14 +1,15 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, ScrollView } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import { Ionicons } from '@expo/vector-icons'; // Import Ionicons from Expo
-import Icon from 'react-native-vector-icons/FontAwesome'; 
+import Icon from 'react-native-vector-icons/FontAwesome';
 import nlp from 'compromise';
 import * as chrono from 'chrono-node';
+import Colors from '../constants/colors';
 
-function HomeScreen({ navigation,route}) {
-  
+function HomeScreen({ navigation, route }) {
   const [searchText, setSearchText] = useState('');
-  const {email} = route.params;
+  const { email } = route.params;
+
   const handleSubmit = () => {
     const parsedData = parseEventDetails(searchText);
     if (parsedData) {
@@ -38,40 +39,38 @@ function HomeScreen({ navigation,route}) {
 
   return (
     <View style={styles.container}>
-      <ScrollView contentContainerStyle={styles.scrollContainer}>
-        <Text style={styles.greeting}>Enter your events with friends to set up reminders!</Text>
+      <Text style={styles.greeting}>
+        Tell me anything about your friends, family and loved ones :)
+      </Text>
+      <Text style={styles.exampleText}>
+        examples;{'\n'}
+        Dinner with Darren tomorrow.{'\n'}
+        Shannon's Birthday on 13th May.{'\n'}
+        Kelly relationship struggles
+      </Text>
+      <View style={styles.centeredContent}>
         <View style={styles.searchContainer}>
           <View style={styles.inputContainer}>
             <TextInput
               style={styles.searchInput}
-              placeholder="Search Commands"
+              placeholder="Save an event"
+              placeholderTextColor={Colors.black500}
               value={searchText}
               onChangeText={(text) => setSearchText(text)}
             />
             <TouchableOpacity style={styles.iconButton} onPress={handleSubmit}>
-              <Ionicons name="send" size={24} color="black" />
+              <Ionicons name="send" size={24} color={Colors.black500} />
             </TouchableOpacity>
           </View>
         </View>
-        <View style={styles.optionsContainer}>
-          <TouchableOpacity style={styles.optionButton}>
-            <Text style={styles.optionText}>Dinner with Darren tomorrow</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.optionButton}>
-            <Text style={styles.optionText}>Add Shannon's Birthday on 13th May</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.optionButton}>
-            <Text style={styles.optionText}>Kelly relationship struggles</Text>
-          </TouchableOpacity>
-        </View>
-      </ScrollView>
+      </View>
       <View style={styles.navBar}>
-        <TouchableOpacity style={styles.navButton} onPress={() => navigation.navigate('Home',{email})}>
-          <Ionicons name="home" size={24} color="black" />
+        <TouchableOpacity style={styles.navButton} onPress={() => navigation.navigate('Home', { email })}>
+          <Ionicons name="home" size={24} color={Colors.pink500} />
           <Text style={styles.navText}>Home</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.navButton} onPress={() => navigation.navigate('Users', {email})}>
-        <Icon name="users" size={24} color="#000" />
+        <TouchableOpacity style={styles.navButton} onPress={() => navigation.navigate('Users', { email })}>
+          <Icon name="users" size={24} color={Colors.pink500} />
           <Text style={styles.navText}>Friends</Text>
         </TouchableOpacity>
       </View>
@@ -82,28 +81,43 @@ function HomeScreen({ navigation,route}) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#e8e8e8',
-  },
-  scrollContainer: {
-    paddingBottom: 60, // Space for the fixed navbar
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: Colors.green500,
+    padding: 20,
   },
   greeting: {
     fontSize: 24,
     fontWeight: 'bold',
-    marginBottom: 20,
+    marginVertical: 20,
     textAlign: 'center',
+    color: Colors.white500,
+  },
+  exampleText: {
+    fontStyle: 'italic',
+    color: Colors.white700,
+    fontSize: 16,
+    textAlign: 'center',
+    lineHeight: 24,
+    marginHorizontal: 20,
+    marginBottom: 20,
+  },
+  centeredContent: {
+    width: '100%',
+    alignItems: 'center',
   },
   searchContainer: {
-    width: '100%',
+    width: '95%',
     marginBottom: 20,
   },
   inputContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    borderColor: '#ccc',
-    borderWidth: 1,
-    borderRadius: 20,
+    backgroundColor: Colors.pink500,
+    borderRadius: 15,
+    padding: 4,
     paddingHorizontal: 10,
+    marginBottom: '45%'
   },
   searchInput: {
     flex: 1,
@@ -113,41 +127,25 @@ const styles = StyleSheet.create({
   iconButton: {
     padding: 10,
   },
-  optionsContainer: {
-    width: '100%',
-  },
-  optionButton: {
-    backgroundColor: '#fff',
-    padding: 15,
-    borderRadius: 10,
-    marginBottom: 10,
-    alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
-  },
-  optionText: {
-    fontSize: 16,
-  },
   navBar: {
     flexDirection: 'row',
     justifyContent: 'space-around',
     width: '100%',
     paddingVertical: 10,
-    backgroundColor: '#fff',
-    borderTopWidth: 1,
-    borderColor: '#ccc',
+    backgroundColor: Colors.green500,
+    borderTopWidth: 4,
+    borderColor: Colors.green700,
     position: 'absolute',
     bottom: 0,
   },
   navButton: {
+    marginTop:'5%',
     alignItems: 'center',
   },
   navText: {
     fontSize: 16,
     marginTop: 5,
+    color: Colors.white700
   },
 });
 
