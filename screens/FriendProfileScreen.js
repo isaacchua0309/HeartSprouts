@@ -1,34 +1,47 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, Image, StyleSheet, TouchableOpacity, ScrollView, Alert, TextInput, Button } from 'react-native';
+import React, { useEffect, useState, useRef } from 'react';
+import { View, Text, Image, StyleSheet, TouchableOpacity, ScrollView, Alert, TextInput, Button, ActivityIndicator } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { firestore } from '../utils/firebaseHelper';
-import { collection, getDocs, addDoc } from 'firebase/firestore';
+import { collection, getDocs, addDoc, deleteDoc, doc } from 'firebase/firestore';
 
 const FriendProfileScreen = ({ navigation, route }) => {
-  const { friend } = route.params;
+  const { friend, email } = route.params;
   const [events, setEvents] = useState([]);
   const [eventName, setEventName] = useState('');
   const [eventDate, setEventDate] = useState(new Date());
   const [showPicker, setShowPicker] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [isFetching, setIsFetching] = useState(true);
+  const scrollViewRef = useRef(null);
 
   useEffect(() => {
     fetchEvents();
-  }, [friend.id]);
+  }, [friend]);
+
+  useEffect(() => {
+    if (events.length > 0) {
+      scrollToClosestEvent();
+    }
+  }, [events]);
 
   const fetchEvents = async () => {
     try {
       const eventsCollectionRef = collection(firestore, `Users/${email}/Friends/${friend.name}/Events`);
       const querySnapshot = await getDocs(eventsCollectionRef);
-      const eventsList = querySnapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
+      const eventsList = querySnapshot.docs
+        .filter(doc => doc.id !== 'EventsInit')
+        .map(doc => ({
+          id: doc.id,
+          ...doc.data(),
+        }))
+        .sort((a, b) => a.date.seconds - b.date.seconds);
       setEvents(eventsList);
     } catch (error) {
       console.error('Error fetching events: ', error);
       Alert.alert('Error', 'There was an error fetching events. Please try again later.');
+    } finally {
+      setIsFetching(false);
     }
   };
 
@@ -57,13 +70,33 @@ const FriendProfileScreen = ({ navigation, route }) => {
     }
   };
 
+  const handleDeleteEvent = async (eventId) => {
+    try {
+      await deleteDoc(doc(firestore, `Users/${email}/Friends/${friend.name}/Events`, eventId));
+      Alert.alert('Success', 'Event deleted successfully');
+      fetchEvents(); // Refresh events list
+    } catch (error) {
+      console.error('Error deleting event: ', error);
+      Alert.alert('Error', 'There was an error deleting the event. Please try again.');
+    }
+  };
+
   const handleDateChange = (event, selectedDate) => {
     const currentDate = selectedDate || eventDate;
     setShowPicker(false);
     setEventDate(currentDate);
   };
 
-  // Handle case where friend data might be missing
+  const scrollToClosestEvent = () => {
+    const today = new Date();
+    const closestEventIndex = events.findIndex(event => new Date(event.date.seconds * 1000) >= today);
+    if (closestEventIndex !== -1 && scrollViewRef.current) {
+      setTimeout(() => {
+        scrollViewRef.current.scrollTo({ y: closestEventIndex * 150, animated: true });
+      }, 500);
+    }
+  };
+
   if (!friend) {
     return (
       <View style={styles.container}>
@@ -84,7 +117,11 @@ const FriendProfileScreen = ({ navigation, route }) => {
         <Image style={styles.profileImage} source={{ uri: friend.image }} />
         <Text style={styles.profileName}>{friend.name}</Text>
         <Text style={styles.profileStatus}>{friend.status}</Text>
-        <Text style={styles.profileBirthday}>Birthday: {new Date(friend.birthday.seconds * 1000).toLocaleDateString()}</Text>
+        {friend.birthday && friend.birthday.seconds && (
+          <Text style={styles.profileBirthday}>
+            Birthday: {new Date(friend.birthday.seconds * 1000).toLocaleDateString()}
+          </Text>
+        )}
       </View>
       <Text style={styles.label}>Add Event</Text>
       <TextInput
@@ -105,15 +142,26 @@ const FriendProfileScreen = ({ navigation, route }) => {
         />
       )}
       <Button title="Add Event" onPress={handleAddEvent} disabled={isLoading} />
-      <ScrollView style={styles.eventsContainer}>
-        {events.map(event => (
-          <View key={event.id} style={styles.eventCard}>
-            <Text style={styles.eventTitle}>{event.title}</Text>
-            <Text style={styles.eventDate}>{new Date(event.date.seconds * 1000).toLocaleDateString()}</Text>
-            <Text style={styles.eventDescription}>{event.description}</Text>
-          </View>
-        ))}
-      </ScrollView>
+      {isFetching ? (
+        <ActivityIndicator size="large" color="#0000ff" />
+      ) : (
+        <ScrollView style={styles.eventsContainer} ref={scrollViewRef}>
+          {events.map((event, index) => (
+            <View key={event.id} style={styles.eventCard}>
+              <Text style={styles.eventTitle}>{event.title}</Text>
+              {event.date && event.date.seconds && (
+                <Text style={styles.eventDate}>
+                  {new Date(event.date.seconds * 1000).toLocaleDateString()}
+                </Text>
+              )}
+              <Text style={styles.eventDescription}>{event.description}</Text>
+              <TouchableOpacity style={styles.deleteButton} onPress={() => handleDeleteEvent(event.id)}>
+                <Icon name="trash" size={24} color="#ff0000" />
+              </TouchableOpacity>
+            </View>
+          ))}
+        </ScrollView>
+      )}
     </View>
   );
 };
@@ -186,6 +234,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 2,
     elevation: 2,
+    position: 'relative',
   },
   eventTitle: {
     fontSize: 18,
@@ -199,6 +248,11 @@ const styles = StyleSheet.create({
   eventDescription: {
     fontSize: 14,
     color: '#757575',
+  },
+  deleteButton: {
+    position: 'absolute',
+    top: 15,
+    right: 15,
   },
   errorText: {
     fontSize: 18,
