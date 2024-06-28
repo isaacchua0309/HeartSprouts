@@ -3,7 +3,7 @@ import { View, Text, Image, StyleSheet, TouchableOpacity, ScrollView, Alert, Tex
 import Icon from 'react-native-vector-icons/FontAwesome';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { firestore } from '../utils/firebaseHelper';
-import { collection, getDocs, addDoc } from 'firebase/firestore';
+import { collection, getDocs, addDoc, deleteDoc, doc } from 'firebase/firestore';
 
 const FriendProfileScreen = ({ navigation, route }) => {
   const { friend, email } = route.params;
@@ -22,10 +22,13 @@ const FriendProfileScreen = ({ navigation, route }) => {
     try {
       const eventsCollectionRef = collection(firestore, `Users/${email}/Friends/${friend.name}/Events`);
       const querySnapshot = await getDocs(eventsCollectionRef);
-      const eventsList = querySnapshot.docs.filter(doc => doc.id !== 'EventsInit').map(doc => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
+      const eventsList = querySnapshot.docs
+        .filter(doc => doc.id !== 'EventsInit')
+        .map(doc => ({
+          id: doc.id,
+          ...doc.data(),
+        }))
+        .sort((a, b) => a.date.seconds - b.date.seconds);
       setEvents(eventsList);
     } catch (error) {
       console.error('Error fetching events: ', error);
@@ -60,13 +63,23 @@ const FriendProfileScreen = ({ navigation, route }) => {
     }
   };
 
+  const handleDeleteEvent = async (eventId) => {
+    try {
+      await deleteDoc(doc(firestore, `Users/${email}/Friends/${friend.name}/Events`, eventId));
+      Alert.alert('Success', 'Event deleted successfully');
+      fetchEvents(); // Refresh events list
+    } catch (error) {
+      console.error('Error deleting event: ', error);
+      Alert.alert('Error', 'There was an error deleting the event. Please try again.');
+    }
+  };
+
   const handleDateChange = (event, selectedDate) => {
     const currentDate = selectedDate || eventDate;
     setShowPicker(false);
     setEventDate(currentDate);
   };
 
-  // Handle case where friend data might be missing
   if (!friend) {
     return (
       <View style={styles.container}>
@@ -125,6 +138,9 @@ const FriendProfileScreen = ({ navigation, route }) => {
                 </Text>
               )}
               <Text style={styles.eventDescription}>{event.description}</Text>
+              <TouchableOpacity style={styles.deleteButton} onPress={() => handleDeleteEvent(event.id)}>
+                <Icon name="trash" size={24} color="#ff0000" />
+              </TouchableOpacity>
             </View>
           ))}
         </ScrollView>
@@ -201,6 +217,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 2,
     elevation: 2,
+    position: 'relative',
   },
   eventTitle: {
     fontSize: 18,
@@ -214,6 +231,11 @@ const styles = StyleSheet.create({
   eventDescription: {
     fontSize: 14,
     color: '#757575',
+  },
+  deleteButton: {
+    position: 'absolute',
+    top: 15,
+    right: 15,
   },
   errorText: {
     fontSize: 18,
