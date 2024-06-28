@@ -5,10 +5,10 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import nlp from 'compromise';
 import * as chrono from 'chrono-node';
 
-function HomeScreen({ navigation }) {
+function HomeScreen({ navigation,route}) {
   
   const [searchText, setSearchText] = useState('');
-
+  const {email} = route.params;
   const handleSubmit = () => {
     const parsedData = parseEventDetails(searchText);
     if (parsedData) {
@@ -66,11 +66,11 @@ function HomeScreen({ navigation }) {
         </View>
       </ScrollView>
       <View style={styles.navBar}>
-        <TouchableOpacity style={styles.navButton} onPress={() => navigation.navigate('Home')}>
+        <TouchableOpacity style={styles.navButton} onPress={() => navigation.navigate('Home',{email})}>
           <Ionicons name="home" size={24} color="black" />
           <Text style={styles.navText}>Home</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.navButton} onPress={() => navigation.navigate('Users')}>
+        <TouchableOpacity style={styles.navButton} onPress={() => navigation.navigate('Users', {email})}>
         <Icon name="users" size={24} color="#000" />
           <Text style={styles.navText}>Friends</Text>
         </TouchableOpacity>

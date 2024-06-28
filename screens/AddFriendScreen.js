@@ -1,23 +1,29 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, Button, StyleSheet, Alert, TouchableOpacity } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import { useNavigation } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { createFriendDocumentWithEvents } from '../utils/actions/friendCollectionCreation';
 
-const AddFriendScreen = () => {
+function AddFriendScreen({ navigation, route }) {
+  const { email } = route.params;
   const [name, setName] = useState('');
   const [birthday, setBirthday] = useState(new Date());
   const [showPicker, setShowPicker] = useState(false);
-  const navigation = useNavigation();
 
   const handleAddFriend = () => {
     // Handle the add friend logic here (e.g., send data to backend or update state)
     if (name.trim()) {
-      createFriendDocumentWithEvents()
-      // Reset the input fields
-      setName('');
-      setBirthday(new Date());
+      createFriendDocumentWithEvents(email, name, birthday)
+        .then(() => {
+          // Reset the input fields
+          setName('');
+          setBirthday(new Date());
+          Alert.alert('Success', 'Friend added successfully');
+        })
+        .catch((error) => {
+          console.error('Error adding friend: ', error);
+          Alert.alert('Error', 'There was an error adding the friend. Please try again.');
+        });
     } else {
       Alert.alert('Error', 'Please enter both name and birthday');
     }
@@ -56,7 +62,7 @@ const AddFriendScreen = () => {
       <Button title="Add Friend" onPress={handleAddFriend} />
     </View>
   );
-};
+}
 
 const styles = StyleSheet.create({
   container: {

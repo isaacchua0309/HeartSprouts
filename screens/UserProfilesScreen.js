@@ -1,15 +1,31 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, Image, TouchableOpacity, StyleSheet, ScrollView, Alert } from 'react-native';
-import Icon from 'react-native-vector-icons/FontAwesome'; // Make sure to install this package
+import Icon from 'react-native-vector-icons/FontAwesome';
 
-const friends = [
-  { id: 1, name: 'Alice', status: 'Busy', image: 'https://via.placeholder.com/80' },
-  { id: 2, name: 'Bob', status: 'Available', image: 'https://via.placeholder.com/80' },
-  { id: 3, name: 'Charlie', status: 'At the gym', image: 'https://via.placeholder.com/80' },
-  { id: 4, name: 'Dana', status: 'Sleeping', image: 'https://via.placeholder.com/80' },
-];
+const UserProfilesScreen = ({ navigation, route }) => {
+  const [friends, setFriends] = useState([]);
+  const {email} = route.params;
+  useEffect(() => {
+    const fetchFriends = async () => {
+      const db = firebase.database();
+      const friendsRef = db.ref('Users/${email}/Friends'); // Adjust the reference path as necessary
+      friendsRef.on('value', (snapshot) => {
+        const data = snapshot.val();
+        if (data) {
+          const friendsList = Object.keys(data).map((key) => ({
+            id: key,
+            ...data[key],
+          }));
+          setFriends(friendsList);
+        } else {
+          setFriends([]);
+        }
+      });
+    };
 
-const UserProfilesScreen = ({ navigation }) => {
+    fetchFriends();
+  }, []);
+
   const handleProfilePress = (name) => {
     Alert.alert('Profile Navigation', `Navigating to ${name}'s profile`);
   };
@@ -20,7 +36,7 @@ const UserProfilesScreen = ({ navigation }) => {
         <View style={styles.header}>
           <Text style={styles.headerText}>Close Friends</Text>
           <View style={styles.headerButtons}>
-            <TouchableOpacity style={styles.addButton} onPress={() => navigation.navigate('Friend Creation')}>
+            <TouchableOpacity style={styles.addButton} onPress={() => navigation.navigate('Friend Creation',{email})}>
               <Icon name="plus" size={20} color="#fff" />
             </TouchableOpacity>
             <TouchableOpacity style={styles.searchButton}>
@@ -30,18 +46,18 @@ const UserProfilesScreen = ({ navigation }) => {
         </View>
         <View style={styles.featured}>
           <Text style={styles.featuredText}>Catch up with Friends!</Text>
-          <Text style={styles.discountText}>Your personal connections</Text>
+          <Text style={styles.subtitleText}>Your personal connections</Text>
         </View>
-        <View style={styles.productContainer}>
+        <View style={styles.profileContainer}>
           {friends.map((friend) => (
             <TouchableOpacity
               key={friend.id}
-              style={styles.productCard}
+              style={styles.profileCard}
               onPress={() => handleProfilePress(friend.name)}
             >
-              <Image style={styles.productImage} source={{ uri: friend.image }} />
-              <Text style={styles.productName}>{friend.name}</Text>
-              <Text style={styles.productStatus}>{friend.status}</Text>
+              <Image style={styles.profileImage} source={{ uri: friend.image }} />
+              <Text style={styles.profileName}>{friend.name}</Text>
+              <Text style={styles.profileStatus}>{friend.status}</Text>
             </TouchableOpacity>
           ))}
         </View>
@@ -99,17 +115,17 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontWeight: 'bold',
   },
-  discountText: {
+  subtitleText: {
     fontSize: 16,
     color: '#fff',
   },
-  productContainer: {
+  profileContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'space-around',
     padding: 10,
   },
-  productCard: {
+  profileCard: {
     width: '45%',
     backgroundColor: '#fff',
     marginBottom: 15,
@@ -122,18 +138,18 @@ const styles = StyleSheet.create({
     shadowRadius: 2,
     elevation: 3,
   },
-  productImage: {
+  profileImage: {
     width: 80,
     height: 80,
     borderRadius: 40,
     marginBottom: 10,
   },
-  productName: {
+  profileName: {
     fontSize: 16,
     fontWeight: 'bold',
     marginBottom: 5,
   },
-  productStatus: {
+  profileStatus: {
     fontSize: 14,
     color: '#757575',
   },

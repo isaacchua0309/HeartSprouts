@@ -27,7 +27,7 @@ const LoginScreen = ({ navigation }) => {
       await signInWithEmailAndPassword(auth, email, password);
       // Sign-in successful
       Alert.alert('Log In Successful', 'Glad to have you back!');
-      navigation.navigate('Home');
+      navigation.navigate('Home', {email});
     } catch (error) {
       // Handle errors here
       setError(error.message);

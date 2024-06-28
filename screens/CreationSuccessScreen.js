@@ -2,9 +2,10 @@ import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import Colors from '../constants/colors';
 
-function CreationSuccessScreen({navigation}){
+function CreationSuccessScreen({navigation,route}){
+    const {email} = route.params;
     function handlePress() {
-        navigation.navigate('Home'); // Replace 'Home' with the name of the screen you want to navigate to
+        navigation.navigate('Home',{email}); // Replace 'Home' with the name of the screen you want to navigate to
       }
     
       return (

@@ -22,7 +22,7 @@ function PassWordInputScreen({ navigation,route }) {
   function nextScreenHandler() {
     if (hasEightCharacters && hasCapitalLetter && hasLowercaseLetter && hasNumber) {
       
-      navigation.navigate('Account Creation Successful');
+      navigation.navigate('Account Creation Successful',{email});
     } else {
       alert('Please ensure your password meets all the requirements.');
     }
