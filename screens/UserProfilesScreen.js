@@ -33,7 +33,7 @@ const UserProfilesScreen = ({ navigation, route }) => {
   );
 
   const handleProfilePress = (friend) => {
-    navigation.navigate('Friend Profile', { friend });
+    navigation.navigate('Friend Profile', { friend,email });
   };
 
   return (

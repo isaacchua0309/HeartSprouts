@@ -1,27 +1,28 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, Image, StyleSheet, TouchableOpacity, ScrollView, Alert, TextInput, Button } from 'react-native';
+import { View, Text, Image, StyleSheet, TouchableOpacity, ScrollView, Alert, TextInput, Button, ActivityIndicator } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { firestore } from '../utils/firebaseHelper';
 import { collection, getDocs, addDoc } from 'firebase/firestore';
 
 const FriendProfileScreen = ({ navigation, route }) => {
-  const { friend } = route.params;
+  const { friend, email } = route.params;
   const [events, setEvents] = useState([]);
   const [eventName, setEventName] = useState('');
   const [eventDate, setEventDate] = useState(new Date());
   const [showPicker, setShowPicker] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [isFetching, setIsFetching] = useState(true);
 
   useEffect(() => {
     fetchEvents();
-  }, [friend.id]);
+  }, [friend]);
 
   const fetchEvents = async () => {
     try {
       const eventsCollectionRef = collection(firestore, `Users/${email}/Friends/${friend.name}/Events`);
       const querySnapshot = await getDocs(eventsCollectionRef);
-      const eventsList = querySnapshot.docs.map(doc => ({
+      const eventsList = querySnapshot.docs.filter(doc => doc.id !== 'EventsInit').map(doc => ({
         id: doc.id,
         ...doc.data(),
       }));
@@ -29,6 +30,8 @@ const FriendProfileScreen = ({ navigation, route }) => {
     } catch (error) {
       console.error('Error fetching events: ', error);
       Alert.alert('Error', 'There was an error fetching events. Please try again later.');
+    } finally {
+      setIsFetching(false);
     }
   };
 
@@ -84,7 +87,11 @@ const FriendProfileScreen = ({ navigation, route }) => {
         <Image style={styles.profileImage} source={{ uri: friend.image }} />
         <Text style={styles.profileName}>{friend.name}</Text>
         <Text style={styles.profileStatus}>{friend.status}</Text>
-        <Text style={styles.profileBirthday}>Birthday: {new Date(friend.birthday.seconds * 1000).toLocaleDateString()}</Text>
+        {friend.birthday && friend.birthday.seconds && (
+          <Text style={styles.profileBirthday}>
+            Birthday: {new Date(friend.birthday.seconds * 1000).toLocaleDateString()}
+          </Text>
+        )}
       </View>
       <Text style={styles.label}>Add Event</Text>
       <TextInput
@@ -105,15 +112,23 @@ const FriendProfileScreen = ({ navigation, route }) => {
         />
       )}
       <Button title="Add Event" onPress={handleAddEvent} disabled={isLoading} />
-      <ScrollView style={styles.eventsContainer}>
-        {events.map(event => (
-          <View key={event.id} style={styles.eventCard}>
-            <Text style={styles.eventTitle}>{event.title}</Text>
-            <Text style={styles.eventDate}>{new Date(event.date.seconds * 1000).toLocaleDateString()}</Text>
-            <Text style={styles.eventDescription}>{event.description}</Text>
-          </View>
-        ))}
-      </ScrollView>
+      {isFetching ? (
+        <ActivityIndicator size="large" color="#0000ff" />
+      ) : (
+        <ScrollView style={styles.eventsContainer}>
+          {events.map(event => (
+            <View key={event.id} style={styles.eventCard}>
+              <Text style={styles.eventTitle}>{event.title}</Text>
+              {event.date && event.date.seconds && (
+                <Text style={styles.eventDate}>
+                  {new Date(event.date.seconds * 1000).toLocaleDateString()}
+                </Text>
+              )}
+              <Text style={styles.eventDescription}>{event.description}</Text>
+            </View>
+          ))}
+        </ScrollView>
+      )}
     </View>
   );
 };
