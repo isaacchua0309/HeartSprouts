@@ -19,7 +19,7 @@ const FriendProfileScreen = ({ navigation, route }) => {
 
   const fetchEvents = async () => {
     try {
-      const eventsCollectionRef = collection(firestore, `Users/${friend.email}/Friends/${friend.name}/Events`);
+      const eventsCollectionRef = collection(firestore, `Users/${email}/Friends/${friend.name}/Events`);
       const querySnapshot = await getDocs(eventsCollectionRef);
       const eventsList = querySnapshot.docs.map(doc => ({
         id: doc.id,
