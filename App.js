@@ -16,6 +16,7 @@ import HomeScreen from './screens/HomeScreen';
 import Colors from './constants/colors';
 import { store } from './store/store';
 import AddFriendScreen from './screens/AddFriendScreen'
+import FriendProfileScreen from './screens/FriendProfileScreen';
 
 const Stack = createStackNavigator();
 
@@ -30,6 +31,7 @@ export default function App() {
               <Stack.Screen name="Login" component={LoginScreen} />
               <Stack.Screen name="Home" component={HomeScreen} />
               <Stack.Screen name="Users" component={UserProfilesScreen} />
+              <Stack.Screen name="Friend Profile" component={FriendProfileScreen} />
               <Stack.Screen name="Friend Creation" component={AddFriendScreen} />
               <Stack.Screen name="Name Input" component={NameInputScreen} />
               <Stack.Screen name="Birthday Input" component={BirthdayInputScreen} />

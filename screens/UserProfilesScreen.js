@@ -29,8 +29,8 @@ const UserProfilesScreen = ({ navigation, route }) => {
     fetchFriends();
   }, [email]);
 
-  const handleProfilePress = (name) => {
-    Alert.alert('Profile Navigation', `Navigating to ${name}'s profile`);
+  const handleProfilePress = (friend) => {
+    navigation.navigate('Friend Profile', { friend });
   };
 
   return (
@@ -59,7 +59,7 @@ const UserProfilesScreen = ({ navigation, route }) => {
             <TouchableOpacity
               key={friend.id}
               style={styles.profileCard}
-              onPress={() => handleProfilePress(friend.name)}
+              onPress={() => handleProfilePress(friend)}
             >
               <Image style={styles.profileImage} source={{ uri: friend.image }} />
               <Text style={styles.profileName}>{friend.name}</Text>
