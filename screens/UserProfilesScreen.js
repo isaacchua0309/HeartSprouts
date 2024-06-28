@@ -69,7 +69,7 @@ const UserProfilesScreen = ({ navigation, route }) => {
         </View>
       </ScrollView>
       <View style={styles.navBar}>
-        <TouchableOpacity style={styles.navButton} onPress={() => navigation.navigate('Home')}>
+        <TouchableOpacity style={styles.navButton} onPress={() => navigation.navigate('Home',{email})}>
           <Icon name="home" size={24} color="#000" />
           <Text style={styles.navText}>Home</Text>
         </TouchableOpacity>
