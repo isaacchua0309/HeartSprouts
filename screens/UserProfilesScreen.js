@@ -1,30 +1,31 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, Image, TouchableOpacity, StyleSheet, ScrollView, Alert } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import { firestore } from '../utils/firebaseHelper';
+import { collection, getDocs } from 'firebase/firestore';
 
 const UserProfilesScreen = ({ navigation, route }) => {
   const [friends, setFriends] = useState([]);
-  const {email} = route.params;
+  const { email } = route.params;
+
   useEffect(() => {
     const fetchFriends = async () => {
-      const db = firebase.database();
-      const friendsRef = db.ref('Users/${email}/Friends'); // Adjust the reference path as necessary
-      friendsRef.on('value', (snapshot) => {
-        const data = snapshot.val();
-        if (data) {
-          const friendsList = Object.keys(data).map((key) => ({
-            id: key,
-            ...data[key],
-          }));
-          setFriends(friendsList);
-        } else {
-          setFriends([]);
-        }
-      });
+      try {
+        const friendsCollectionRef = collection(firestore, `Users/${email}/Friends`);
+        const querySnapshot = await getDocs(friendsCollectionRef);
+        const friendsList = querySnapshot.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+        setFriends(friendsList);
+      } catch (error) {
+        console.error('Error fetching friends: ', error);
+        Alert.alert('Error', 'There was an error fetching friends. Please try again later.');
+      }
     };
 
     fetchFriends();
-  }, []);
+  }, [email]);
 
   const handleProfilePress = (name) => {
     Alert.alert('Profile Navigation', `Navigating to ${name}'s profile`);
@@ -36,7 +37,10 @@ const UserProfilesScreen = ({ navigation, route }) => {
         <View style={styles.header}>
           <Text style={styles.headerText}>Close Friends</Text>
           <View style={styles.headerButtons}>
-            <TouchableOpacity style={styles.addButton} onPress={() => navigation.navigate('Friend Creation',{email})}>
+            <TouchableOpacity
+              style={styles.addButton}
+              onPress={() => navigation.navigate('Friend Creation', { email })}
+            >
               <Icon name="plus" size={20} color="#fff" />
             </TouchableOpacity>
             <TouchableOpacity style={styles.searchButton}>

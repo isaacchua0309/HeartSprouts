@@ -10,20 +10,18 @@ function AddFriendScreen({ navigation, route }) {
   const [birthday, setBirthday] = useState(new Date());
   const [showPicker, setShowPicker] = useState(false);
 
-  const handleAddFriend = () => {
-    // Handle the add friend logic here (e.g., send data to backend or update state)
+  const handleAddFriend = async () => {
     if (name.trim()) {
-      createFriendDocumentWithEvents(email, name, birthday)
-        .then(() => {
-          // Reset the input fields
-          setName('');
-          setBirthday(new Date());
-          Alert.alert('Success', 'Friend added successfully');
-        })
-        .catch((error) => {
-          console.error('Error adding friend: ', error);
-          Alert.alert('Error', 'There was an error adding the friend. Please try again.');
-        });
+      try {
+        await createFriendDocumentWithEvents(email, name, birthday);
+        // Reset the input fields
+        setName('');
+        setBirthday(new Date());
+        Alert.alert('Success', 'Friend added successfully');
+      } catch (error) {
+        console.error('Error adding friend: ', error);
+        Alert.alert('Error', 'There was an error adding the friend. Please try again.');
+      }
     } else {
       Alert.alert('Error', 'Please enter both name and birthday');
     }
@@ -48,7 +46,7 @@ function AddFriendScreen({ navigation, route }) {
         placeholder="Enter name"
       />
       <Text style={styles.label}>Friend's Birthday</Text>
-      <TouchableOpacity style={styles.input} onPress={() => setShowPicker(true)}>
+      <TouchableOpacity style={styles.dateInput} onPress={() => setShowPicker(true)}>
         <Text>{birthday.toDateString()}</Text>
       </TouchableOpacity>
       {showPicker && (
@@ -78,6 +76,14 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   input: {
+    height: 40,
+    borderColor: '#ccc',
+    borderWidth: 1,
+    marginBottom: 20,
+    paddingHorizontal: 10,
+    borderRadius: 5,
+  },
+  dateInput: {
     height: 40,
     borderColor: '#ccc',
     borderWidth: 1,
