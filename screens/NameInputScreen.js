@@ -34,6 +34,7 @@ function NameInputScreen({navigation}){
           placeholderTextColor={Colors.white700}
           onChangeText={setName}
           value = {name}
+          autoCapitalize ="none"
         />
         <TouchableOpacity style={styles.sendButton} onPress = {nextScreenHandler}>
           <Icon name="send" size={24} color="#fff" />
