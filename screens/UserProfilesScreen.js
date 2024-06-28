@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { View, Text, Image, TouchableOpacity, StyleSheet, ScrollView, Alert } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import { useFocusEffect } from '@react-navigation/native';
 import { firestore } from '../utils/firebaseHelper';
 import { collection, getDocs } from 'firebase/firestore';
 
@@ -8,26 +9,28 @@ const UserProfilesScreen = ({ navigation, route }) => {
   const [friends, setFriends] = useState([]);
   const { email } = route.params;
 
-  useEffect(() => {
-    const fetchFriends = async () => {
-      try {
-        const friendsCollectionRef = collection(firestore, `Users/${email}/Friends`);
-        const querySnapshot = await getDocs(friendsCollectionRef);
-        const friendsList = querySnapshot.docs
-          .filter(doc => doc.id !== 'Friends Init') // Filter out the temp doc
-          .map(doc => ({
-            id: doc.id,
-            ...doc.data(),
-          }));
-        setFriends(friendsList);
-      } catch (error) {
-        console.error('Error fetching friends: ', error);
-        Alert.alert('Error', 'There was an error fetching friends. Please try again later.');
-      }
-    };
+  const fetchFriends = async () => {
+    try {
+      const friendsCollectionRef = collection(firestore, `Users/${email}/Friends`);
+      const querySnapshot = await getDocs(friendsCollectionRef);
+      const friendsList = querySnapshot.docs
+        .filter(doc => doc.id !== 'Friends Init') // Filter out the temp doc
+        .map(doc => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+      setFriends(friendsList);
+    } catch (error) {
+      console.error('Error fetching friends: ', error);
+      Alert.alert('Error', 'There was an error fetching friends. Please try again later.');
+    }
+  };
 
-    fetchFriends();
-  }, [email]);
+  useFocusEffect(
+    useCallback(() => {
+      fetchFriends();
+    }, [email])
+  );
 
   const handleProfilePress = (friend) => {
     navigation.navigate('Friend Profile', { friend });
@@ -69,7 +72,7 @@ const UserProfilesScreen = ({ navigation, route }) => {
         </View>
       </ScrollView>
       <View style={styles.navBar}>
-        <TouchableOpacity style={styles.navButton} onPress={() => navigation.navigate('Home',{email})}>
+        <TouchableOpacity style={styles.navButton} onPress={() => navigation.navigate('Home', { email })}>
           <Icon name="home" size={24} color="#000" />
           <Text style={styles.navText}>Home</Text>
         </TouchableOpacity>
@@ -180,3 +183,4 @@ const styles = StyleSheet.create({
 });
 
 export default UserProfilesScreen;
+
