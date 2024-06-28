@@ -14,29 +14,29 @@ const FriendProfileScreen = ({ navigation, route }) => {
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    const fetchEvents = async () => {
-      try {
-        const eventsCollectionRef = collection(firestore, `Friends/${friend.id}/Events`);
-        const querySnapshot = await getDocs(eventsCollectionRef);
-        const eventsList = querySnapshot.docs.map(doc => ({
-          id: doc.id,
-          ...doc.data(),
-        }));
-        setEvents(eventsList);
-      } catch (error) {
-        console.error('Error fetching events: ', error);
-        Alert.alert('Error', 'There was an error fetching events. Please try again later.');
-      }
-    };
-
     fetchEvents();
   }, [friend.id]);
+
+  const fetchEvents = async () => {
+    try {
+      const eventsCollectionRef = collection(firestore, `Users/${friend.email}/Friends/${friend.name}/Events`);
+      const querySnapshot = await getDocs(eventsCollectionRef);
+      const eventsList = querySnapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      setEvents(eventsList);
+    } catch (error) {
+      console.error('Error fetching events: ', error);
+      Alert.alert('Error', 'There was an error fetching events. Please try again later.');
+    }
+  };
 
   const handleAddEvent = async () => {
     if (eventName.trim()) {
       setIsLoading(true);
       try {
-        await addDoc(collection(firestore, `Friends/${friend.id}/Events`), {
+        await addDoc(collection(firestore, `Users/${email}/Friends/${friend.name}/Events`), {
           title: eventName,
           date: eventDate,
           description: '', // Add a description field if needed
