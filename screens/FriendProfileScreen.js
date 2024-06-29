@@ -4,6 +4,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { firestore } from '../utils/firebaseHelper';
 import { collection, getDocs, addDoc, deleteDoc, doc } from 'firebase/firestore';
+import Colors from '../constants/colors';
 
 const FriendProfileScreen = ({ navigation, route }) => {
   const { friend, email } = route.params;
@@ -110,9 +111,12 @@ const FriendProfileScreen = ({ navigation, route }) => {
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
-        <Icon name="arrow-left" size={24} color="#000" />
-      </TouchableOpacity>
+      <View style={styles.header}>
+        <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
+        <Icon name="arrow-left" size={24} color={Colors.white500} />
+        </TouchableOpacity>
+      </View>
+      <View style={styles.mainBody}>
       <View style={styles.profileContainer}>
         <Image style={styles.profileImage} source={{ uri: friend.image }} />
         <Text style={styles.profileName}>{friend.name}</Text>
@@ -123,7 +127,7 @@ const FriendProfileScreen = ({ navigation, route }) => {
           </Text>
         )}
       </View>
-      <Text style={styles.label}>Add Event</Text>
+      {/* <Text style={styles.label}>Add Event</Text> */}
       <TextInput
         style={styles.input}
         value={eventName}
@@ -141,9 +145,9 @@ const FriendProfileScreen = ({ navigation, route }) => {
           onChange={handleDateChange}
         />
       )}
-      <Button title="Add Event" onPress={handleAddEvent} disabled={isLoading} />
+      <Button title="Add Event" onPress={handleAddEvent} disabled={isLoading} color={Colors.green300} />
       {isFetching ? (
-        <ActivityIndicator size="large" color="#0000ff" />
+        <ActivityIndicator size="large" color={Colors.green300} />
       ) : (
         <ScrollView style={styles.eventsContainer} ref={scrollViewRef}>
           {events.map((event, index) => (
@@ -162,6 +166,7 @@ const FriendProfileScreen = ({ navigation, route }) => {
           ))}
         </ScrollView>
       )}
+      </View>
     </View>
   );
 };
@@ -169,63 +174,84 @@ const FriendProfileScreen = ({ navigation, route }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
-    backgroundColor: '#fff',
+    backgroundColor: Colors.white500,
+  },
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingLeft: 24,
+    paddingTop: 16,
+    backgroundColor: Colors.green500,
+  },
+  headerText: {
+    fontSize: 24,
+    color: Colors.white500,
+    fontWeight: 'bold',
+    alignItems: 'center'
   },
   backButton: {
     marginBottom: 20,
   },
+  mainBody: {
+    flex: 1,
+    paddingHorizontal: 32
+  },
   profileContainer: {
-    alignItems: 'center',
+    alignItems:'center'
   },
-  profileImage: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
-    marginBottom: 10,
-  },
+  // profileImage: {
+  //   width: 100,
+  //   height: 100,
+  //   borderRadius: 50,
+  //   marginBottom: 10,
+  // },
   profileName: {
     fontSize: 24,
     fontWeight: 'bold',
-    marginBottom: 5,
+    marginTop: '10%'
   },
-  profileStatus: {
-    fontSize: 16,
-    color: '#757575',
-    marginBottom: 10,
-  },
+  // profileStatus: {
+  //   fontSize: 16,
+  //   color: '#757575',
+  //   marginBottom: 0,
+  // },
   profileBirthday: {
     fontSize: 16,
     color: '#757575',
     marginBottom: 20,
+    fontStyle: 'italic'
   },
   label: {
     fontSize: 18,
     marginBottom: 10,
   },
   input: {
-    height: 40,
-    borderColor: '#ccc',
-    borderWidth: 1,
-    marginBottom: 20,
+    height: 44,
+    borderColor: Colors.white700,
+    borderWidth: 2,
+    marginBottom: '4%',
     paddingHorizontal: 10,
-    borderRadius: 5,
+    borderRadius: 8,
+    backgroundColor: Colors.white700
   },
   dateInput: {
-    height: 40,
-    borderColor: '#ccc',
-    borderWidth: 1,
+    height: 44,
+    borderColor: Colors.white700,
+    borderWidth: 2,
     marginBottom: 20,
     paddingHorizontal: 10,
-    borderRadius: 5,
+    borderRadius: 8,
     justifyContent: 'center',
+    backgroundColor: Colors.white700
+    
   },
   eventsContainer: {
     flex: 1,
     marginTop: 20,
   },
   eventCard: {
-    backgroundColor: '#f9f9f9',
+    backgroundColor: Colors.green300,
     padding: 15,
     borderRadius: 10,
     marginBottom: 10,

@@ -45,7 +45,7 @@ function AddFriendScreen({ navigation, route }) {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.headerText}>Add a new relationship profile</Text>
+        <Text style={styles.headerText}>Add a new relationship profile     </Text>
         <TouchableOpacity style={styles.backButton} onPress={() => navigation.navigate('Users', { email })}>
           <Icon name="arrow-left" size={24} color={Colors.white500} />
         </TouchableOpacity>

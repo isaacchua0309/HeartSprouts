@@ -39,7 +39,6 @@ const UserProfilesScreen = ({ navigation, route }) => {
 
   return (
     <View style={styles.container}>
-      <ScrollView contentContainerStyle={styles.scrollContainer}>
         <View style={styles.header}>
           <Text style={styles.headerText}>Relationship manager</Text>
           <View style={styles.headerButtons}>
@@ -54,6 +53,7 @@ const UserProfilesScreen = ({ navigation, route }) => {
             </TouchableOpacity>
           </View>
         </View>
+        <ScrollView contentContainerStyle={styles.scrollContainer}>
         <View style={styles.featured}>
           <Text style={styles.featuredText}>Build Healthy Relationships</Text>
           <Text style={styles.subtitleText}>Your personal connections</Text>
