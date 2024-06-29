@@ -123,13 +123,13 @@ const styles = StyleSheet.create({
   },
   featuredText: {
     fontSize: 18,
-    color: Colors.pink500,
+    color: Colors.pink700,
     fontWeight: 'bold',
     fontStyle: 'italic'
   },
   subtitleText: {
     fontSize: 16,
-    color: Colors.white700,
+    color: Colors.pink500,
     fontStyle: 'italic'
   },
   profileContainer: {
