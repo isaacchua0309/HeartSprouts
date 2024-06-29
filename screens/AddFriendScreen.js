@@ -3,6 +3,7 @@ import { View, Text, TextInput, Button, StyleSheet, Alert, TouchableOpacity, Act
 import DateTimePicker from '@react-native-community/datetimepicker';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { createFriendDocumentWithEvents } from '../utils/actions/friendCollectionCreation';
+import Colors from '../constants/colors';
 
 function AddFriendScreen({ navigation, route }) {
   const { email } = route.params;
@@ -43,36 +44,47 @@ function AddFriendScreen({ navigation, route }) {
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity style={styles.backButton} onPress={() => navigation.navigate('Users', { email })}>
-        <Icon name="arrow-left" size={24} color="#000" />
-      </TouchableOpacity>
-      <Text style={styles.label}>Friend's Name</Text>
-      <TextInput
-        style={styles.input}
-        value={name}
-        onChangeText={setName}
-        placeholder="Enter name"
-        accessible={true}
-        accessibilityLabel="Friend's Name"
-        accessibilityHint="Enter your friend's name"
-      />
-      <Text style={styles.label}>Friend's Birthday</Text>
-      <TouchableOpacity style={styles.dateInput} onPress={() => setShowPicker(true)} accessible={true} accessibilityLabel="Friend's Birthday" accessibilityHint="Select your friend's birthday">
-        <Text>{birthday.toDateString()}</Text>
-      </TouchableOpacity>
-      {showPicker && (
-        <DateTimePicker
-          value={birthday}
-          mode="date"
-          display="default"
-          onChange={handleDateChange}
+      <View style={styles.header}>
+        <Text style={styles.headerText}>Add a new relationship profile</Text>
+        <TouchableOpacity style={styles.backButton} onPress={() => navigation.navigate('Users', { email })}>
+          <Icon name="arrow-left" size={24} color={Colors.white500} />
+        </TouchableOpacity>
+      </View>
+      <View style={styles.mainBody}>
+        <Text style={styles.label}>Friend's Name</Text>
+        <TextInput
+          style={styles.input}
+          value={name}
+          onChangeText={setName}
+          placeholder="Enter name"
+          accessible={true}
+          accessibilityLabel="Friend's Name"
+          accessibilityHint="Enter your friend's name"
         />
-      )}
-      {loading ? (
-        <ActivityIndicator size="large" color="#0000ff" />
-      ) : (
-        <Button title="Add Friend" onPress={handleAddFriend} />
-      )}
+        <Text style={styles.label}>Friend's Birthday</Text>
+        <TouchableOpacity
+          style={styles.dateInput}
+          onPress={() => setShowPicker(true)}
+          accessible={true}
+          accessibilityLabel="Friend's Birthday"
+          accessibilityHint="Select your friend's birthday"
+        >
+          <Text>{birthday.toDateString()}</Text>
+        </TouchableOpacity>
+        {showPicker && (
+          <DateTimePicker
+            value={birthday}
+            mode="date"
+            display="default"
+            onChange={handleDateChange}
+          />
+        )}
+        {loading ? (
+          <ActivityIndicator size="large" color={Colors.white500} />
+        ) : (
+          <Button title="Add Friend" onPress={handleAddFriend} color={Colors.white500} />
+        )}
+      </View>
     </View>
   );
 }
@@ -80,33 +92,63 @@ function AddFriendScreen({ navigation, route }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: Colors.green300,
+  },
+  header: {
+    flexDirection: 'row-reverse',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    padding: 16,
+    backgroundColor: Colors.green500,
+  },
+  headerText: {
+    fontSize: 24,
+    color: Colors.white500,
+    fontWeight: 'bold',
+    alignItems: 'center'
+  },
+  mainBody: {
     padding: 20,
-    backgroundColor: '#fff',
   },
   backButton: {
-    marginBottom: 20,
   },
   label: {
-    fontSize: 18,
+    fontSize: 16,
     marginBottom: 10,
+    color: Colors.pink700,
+    fontWeight: 'bold'
   },
   input: {
+    backgroundColor: Colors.white500,
+    color: Colors.black500,
+    width: '100%',
     height: 40,
-    borderColor: '#ccc',
-    borderWidth: 1,
+    borderRadius: 8,
+    paddingHorizontal: 20,
     marginBottom: 20,
-    paddingHorizontal: 10,
-    borderRadius: 5,
   },
   dateInput: {
+    backgroundColor: Colors.white500,
+    color: '#FFFFFF',
+    width: '100%',
     height: 40,
-    borderColor: '#ccc',
-    borderWidth: 1,
+    borderRadius: 8,
+    paddingHorizontal: 20,
     marginBottom: 20,
-    paddingHorizontal: 10,
-    borderRadius: 5,
     justifyContent: 'center',
+  },
+  navBar: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    width: '100%',
+    paddingVertical: 10,
+    backgroundColor: Colors.green500,
+    borderTopWidth: 4,
+    borderColor: Colors.green700,
+    position: 'absolute',
+    bottom: 0,
   },
 });
 
 export default AddFriendScreen;
+

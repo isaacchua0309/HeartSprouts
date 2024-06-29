@@ -4,6 +4,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import { useFocusEffect } from '@react-navigation/native';
 import { firestore } from '../utils/firebaseHelper';
 import { collection, getDocs } from 'firebase/firestore';
+import Colors from '../constants/colors';
 
 const UserProfilesScreen = ({ navigation, route }) => {
   const [friends, setFriends] = useState([]);
@@ -40,7 +41,7 @@ const UserProfilesScreen = ({ navigation, route }) => {
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         <View style={styles.header}>
-          <Text style={styles.headerText}>Close Friends</Text>
+          <Text style={styles.headerText}>Relationship manager</Text>
           <View style={styles.headerButtons}>
             <TouchableOpacity
               style={styles.addButton}
@@ -54,7 +55,7 @@ const UserProfilesScreen = ({ navigation, route }) => {
           </View>
         </View>
         <View style={styles.featured}>
-          <Text style={styles.featuredText}>Catch up with Friends!</Text>
+          <Text style={styles.featuredText}>Build Healthy Relationships</Text>
           <Text style={styles.subtitleText}>Your personal connections</Text>
         </View>
         <View style={styles.profileContainer}>
@@ -73,11 +74,11 @@ const UserProfilesScreen = ({ navigation, route }) => {
       </ScrollView>
       <View style={styles.navBar}>
         <TouchableOpacity style={styles.navButton} onPress={() => navigation.navigate('Home', { email })}>
-          <Icon name="home" size={24} color="#000" />
+          <Icon name="home" size={24} color={Colors.pink500}  />
           <Text style={styles.navText}>Home</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.navButton}>
-          <Icon name="users" size={24} color="#000" />
+          <Icon name="users" size={24} color={Colors.pink500} />
           <Text style={styles.navText}>Friends</Text>
         </TouchableOpacity>
       </View>
@@ -88,7 +89,7 @@ const UserProfilesScreen = ({ navigation, route }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f8f8f8',
+    backgroundColor: Colors.green300,
   },
   scrollContainer: {
     paddingBottom: 60, // Space for the fixed navbar
@@ -98,11 +99,12 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     padding: 15,
-    backgroundColor: '#4CAF50',
+    backgroundColor: Colors.green500,
   },
   headerText: {
     fontSize: 24,
-    color: '#fff',
+    color: Colors.white500,
+    fontWeight: 'bold',
   },
   headerButtons: {
     flexDirection: 'row',
@@ -116,17 +118,19 @@ const styles = StyleSheet.create({
   },
   featured: {
     padding: 20,
-    backgroundColor: '#4CAF50',
+    backgroundColor: Colors.green300,
     alignItems: 'center',
   },
   featuredText: {
     fontSize: 18,
-    color: '#fff',
+    color: Colors.pink500,
     fontWeight: 'bold',
+    fontStyle: 'italic'
   },
   subtitleText: {
     fontSize: 16,
-    color: '#fff',
+    color: Colors.white700,
+    fontStyle: 'italic'
   },
   profileContainer: {
     flexDirection: 'row',
@@ -167,18 +171,21 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
     width: '100%',
     paddingVertical: 10,
-    backgroundColor: '#fff',
-    borderTopWidth: 1,
-    borderColor: '#ccc',
+    backgroundColor: Colors.green500,
+    borderTopWidth: 4,
+    borderColor: Colors.green700,
     position: 'absolute',
     bottom: 0,
   },
   navButton: {
+    marginTop:'5%',
     alignItems: 'center',
+    
   },
   navText: {
     fontSize: 16,
     marginTop: 5,
+    color: Colors.white500
   },
 });
 

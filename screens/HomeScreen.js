@@ -46,7 +46,7 @@ function HomeScreen({ navigation, route }) {
         examples;{'\n'}
         Dinner with Darren tomorrow.{'\n'}
         Shannon's Birthday on 13th May.{'\n'}
-        Kelly relationship struggles
+        Isaac relationship struggles
       </Text>
       <View style={styles.centeredContent}>
         <View style={styles.searchContainer}>
