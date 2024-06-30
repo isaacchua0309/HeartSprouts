@@ -40,7 +40,8 @@ function HomeScreen({ navigation, route }) {
   return (
     <View style={styles.container}>
       <Text style={styles.greeting}>
-        Tell me anything about your friends, family and loved ones :)
+        Tell me anything about your friends, family and loved ones 
+        (TEXT TO ADD EVENT NOT IMPLEMENTED YET BUT CAN BE ADDED MANUALLY IN FRIENDS PROFILE)
       </Text>
       <Text style={styles.exampleText}>
         examples;{'\n'}
@@ -53,8 +54,8 @@ function HomeScreen({ navigation, route }) {
           <View style={styles.inputContainer}>
             <TextInput
               style={styles.searchInput}
-              placeholder="(NOT IMPLEMENTED YET BUT EVENTS CAN BE SAVED MANUALLY IN FRIEND PROFILES)"
-              placeholderTextColor={Colors.black500}
+              placeholder="(NOT IMPLEMENTED YET)"
+              placeholderTextColor='black'
               value={searchText}
               onChangeText={(text) => setSearchText(text)}
             />
