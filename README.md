@@ -61,25 +61,29 @@ Our aim is to create a mobile application that serves as a personal relationship
 - **Key Features**: Input field for the user's name, progress bar.
 
 ### BirthdayInputScreen
-![Birthday Input Screen](https://github.com/your_username/your_repo_name/path_to_image/birthday_input.png)
+![Birthday Input Screen](https://github.com/isaacchua0309/HeartSprouts/blob/main/assets/ReadMe/BirthdayInputScreen.jpg)
+![Birthday Input Screen Failure](https://github.com/isaacchua0309/HeartSprouts/blob/main/assets/ReadMe/BirthdayInputScreenFail.jpg)
 
 - **Function**: Captures the user's birthday and navigates to the Email Input screen.
 - **Key Features**: Input field for the user's birthday, date validation, progress bar.
 
 ### EmailInputScreen
-![Email Input Screen](https://github.com/your_username/your_repo_name/path_to_image/email_input.png)
+![Email Input Screen](https://github.com/isaacchua0309/HeartSprouts/blob/main/assets/ReadMe/EmailInputScreen.jpg)
+![Email Input Screen Fail](https://github.com/isaacchua0309/HeartSprouts/blob/main/assets/ReadMe/EmailInputScreenFail.jpg)
 
 - **Function**: Captures the user's email and navigates to the Password Input screen.
 - **Key Features**: Input field for the user's email, email validation, progress bar.
 
 ### PasswordInputScreen
-![Password Input Screen](https://github.com/your_username/your_repo_name/path_to_image/password_input.png)
+![Password Input Screen](https://github.com/isaacchua0309/HeartSprouts/blob/main/assets/ReadMe/PasswordInputScreen.jpg)
+![Password Input Screen Accepted](https://github.com/isaacchua0309/HeartSprouts/blob/main/assets/ReadMe/PasswordInputScreenAccepted.jpg)
+![Password Input Screen Showcase](https://github.com/isaacchua0309/HeartSprouts/blob/main/assets/ReadMe/PasswordInputScreenShowcase.jpg)
 
 - **Function**: Captures and validates the user's password and navigates to the account creation success screen.
 - **Key Features**: Input field for the password, password strength validation, progress bar.
 
 ### CreationSuccessScreen
-![Creation Success Screen](https://github.com/your_username/your_repo_name/path_to_image/creation_success.png)
+![Creation Success Screen](https://github.com/isaacchua0309/HeartSprouts/blob/main/assets/ReadMe/CreationSuccessScreen.jpg)
 
 - **Function**: Informs the user that their account has been successfully created and navigates to the Home screen.
 - **Key Features**: Success message, navigation to the Home screen.
@@ -91,25 +95,33 @@ Our aim is to create a mobile application that serves as a personal relationship
 - **Key Features**: Input fields for email and password, password visibility toggle, navigation to Home screen upon successful login.
 
 ### HomeScreen
-![Home Screen](https://github.com/your_username/your_repo_name/path_to_image/home.png)
+![Home Screen](https://github.com/isaacchua0309/HeartSprouts/blob/main/assets/ReadMe/HomeScreen.jpg)
 
 - **Function**: Serves as the main dashboard for the user, allowing them to interact with various features.
 - **Key Features**: Search input for saving events, navigation to Users and Home screens, display of user instructions and examples.
 
 ### AddFriendScreen
-![Add Friend Screen](https://github.com/your_username/your_repo_name/path_to_image/add_friend.png)
+![Add Friend Screen](https://github.com/isaacchua0309/HeartSprouts/blob/main/assets/ReadMe/AddFriendScreen.jpg)
+![Add Friend Screen Input](https://github.com/isaacchua0309/HeartSprouts/blob/main/assets/ReadMe/AddFriendScreenInput.jpg)
+![Add Friend Screen Rendering](https://github.com/isaacchua0309/HeartSprouts/blob/main/assets/ReadMe/AddFriendScreenRendering.jpg)
+![Add Friend Screen Success](https://github.com/isaacchua0309/HeartSprouts/blob/main/assets/ReadMe/AddFriendScreenSuccess.jpg)
 
 - **Function**: Allows users to add new friends to their profile.
 - **Key Features**: Input fields for friend's name and birthday, date picker, navigation to Users screen upon successful addition.
 
 ### FriendProfileScreen
-![Friend Profile Screen](https://github.com/your_username/your_repo_name/path_to_image/friend_profile.png)
+![Friend Profile Screen](https://github.com/isaacchua0309/HeartSprouts/blob/main/assets/ReadMe/FriendProfileScreen.jpg)
+![Friend Profile Screen Event Adding](https://github.com/isaacchua0309/HeartSprouts/blob/main/assets/ReadMe/FriendProfileScreenEventAdding.jpg)
+![Friend Profile Screen Date Adding](https://github.com/isaacchua0309/HeartSprouts/blob/main/assets/ReadMe/FriendProfileScreenDateAdding.jpg)
+![Friend Profile Screen Event Add Success](https://github.com/isaacchua0309/HeartSprouts/blob/main/assets/ReadMe/FriendProfileScreenEventAddSuccess.jpg)
+![Friend Profile Screen Updated](https://github.com/isaacchua0309/HeartSprouts/blob/main/assets/ReadMe/FriendProfileScreenUpdated.jpg)
 
 - **Function**: Displays the profile of a specific friend, including events and other details.
 - **Key Features**: Display of friend's information, ability to add and delete events, date picker.
 
 ### UserProfilesScreen
-![User Profiles Screen](https://github.com/your_username/your_repo_name/path_to_image/user_profiles.png)
+![User Profiles Screen](https://github.com/isaacchua0309/HeartSprouts/blob/main/assets/ReadMe/FriendsScreen.jpg)
+![User Profiles Screen Updated](https://github.com/isaacchua0309/HeartSprouts/blob/main/assets/ReadMe/FriendProfileScreenUpdated.jpg)
 
 - **Function**: Manages and displays the user's friend profiles.
 - **Key Features**: Display of friend profiles, navigation to Friend Profile and Friend Creation screens, setup notifications for events.
