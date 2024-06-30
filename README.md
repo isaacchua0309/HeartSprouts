@@ -9,6 +9,7 @@ HeartSprouts is a mobile application designed to help young adults foster and ma
 - [Features](#features)
 - [Tech Stack](#tech-stack)
 - [Installation](#installation)
+- [User Research Samples and Examples](#Research)
 - [Usage](#usage)
 - [Screens](#screens)
 
@@ -46,6 +47,56 @@ Our aim is to create a mobile application that serves as a personal relationship
 - **Firebase Cloud Messaging** (Cloud Services): Firebase Cloud Messaging allows us to send push notifications to users, ensuring that they receive timely reminders and prompts.
 - **React Navigation** (UI Components and Navigation): React Navigation helps us build a user-friendly and intuitive navigation system for the application, making it easy for users to move between different screens and features.
 - **Git and GitHub** (Version Control): Git and GitHub enable us to manage our codebase, collaborate effectively, and track changes. This ensures that our development process is smooth and that we can quickly address any issues that arise.
+
+### User Research Samples and Examples
+
+#### Sample 1: Initial Usability Testing
+
+**Objective**: To assess the overall usability of the HeartSprouts app and identify any immediate issues with navigation and key features.
+
+**Participants**: 10 young adults aged 18-25.
+
+**Methodology**:
+- Participants were asked to perform a series of tasks, including creating a profile, adding a friend and setting a reminder
+- Screen recordings and user input logs were collected.
+- Post-test surveys and interviews were conducted to gather qualitative feedback.
+
+**Key Findings**:
+1. **Navigation Issues**: Several participants found it difficult to navigate from the Home screen to the Add Friend screen.
+   - **Conclusion**: The navigation bar needs clearer icons and labels. We should consider adding a tutorial or onboarding guide for first-time users.
+
+2. **Profile Creation Confusion**: Some users were confused about the steps required to complete the profile creation process.
+   - **Conclusion**: Simplify the profile creation process and providing clearer instructions at each step.
+
+3. **Reminder Settings**: Users appreciated the reminder feature but wanted more customization options (e.g., setting specific times for reminders).
+   - **Conclusion**: Enhance the reminder feature by allowing users to set specific times and customize reminder messages.
+
+#### Sample 2: Focus Group Discussions
+
+**Objective**: To gain deeper insights into user motivations and preferences for features related to maintaining relationships.
+
+**Participants**: 8 young adults from diverse backgrounds.
+
+**Methodology**:
+- Conducted two focus group sessions, each lasting 1.5 hours.
+- Participants discussed their experiences with the app, their relationship maintenance habits, and their feature preferences.
+
+**Key Findings**:
+1. **Personal Connection**: Users emphasized the importance of features that help them feel more connected on a personal level, such as sharing memories or photos.
+   - **Conclusion**: Introduce features that allow users to share photos, notes, and memories with their friends and family members.
+
+2. **Customization**: Participants wanted more ways to customize their experience, such as personalized themes and notification sounds.
+   - **Conclusion**: Add customization options for themes, notification sounds, and display preferences to enhance user experience.
+
+3. **Integration with Other Apps**: Users expressed interest in integrating HeartSprouts with other apps like calendars and social media platforms.
+   - **Conclusion**: Explore possibilities for integrating with popular calendar apps and social media platforms to provide a seamless experience for users.
+
+4. **Privacy Concerns**: Some participants were concerned about the privacy of their data, particularly personal details of their friends.
+   - **Conclusion**: Strengthen privacy policies and provide transparent information on data usage. Implement robust security measures to protect user data.
+
+---
+
+By conducting these user research activities, HeartSprouts can continuously refine and improve its features, ensuring that the app meets the needs and preferences of its target audience.
 
 ## Installation
 To get started with HeartSprouts, follow these steps:
