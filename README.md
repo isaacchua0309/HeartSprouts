@@ -89,7 +89,7 @@ Our aim is to create a mobile application that serves as a personal relationship
 - **Key Features**: Success message, navigation to the Home screen.
 
 ### LoginScreen
-![Login Screen](https://github.com/your_username/your_repo_name/path_to_image/login.png)
+![Login Screen](https://github.com/isaacchua0309/HeartSprouts/blob/main/assets/ReadMe/SignInScreen.jpg)
 
 - **Function**: Allows existing users to log in to their accounts.
 - **Key Features**: Input fields for email and password, password visibility toggle, navigation to Home screen upon successful login.
