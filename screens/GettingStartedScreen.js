@@ -24,9 +24,9 @@ function GettingStartedScreen({ navigation }) {
       </View>
 
       <View style={styles.contentContainer}>
-        <Text style={styles.mainText}>Welcome to HeartSprouts !</Text>
+        <Text style={styles.mainText}>Welcome!</Text>
         <ImageBackground
-          source={{ uri: 'https://your-image-url.com/image.png' }} // Replace with your image URL or local path
+          source={ require('../assets/HeartSprouts.png')} // Replace with your image URL or local path
           style={styles.image}
         />
       </View>
@@ -73,8 +73,8 @@ const styles = StyleSheet.create({
     fontWeight: 'bold'
   },
   image: {
-    width: 200, // Adjust the size of the image
-    height: 200, // Adjust the size of the image
+    width: 350, // Adjust the size of the image
+    height: 350, // Adjust the size of the image
     marginBottom: 20,
   },
   button: {
