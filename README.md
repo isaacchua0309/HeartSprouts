@@ -48,7 +48,7 @@ Our aim is to create a mobile application that serves as a personal relationship
 - **React Navigation** (UI Components and Navigation): React Navigation helps us build a user-friendly and intuitive navigation system for the application, making it easy for users to move between different screens and features.
 - **Git and GitHub** (Version Control): Git and GitHub enable us to manage our codebase, collaborate effectively, and track changes. This ensures that our development process is smooth and that we can quickly address any issues that arise.
 
-### User Research Samples and Examples
+## User Research Samples and Examples
 
 #### Sample 1: Initial Usability Testing
 
