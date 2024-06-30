@@ -49,13 +49,13 @@ Our aim is to create a mobile application that serves as a personal relationship
 
 ## Screens
 ### GettingStartedScreen
-![Getting Started Screen](https://github.com/your_username/your_repo_name/path_to_image/getting_started.png)
+![Getting Started Screen](https://github.com/isaacchua0309/HeartSprouts/blob/main/assets/ReadMe/GettingStartedScreen.jpg)
 
 - **Function**: Welcomes users to HeartSprouts and provides navigation to sign in or continue with onboarding.
 - **Key Features**: Navigation to Name Input screen for new users and Login screen for existing users.
 
 ### NameInputScreen
-![Name Input Screen](https://github.com/your_username/your_repo_name/path_to_image/name_input.png)
+![Name Input Screen](https://github.com/isaacchua0309/HeartSprouts/blob/main/assets/ReadMe/NameInputScreen.jpg)
 
 - **Function**: Captures the user's name and navigates to the Birthday Input screen.
 - **Key Features**: Input field for the user's name, progress bar.
