@@ -127,7 +127,7 @@ const FriendProfileScreen = ({ navigation, route }) => {
           </Text>
         )}
       </View>
-      {/* <Text style={styles.label}>Add Event</Text> */}
+      {<Text style={styles.label}>Add Events For Timely Notifications Before Events!</Text>}
       <TextInput
         style={styles.input}
         value={eventName}

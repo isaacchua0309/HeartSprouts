@@ -53,7 +53,7 @@ function HomeScreen({ navigation, route }) {
           <View style={styles.inputContainer}>
             <TextInput
               style={styles.searchInput}
-              placeholder="Save an event"
+              placeholder="(NOT IMPLEMENTED YET BUT EVENTS CAN BE SAVED MANUALLY IN FRIEND PROFILES)"
               placeholderTextColor={Colors.black500}
               value={searchText}
               onChangeText={(text) => setSearchText(text)}
