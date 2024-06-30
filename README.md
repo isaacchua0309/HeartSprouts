@@ -29,14 +29,14 @@ Our aim is to create a mobile application that serves as a personal relationship
 ## Features
 ### Core Features
 - **Create Profiles**: Maintain a digital "rolodex" of closest connections, with details like hobbies, events, and birthdays.
-- **Weekly Reflection Prompts**: Encourage self-awareness and introspection with weekly prompts.
 - **Reminders for Important Days**: Send reminders for birthdays, outings, and other milestones.
-- **Reminders to Check In**: Gentle prompts to reach out and maintain regular communication.
 
 ### Extension Features
 - **Check-in Streaks**: Gamify consistent communication, rewarding users for maintaining regular contact.
 - **Outing Reminders**: Provide relevant information about friends for meaningful conversations.
 - **Daily Prompts**: Offer daily prompts for intentional relationship-building.
+- **Weekly Reflection Prompts**: Encourage self-awareness and introspection with weekly prompts.
+- **Reminders to Check In**: Gentle prompts to reach out and maintain regular communication.
 
 ## Tech Stack
 - **React Native** (FrontEnd)
