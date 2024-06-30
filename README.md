@@ -8,9 +8,10 @@ HeartSprouts is a mobile application designed to help young adults foster and ma
 - [User Stories](#user-stories)
 - [Features](#features)
 - [Tech Stack](#tech-stack)
-- [Screens](#screens)
 - [Installation](#installation)
 - [Usage](#usage)
+- [Screens](#screens)
+
 
 ## Motivation
 As two 21-year-old students, we understand the struggle of maintaining close, intentional, and loving relationships amidst the rapid digitalization of our world and changes in individual life priorities. We believe that building and maintaining connections with those closest to us is the key to personal growth, combating mental health struggles, and empowering us to take control of our social lives.
@@ -46,6 +47,85 @@ Our aim is to create a mobile application that serves as a personal relationship
 - **Firebase Cloud Messaging** (Cloud Services)
 - **React Navigation** (UI Components and Navigation)
 - **Git and GitHub** (Version Control)
+
+
+## Installation
+To get started with HeartSprouts, follow these steps:
+
+### Step 1: Install Node.js
+Node.js is required to run the development server and manage dependencies. Follow the instructions below to install Node.js on your system:
+
+#### For Windows and macOS:
+1. Go to the [Node.js website](https://nodejs.org/).
+2. Download the LTS version of Node.js.
+3. Run the installer and follow the instructions to complete the installation.
+
+#### For Linux:
+1. Open a terminal and run the following commands:
+    ```sh
+    sudo apt update
+    sudo apt install nodejs npm
+    ```
+
+### Step 2: Install Expo CLI
+Expo CLI is required to build and serve your React Native application. Install it globally using npm:
+
+1. Open a terminal (or command prompt on Windows).
+2. Run the following command:
+    ```sh
+    npm install -g expo-cli
+    ```
+
+### Step 3: Install Expo Go
+Expo Go is a mobile application that allows you to run your React Native applications on your mobile device. Install Expo Go on your mobile device from the appropriate app store:
+
+#### For Android:
+1. Open the Google Play Store.
+2. Search for "Expo Go".
+3. Install the Expo Go app.
+
+#### For iOS:
+1. Open the App Store.
+2. Search for "Expo Go".
+3. Install the Expo Go app.
+
+### Step 4: Clone the Repository
+1. Open a terminal (or command prompt on Windows).
+2. Run the following command to clone the repository:
+    ```sh
+    git clone https://github.com/isaacchua0309/HeartSprouts.git
+    ```
+
+### Step 5: Navigate to the Project Directory
+1. In the terminal, navigate to the project directory:
+    ```sh
+    cd HeartSprouts
+    ```
+
+### Step 6: Install Dependencies
+1. In the project directory, run the following command to install the necessary dependencies:
+    ```sh
+    npm install
+    ```
+
+### Step 7: Start the Development Server
+1. Start the development server by running the following command:
+    ```sh
+    expo start
+    ```
+2. Follow the instructions in the terminal to open the Expo Go app on your mobile device and scan the QR code to run the application.
+
+## Usage
+To use HeartSprouts, follow these steps:
+
+1. **Create an Account**: Open the app and create a new account by following the on-screen instructions. Enter your name, birthday, email, and password to complete the registration process.
+2. **Add Friends**: Once logged in, navigate to the "Add Friend" screen to add profiles for your friends and family members. Enter their name, birthday, and any other relevant details.
+3. **Set Reminders**: Use the app to set reminders for important dates like birthdays and anniversaries. You can also set regular check-in reminders to stay connected with your loved ones.
+4. **Weekly Reflections**: Take a few minutes each week to respond to reflection prompts designed to help you deepen your understanding of your relationships and improve your social connections.
+5. **Daily Prompts**: Receive daily prompts to encourage intentional actions or conversations that can strengthen your relationships.
+6. **Prepare for Social Outings**: Use the app to receive reminders and relevant information about your friends before social outings, ensuring you have meaningful conversations.
+
+By following these steps, you can leverage HeartSprouts to maintain and foster genuine connections with your friends and family, even amidst the demands of modern life.
 
 ## Screens
 ### GettingStartedScreen
@@ -125,84 +205,6 @@ Our aim is to create a mobile application that serves as a personal relationship
 
 - **Function**: Manages and displays the user's friend profiles.
 - **Key Features**: Display of friend profiles, navigation to Friend Profile and Friend Creation screens, setup notifications for events.
-
-## Installation
-To get started with HeartSprouts, follow these steps:
-
-### Step 1: Install Node.js
-Node.js is required to run the development server and manage dependencies. Follow the instructions below to install Node.js on your system:
-
-#### For Windows and macOS:
-1. Go to the [Node.js website](https://nodejs.org/).
-2. Download the LTS version of Node.js.
-3. Run the installer and follow the instructions to complete the installation.
-
-#### For Linux:
-1. Open a terminal and run the following commands:
-    ```sh
-    sudo apt update
-    sudo apt install nodejs npm
-    ```
-
-### Step 2: Install Expo CLI
-Expo CLI is required to build and serve your React Native application. Install it globally using npm:
-
-1. Open a terminal (or command prompt on Windows).
-2. Run the following command:
-    ```sh
-    npm install -g expo-cli
-    ```
-
-### Step 3: Install Expo Go
-Expo Go is a mobile application that allows you to run your React Native applications on your mobile device. Install Expo Go on your mobile device from the appropriate app store:
-
-#### For Android:
-1. Open the Google Play Store.
-2. Search for "Expo Go".
-3. Install the Expo Go app.
-
-#### For iOS:
-1. Open the App Store.
-2. Search for "Expo Go".
-3. Install the Expo Go app.
-
-### Step 4: Clone the Repository
-1. Open a terminal (or command prompt on Windows).
-2. Run the following command to clone the repository:
-    ```sh
-    git clone https://github.com/isaacchua0309/HeartSprouts.git
-    ```
-
-### Step 5: Navigate to the Project Directory
-1. In the terminal, navigate to the project directory:
-    ```sh
-    cd HeartSprouts
-    ```
-
-### Step 6: Install Dependencies
-1. In the project directory, run the following command to install the necessary dependencies:
-    ```sh
-    npm install
-    ```
-
-### Step 7: Start the Development Server
-1. Start the development server by running the following command:
-    ```sh
-    expo start
-    ```
-2. Follow the instructions in the terminal to open the Expo Go app on your mobile device and scan the QR code to run the application.
-
-## Usage
-To use HeartSprouts, follow these steps:
-
-1. **Create an Account**: Open the app and create a new account by following the on-screen instructions. Enter your name, birthday, email, and password to complete the registration process.
-2. **Add Friends**: Once logged in, navigate to the "Add Friend" screen to add profiles for your friends and family members. Enter their name, birthday, and any other relevant details.
-3. **Set Reminders**: Use the app to set reminders for important dates like birthdays and anniversaries. You can also set regular check-in reminders to stay connected with your loved ones.
-4. **Weekly Reflections**: Take a few minutes each week to respond to reflection prompts designed to help you deepen your understanding of your relationships and improve your social connections.
-5. **Daily Prompts**: Receive daily prompts to encourage intentional actions or conversations that can strengthen your relationships.
-6. **Prepare for Social Outings**: Use the app to receive reminders and relevant information about your friends before social outings, ensuring you have meaningful conversations.
-
-By following these steps, you can leverage HeartSprouts to maintain and foster genuine connections with your friends and family, even amidst the demands of modern life.
 
 ---
 
