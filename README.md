@@ -12,42 +12,40 @@ HeartSprouts is a mobile application designed to help young adults foster and ma
 - [Usage](#usage)
 - [Screens](#screens)
 
-
 ## Motivation
-As two 21-year-old students, we understand the struggle of maintaining close, intentional, and loving relationships amidst the rapid digitalization of our world and changes in individual life priorities. We believe that building and maintaining connections with those closest to us is the key to personal growth, combating mental health struggles, and empowering us to take control of our social lives.
+In today’s fast-paced world, maintaining close, intentional, and loving relationships can be challenging, especially for young adults juggling various life changes and digital distractions. As two 21-year-old students, we have experienced firsthand how difficult it can be to stay connected with those who matter most. We believe that fostering and maintaining genuine relationships is crucial for personal growth, combating mental health issues, and empowering individuals to take control of their social lives. HeartSprouts was born out of this realization, aiming to bridge the gap between digital convenience and meaningful human connections.
 
 ## Aim
-Our aim is to create a mobile application that serves as a personal relationship companion for young adults, empowering them to foster and maintain genuine connections with friends and family amidst the demands of modern life.
+Our aim is to create a mobile application that serves as a personal relationship companion for young adults. HeartSprouts empowers users to nurture and sustain genuine connections with friends and family amidst the demands of modern life. By providing timely reminders, insightful prompts, and a platform for intentional interactions, we hope to make maintaining relationships easier and more fulfilling.
 
 ## User Stories
-- **Create Profiles**: As a young adult who wants to stay connected with my friends and family, I want to create profiles for each of my close relationships, including details like hobbies, birthdays, and important milestones.
-- **Regular Communication**: As a young adult who values regular communication, I want to receive reminders to check in on my friends and family members.
-- **Remember Important Dates**: As a young adult who tends to forget important dates, I want to receive reminders for birthdays, outings, and other significant events.
-- **Weekly Reflection**: As a young adult who wants to deepen my understanding of my relationships, I want to receive weekly reflection prompts.
-- **Social Outing Prep**: As a young adult preparing for a social outing, I want to receive a reminder with details about my friend.
-- **Daily Inspiration**: As a young adult seeking inspiration, I want to receive a daily prompt encouraging intentional actions or conversations.
+- **Create Profiles**: As a young adult who wants to stay connected with my friends and family, I want to create profiles for each of my close relationships, including details like hobbies, birthdays, and important milestones. This helps me remember key details about my loved ones and makes interactions more personal.
+- **Regular Communication**: As a young adult who values regular communication, I want to receive reminders to check in on my friends and family members. These reminders help me stay in touch and maintain regular contact.
+- **Remember Important Dates**: As a young adult who tends to forget important dates, I want to receive reminders for birthdays, outings, and other significant events. This ensures that I never miss an important occasion.
+- **Weekly Reflection**: As a young adult who wants to deepen my understanding of my relationships, I want to receive weekly reflection prompts. These prompts encourage me to think about my interactions and how I can improve them.
+- **Social Outing Prep**: As a young adult preparing for a social outing, I want to receive a reminder with details about my friend. This helps me prepare for meaningful conversations and shows that I care.
+- **Daily Inspiration**: As a young adult seeking inspiration, I want to receive a daily prompt encouraging intentional actions or conversations. These prompts motivate me to take small but meaningful steps to strengthen my relationships.
 
 ## Features
 ### Core Features
-- **Create Profiles**: Maintain a digital "rolodex" of closest connections, with details like hobbies, events, and birthdays.
-- **Reminders for Important Days**: Send reminders for birthdays, outings, and other milestones.
+- **Create Profiles**: Maintain a digital "rolodex" of closest connections, with details like hobbies, events, and birthdays. This feature helps users keep track of important information about their loved ones, making interactions more meaningful.
+- **Reminders for Important Days**: Send reminders for birthdays, outings, and other milestones. This ensures that users never miss an important date, helping them stay connected and show that they care.
 
 ### Extension Features
-- **Check-in Streaks**: Gamify consistent communication, rewarding users for maintaining regular contact.
-- **Outing Reminders**: Provide relevant information about friends for meaningful conversations.
-- **Daily Prompts**: Offer daily prompts for intentional relationship-building.
-- **Weekly Reflection Prompts**: Encourage self-awareness and introspection with weekly prompts.
-- **Reminders to Check In**: Gentle prompts to reach out and maintain regular communication.
+- **Check-in Streaks**: Gamify consistent communication, rewarding users for maintaining regular contact. This feature encourages users to stay in touch with their loved ones by making it a fun and rewarding activity.
+- **Outing Reminders**: Provide relevant information about friends for meaningful conversations. This helps users prepare for social outings and ensures that their interactions are thoughtful and engaging.
+- **Daily Prompts**: Offer daily prompts for intentional relationship-building. These prompts inspire users to take small but meaningful actions to strengthen their relationships.
+- **Weekly Reflection Prompts**: Encourage self-awareness and introspection with weekly prompts. These prompts help users reflect on their interactions and think about how they can improve their relationships.
+- **Reminders to Check In**: Gentle prompts to reach out and maintain regular communication. These reminders help users stay in touch with their loved ones and maintain strong relationships.
 
 ## Tech Stack
-- **React Native** (FrontEnd)
-- **Node.js with Express.js** (BackEnd)
-- **Firestore Database** (Database)
-- **Firebase Authentication** (Authentication)
-- **Firebase Cloud Messaging** (Cloud Services)
-- **React Navigation** (UI Components and Navigation)
-- **Git and GitHub** (Version Control)
-
+- **React Native** (FrontEnd): React Native allows us to build a mobile application that works on both iOS and Android platforms using a single codebase. This helps us deliver a consistent experience to all users, regardless of their device.
+- **Node.js with Express.js** (BackEnd): Node.js and Express.js enable us to build a scalable and efficient backend for handling API requests and managing data. This ensures that our application performs well and can handle a large number of users.
+- **Firestore Database** (Database): Firestore provides a flexible, scalable, and real-time database solution for storing user data. This allows us to deliver a seamless and responsive experience to our users.
+- **Firebase Authentication** (Authentication): Firebase Authentication provides secure and reliable user authentication, ensuring that user data is protected and that users can easily sign in and out of the application.
+- **Firebase Cloud Messaging** (Cloud Services): Firebase Cloud Messaging allows us to send push notifications to users, ensuring that they receive timely reminders and prompts.
+- **React Navigation** (UI Components and Navigation): React Navigation helps us build a user-friendly and intuitive navigation system for the application, making it easy for users to move between different screens and features.
+- **Git and GitHub** (Version Control): Git and GitHub enable us to manage our codebase, collaborate effectively, and track changes. This ensures that our development process is smooth and that we can quickly address any issues that arise.
 
 ## Installation
 To get started with HeartSprouts, follow these steps:
@@ -138,7 +136,9 @@ By following these steps, you can leverage HeartSprouts to maintain and foster g
 ![Name Input Screen](https://github.com/isaacchua0309/HeartSprouts/blob/main/assets/ReadMe/NameInputScreen.jpg)
 
 - **Function**: Captures the user's name and navigates to the Birthday Input screen.
-- **Key Features**: Input field for the user's name, progress bar.
+- **Key Features**: Input field for
+
+ the user's name, progress bar.
 
 ### BirthdayInputScreen
 ![Birthday Input Screen](https://github.com/isaacchua0309/HeartSprouts/blob/main/assets/ReadMe/BirthdayInputScreen.jpg)
@@ -213,4 +213,3 @@ HeartSprouts is designed to be your personal relationship companion, empowering 
 For more information, visit our [GitHub repository](https://github.com/isaacchua0309/HeartSprouts) or contact our support team at support@heartsprouts.com.
 
 Happy connecting!
-
