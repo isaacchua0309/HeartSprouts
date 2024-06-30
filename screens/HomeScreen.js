@@ -41,7 +41,7 @@ function HomeScreen({ navigation, route }) {
     <View style={styles.container}>
       <Text style={styles.greeting}>
         Tell me anything about your friends, family and loved ones 
-        (TEXT TO ADD EVENT NOT IMPLEMENTED YET BUT CAN BE ADDED MANUALLY IN FRIENDS PROFILE)
+        (TEXT RECONGITION TO ADD EVENT NOT IMPLEMENTED YET BUT CAN BE ADDED MANUALLY IN FRIENDS PROFILE)
       </Text>
       <Text style={styles.exampleText}>
         examples;{'\n'}
