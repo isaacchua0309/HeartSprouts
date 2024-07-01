@@ -24,10 +24,14 @@ function GettingStartedScreen({ navigation }) {
       </View>
 
       <View style={styles.contentContainer}>
-        <Text style={styles.mainText}>Welcome!</Text>
+        <Text style={styles.mainText}>Warmest Welcome to, </Text>
         <ImageBackground
-          source={ require('../assets/HeartSprouts.png')} // Replace with your image URL or local path
-          style={styles.image}
+          source={ require('../assets/somesprouts.png')} // Replace with your image URL or local path
+          style={styles.firstimage}
+        />
+        <ImageBackground
+          source={ require('../assets/HeartSproutsWORD.png')} // Replace with your image URL or local path
+          style={styles.secondimage}
         />
       </View>
 
@@ -57,7 +61,7 @@ const styles = StyleSheet.create({
   },
   signInLink: {
     fontWeight: 'bold',
-    color: Colors.white500,
+    color: Colors.white700,
     fontSize: '16'
   },
   contentContainer: {
@@ -66,26 +70,30 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   mainText: {
-    color: Colors.white500,
+    color: Colors.pink500,
     fontSize: 24,
     textAlign: 'center',
     marginBottom: 20,
     fontWeight: 'bold'
   },
-  image: {
-    width: 350, // Adjust the size of the image
-    height: 350, // Adjust the size of the image
+  firstimage: {
+    width: 240,
+    height: 140,
+  },
+  secondimage: {
+    width: 300, // Adjust the size of the image
+    height: 90, // Adjust the size of the image
     marginBottom: 20,
   },
   button: {
-    backgroundColor: Colors.white500, // Use the appropriate button background color
+    backgroundColor: Colors.green700, // Use the appropriate button background color
     padding: 15,
     borderRadius: 30,
     alignItems: 'center',
     marginBottom: 24, // Adjust as needed
   },
   buttonText: {
-    color: '#1B0638', // Use the appropriate text color
+    color: Colors.white700, // Use the appropriate text color
     fontSize: 16,
     fontWeight: 'bold',
   },

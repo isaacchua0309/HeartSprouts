@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, SafeAreaView, Alert } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, SafeAreaView, Alert, ImageBackground } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Colors from '../constants/colors';
 import { getAuth, signInWithEmailAndPassword } from '@firebase/auth';
@@ -40,9 +40,21 @@ const LoginScreen = ({ navigation }) => {
       <TouchableOpacity onPress={goBack} style={styles.backButton}>
         <Icon name="arrow-back" size={24} color="#FFFFFF" />
       </TouchableOpacity>
+
       <View style={styles.body}>
-        <Text style={styles.mainText}> Welcome Back to HeartSprouts! </Text>
-        <TextInput 
+      <View style={styles.contentContainer}>
+        {/* <Text style={styles.mainText}></Text> */}
+        <ImageBackground
+          source={ require('../assets/HeartSproutsWORD.png')} // Replace with your image URL or local path
+          style={styles.firstimage}
+        />
+        <ImageBackground
+          source={ require('../assets/somesprouts.png')} // Replace with your image URL or local path
+          style={styles.secondimage}
+        />
+      </View>
+
+      <TextInput 
           style={styles.input}
           placeholder="Email"
           placeholderTextColor={Colors.white700}
@@ -51,31 +63,32 @@ const LoginScreen = ({ navigation }) => {
           keyboardType="email-address"
           autoCapitalize="none"
         />
-        <View style={styles.passwordContainer}>
-          <TextInput 
+      <View style={styles.passwordContainer}>
+        <TextInput 
             style={styles.passwordInput}
             placeholder="Password"
             placeholderTextColor={Colors.white700}
             secureTextEntry={!passwordVisible}
             value={password}
             onChangeText={setPassword}
-          />
-          <TouchableOpacity onPress={togglePasswordVisibility} style={styles.eyeIcon}>
+        />
+        <TouchableOpacity onPress={togglePasswordVisibility} style={styles.eyeIcon}>
             <Icon name={passwordVisible ? "eye-off" : "eye"} size={20} color="#FFFFFF" />
-          </TouchableOpacity>
-        </View>
-        <View style={styles.forgotPasswordContainer}>
-          <Text style={styles.forgotPassword}>Forgot Password?</Text>
-          <TouchableOpacity onPress={() => alert('Reset Password Pressed')}>
-            <Text style={styles.resetPassword}>    Reset Password</Text>
-          </TouchableOpacity>
-        </View>
-        {error ? <Text style={styles.errorText}>{error}</Text> : null}
-        <TouchableOpacity style={styles.signInButton} onPress={handleSignIn}>
-          <Text style={styles.signInText}>SIGN IN</Text>
         </TouchableOpacity>
       </View>
-    </SafeAreaView>
+
+      <View style={styles.forgotPasswordContainer}>
+        <Text style={styles.forgotPassword}>Forgot Password?</Text>
+        <TouchableOpacity onPress={() => alert('Reset Password Pressed')}>
+          <Text style={styles.resetPassword}>    Reset Password</Text>
+        </TouchableOpacity>
+      </View>
+      {error ? <Text style={styles.errorText}>{error}</Text> : null}
+      <TouchableOpacity style={styles.signInButton} onPress={handleSignIn}>
+        <Text style={styles.signInText}>SIGN IN</Text>
+      </TouchableOpacity>
+    </View>
+  </SafeAreaView>
   );
 }
 
@@ -83,7 +96,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: Colors.green500,
-    justifyContent: 'center',
+    // justifyContent: 'center',
     alignItems: 'center',
   },
   mainText: {
@@ -101,6 +114,19 @@ const styles = StyleSheet.create({
   body: {
     width: '80%',
     alignItems: 'center',
+  },
+  contentContainer: {
+  justifyContent: 'center',
+  alignItems: 'center',
+  },
+  firstimage: {
+    width: 300,
+    height: 90,
+    marginBottom: '35%',
+  },
+  secondimage: {
+    width: 240, 
+    height: 140, 
   },
   input: {
     backgroundColor: Colors.green700,
