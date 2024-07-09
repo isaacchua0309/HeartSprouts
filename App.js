@@ -17,6 +17,7 @@ import Colors from './constants/colors';
 import { store } from './store/store';
 import AddFriendScreen from './screens/AddFriendScreen'
 import FriendProfileScreen from './screens/FriendProfileScreen';
+import PromptScreen from './screens/WeeklyReflectionScreen';
 
 const Stack = createStackNavigator();
 
@@ -33,6 +34,7 @@ export default function App() {
               <Stack.Screen name="Users" component={UserProfilesScreen} />
               <Stack.Screen name="Friend Profile" component={FriendProfileScreen} />
               <Stack.Screen name="Friend Creation" component={AddFriendScreen} />
+              <Stack.Screen name="Weekly Prompts" component={PromptScreen} />
               <Stack.Screen name="Name Input" component={NameInputScreen} />
               <Stack.Screen name="Birthday Input" component={BirthdayInputScreen} />
               <Stack.Screen name="Email Input" component={EmailInputScreen} />
