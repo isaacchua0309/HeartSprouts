@@ -1,7 +1,7 @@
 import { firestore } from '../firebaseHelper';
 import { collection, doc, setDoc, getDoc, Timestamp } from 'firebase/firestore';
 
-export const createFriendDocumentWithEvents = async (email, name, birthday) => {
+export const createFriendDocumentWithEvents = async (email, name, birthday, image) => {
   try {
     // Reference to the 'Friends' subcollection
     const friendDocRef = doc(firestore, `Users/${email}/Friends`, name);
@@ -16,6 +16,7 @@ export const createFriendDocumentWithEvents = async (email, name, birthday) => {
     await setDoc(friendDocRef, {
       name: name,
       birthday: Timestamp.fromDate(birthday),
+      image: image || null, // Save the image URL if provided, else save as null
     });
 
     // Reference to the 'Events' subcollection in the 'Friends' document

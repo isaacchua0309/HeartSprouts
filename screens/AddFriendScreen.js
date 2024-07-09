@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, Alert, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { View, Text, TextInput, Button, StyleSheet, Alert, TouchableOpacity, ActivityIndicator, Image } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import * as ImagePicker from 'expo-image-picker';
 import { createFriendDocumentWithEvents } from '../utils/actions/friendCollectionCreation';
 import Colors from '../constants/colors';
 
@@ -11,14 +12,16 @@ function AddFriendScreen({ navigation, route }) {
   const [birthday, setBirthday] = useState(new Date());
   const [showPicker, setShowPicker] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [image, setImage] = useState(null);
 
   const handleAddFriend = async () => {
     if (name.trim()) {
       try {
         setLoading(true);
-        await createFriendDocumentWithEvents(email, name, birthday);
+        await createFriendDocumentWithEvents(email, name, birthday, image);
         setName('');
         setBirthday(new Date());
+        setImage(null);
         Alert.alert('Success', 'Friend added successfully', [
           { text: 'OK', onPress: () => navigation.navigate('Users', { email }) }
         ]);
@@ -42,15 +45,46 @@ function AddFriendScreen({ navigation, route }) {
     setBirthday(currentDate);
   };
 
+  const pickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+    if (!result.canceled) {
+      setImage(result.assets[0].uri);
+    }
+  };
+
+  const removeImage = () => {
+    setImage(null);
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.headerText}>Add a new relationship profile     </Text>
+        <Text style={styles.headerText}>Add a new relationship profile</Text>
         <TouchableOpacity style={styles.backButton} onPress={() => navigation.navigate('Users', { email })}>
           <Icon name="arrow-left" size={24} color={Colors.white500} />
         </TouchableOpacity>
       </View>
       <View style={styles.mainBody}>
+        <View style={styles.imageContainer}>
+          <TouchableOpacity style={styles.imagePicker} onPress={pickImage}>
+            {image ? (
+              <>
+                <Image source={{ uri: image }} style={styles.image} />
+                <TouchableOpacity style={styles.removeButton} onPress={removeImage}>
+                  <Text style={styles.removeButtonText}>Remove Photo</Text>
+                </TouchableOpacity>
+              </>
+            ) : (
+              <Text style={styles.imagePickerText}>Pick an image</Text>
+            )}
+          </TouchableOpacity>
+        </View>
         <Text style={styles.label}>Friend's Name</Text>
         <TextInput
           style={styles.input}
@@ -105,18 +139,52 @@ const styles = StyleSheet.create({
     fontSize: 24,
     color: Colors.white500,
     fontWeight: 'bold',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   mainBody: {
     padding: 20,
+    alignItems: 'center',
   },
-  backButton: {
+  imageContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: 200,
+    height: 200,
+    borderRadius: 50,
+    backgroundColor: Colors.white500,
+    marginBottom: 20,
+    overflow: 'hidden',
   },
+  image: {
+    width: '100%',
+    height: '100%',
+  },
+  imagePicker: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '100%',
+    height: '100%',
+  },
+  imagePickerText: {
+    color: Colors.black500,
+  },
+  removeButton: {
+    position: 'absolute',
+    bottom: 0,
+    backgroundColor: 'rgba(0,0,0,0.5)',
+    width: '100%',
+    alignItems: 'center',
+  },
+  removeButtonText: {
+    color: 'white',
+    paddingVertical: 5,
+  },
+  backButton: {},
   label: {
     fontSize: 16,
     marginBottom: 10,
     color: Colors.pink700,
-    fontWeight: 'bold'
+    fontWeight: 'bold',
   },
   input: {
     backgroundColor: Colors.white500,
@@ -151,4 +219,3 @@ const styles = StyleSheet.create({
 });
 
 export default AddFriendScreen;
-
