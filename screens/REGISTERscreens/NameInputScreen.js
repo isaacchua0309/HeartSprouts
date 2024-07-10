@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TextInput, Pressable, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons'; // Ensure you have react-native-vector-icons installed
-import Colors from '../constants/colors';
+import Colors from '../../constants/colors';
 
 function NameInputScreen({navigation}){
     const [name, setName] = useState('');

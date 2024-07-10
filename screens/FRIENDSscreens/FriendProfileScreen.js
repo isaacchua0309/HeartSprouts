@@ -14,7 +14,7 @@ import {
 import Icon from 'react-native-vector-icons/FontAwesome';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import * as ImagePicker from 'expo-image-picker';
-import { firestore, storage } from '../utils/firebaseHelper';
+import { firestore, storage } from '../../utils/firebaseHelper';
 import {
   collection,
   getDocs,
@@ -29,7 +29,7 @@ import {
   setDoc,
 } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import Colors from '../constants/colors';
+import Colors from '../../constants/colors';
 
 const FriendProfileScreen = ({ navigation, route }) => {
   const { friend, email } = route.params;

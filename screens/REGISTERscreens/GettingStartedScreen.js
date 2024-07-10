@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet, Pressable, ImageBackground } from 'react-native';
-import Colors from '../constants/colors';
+import Colors from '../../constants/colors';
 
 function GettingStartedScreen({ navigation }) {
   function nextScreenHandler() {
@@ -26,11 +26,11 @@ function GettingStartedScreen({ navigation }) {
       <View style={styles.contentContainer}>
         <Text style={styles.mainText}>Warmest Welcome to, </Text>
         <ImageBackground
-          source={ require('../assets/somesprouts.png')} // Replace with your image URL or local path
+          source={ require('../../assets/somesprouts.png')} // Replace with your image URL or local path
           style={styles.firstimage}
         />
         <ImageBackground
-          source={ require('../assets/HeartSproutsWORD.png')} // Replace with your image URL or local path
+          source={ require('../../assets/HeartSproutsWORD.png')} // Replace with your image URL or local path
           style={styles.secondimage}
         />
       </View>

@@ -3,8 +3,8 @@ import { View, Text, TextInput, Button, StyleSheet, Alert, TouchableOpacity, Act
 import DateTimePicker from '@react-native-community/datetimepicker';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import * as ImagePicker from 'expo-image-picker';
-import { createFriendDocumentWithEvents } from '../utils/actions/friendCollectionCreation';
-import Colors from '../constants/colors';
+import { createFriendDocumentWithEvents } from '../../utils/actions/friendCollectionCreation';
+import Colors from '../../constants/colors';
 
 function AddFriendScreen({ navigation, route }) {
   const { email } = route.params;
