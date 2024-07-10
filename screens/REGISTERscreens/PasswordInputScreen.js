@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TextInput, TouchableOpacity, Alert } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
-import Colors from '../constants/colors';
+import Colors from '../../constants/colors';
 import { getAuth, createUserWithEmailAndPassword } from '@firebase/auth';
-import { getFirebaseApp } from '../utils/firebaseHelper';
-import { createUserDocumentWithFriends } from '../utils/actions/userCollectionCreation';
+import { getFirebaseApp } from '../../utils/firebaseHelper';
+import { createUserDocumentWithFriends } from '../../utils/actions/userCollectionCreation';
 
 function PassWordInputScreen({ navigation,route }) {
   const [password, setPassword] = useState('');

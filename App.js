@@ -4,20 +4,20 @@ import { StyleSheet, View, SafeAreaView } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { Provider } from 'react-redux';
-import GettingStartedScreen from './screens/GettingStartedScreen';
-import NameInputScreen from './screens/NameInputScreen';
-import BirthdayInputScreen from './screens/BirthdayInputScreen';
-import EmailInputScreen from './screens/EmailInputScreen';
-import PassWordInputScreen from './screens/PasswordInputScreen';
-import CreationSuccessScreen from './screens/CreationSuccessScreen';
-import LoginScreen from './screens/LoginScreen';
-import UserProfilesScreen from './screens/UserProfilesScreen';
-import HomeScreen from './screens/HomeScreen';
+import GettingStartedScreen from './screens/REGISTERscreens/GettingStartedScreen';
+import NameInputScreen from './screens/REGISTERscreens/NameInputScreen';
+import BirthdayInputScreen from './screens/REGISTERscreens/BirthdayInputScreen';
+import EmailInputScreen from './screens/REGISTERscreens/EmailInputScreen';
+import PassWordInputScreen from './screens/REGISTERscreens/PasswordInputScreen';
+import CreationSuccessScreen from './screens/REGISTERscreens/CreationSuccessScreen';
+import LoginScreen from './screens/REGISTERscreens/LoginScreen';
+import UserProfilesScreen from './screens/FRIENDSscreens/UserProfilesScreen';
+import HomeScreen from './screens/HOMEscreens/HomeScreen';
 import Colors from './constants/colors';
 import { store } from './store/store';
-import AddFriendScreen from './screens/AddFriendScreen'
-import FriendProfileScreen from './screens/FriendProfileScreen';
-import PromptScreen from './screens/WeeklyReflectionScreen';
+import AddFriendScreen from './screens/FRIENDSscreens/AddFriendScreen'
+import FriendProfileScreen from './screens/FRIENDSscreens/FriendProfileScreen';
+import PromptScreen from './screens/JOURNALscreens/WeeklyReflectionScreen';
 
 const Stack = createStackNavigator();
 

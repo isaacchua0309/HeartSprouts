@@ -4,7 +4,7 @@ import { Ionicons } from '@expo/vector-icons'; // Import Ionicons from Expo
 import Icon from 'react-native-vector-icons/FontAwesome';
 import nlp from 'compromise';
 import * as chrono from 'chrono-node';
-import Colors from '../constants/colors';
+import Colors from '../../constants/colors';
 
 function HomeScreen({ navigation, route }) {
   const [searchText, setSearchText] = useState('');

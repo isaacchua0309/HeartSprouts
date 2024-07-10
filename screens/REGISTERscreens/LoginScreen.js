@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, SafeAreaView, Alert, ImageBackground } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
-import Colors from '../constants/colors';
+import Colors from '../../constants/colors';
 import { getAuth, signInWithEmailAndPassword } from '@firebase/auth';
-import { getFirebaseApp } from '../utils/firebaseHelper';
+import { getFirebaseApp } from '../../utils/firebaseHelper';
 
 const LoginScreen = ({ navigation }) => {
   const [passwordVisible, setPasswordVisible] = useState(false);
@@ -45,11 +45,11 @@ const LoginScreen = ({ navigation }) => {
       <View style={styles.contentContainer}>
         {/* <Text style={styles.mainText}></Text> */}
         <ImageBackground
-          source={ require('../assets/HeartSproutsWORD.png')} // Replace with your image URL or local path
+          source={ require('../../assets/HeartSproutsWORD.png')} // Replace with your image URL or local path
           style={styles.firstimage}
         />
         <ImageBackground
-          source={ require('../assets/somesprouts.png')} // Replace with your image URL or local path
+          source={ require('../../assets/somesprouts.png')} // Replace with your image URL or local path
           style={styles.secondimage}
         />
       </View>

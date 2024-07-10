@@ -2,11 +2,11 @@ import React, { useEffect, useState, useCallback } from 'react';
 import { View, Text, Image, TouchableOpacity, StyleSheet, ScrollView, Alert } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { useFocusEffect } from '@react-navigation/native';
-import { firestore } from '../utils/firebaseHelper';
+import { firestore } from '../../utils/firebaseHelper';
 import { collection, getDocs } from 'firebase/firestore';
-import Colors from '../constants/colors';
-import { requestPermissions, scheduleNotification } from '../utils/notificationHandler';
-import fetchEventsForFriend from '../utils/actions/fetchEventsForFriend';
+import Colors from '../../constants/colors';
+import { requestPermissions, scheduleNotification } from '../../utils/notificationHandler';
+import fetchEventsForFriend from '../../utils/actions/fetchEventsForFriend';
 import { Ionicons } from '@expo/vector-icons';
 
 const UserProfilesScreen = ({ navigation, route }) => {
