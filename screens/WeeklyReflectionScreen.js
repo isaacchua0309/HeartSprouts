@@ -13,7 +13,8 @@ const data = [
   { id: '8', title: 'On Quantity and Quality', description: 'This week, we\'ll compare more with better.', progress: '0/7' },
 ];
 
-const PromptScreen = ({ navigation }) => {
+const PromptScreen = ({ navigation, route }) => {
+  const { email } = route.params;
   const renderItem = ({ item }) => (
     <TouchableOpacity style={styles.itemContainer} onPress={() => alert(item.title)}>
       <View style={styles.itemTextContainer}>

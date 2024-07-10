@@ -7,6 +7,7 @@ import { collection, getDocs } from 'firebase/firestore';
 import Colors from '../constants/colors';
 import { requestPermissions, scheduleNotification } from '../utils/notificationHandler';
 import fetchEventsForFriend from '../utils/actions/fetchEventsForFriend';
+import { Ionicons } from '@expo/vector-icons';
 
 const UserProfilesScreen = ({ navigation, route }) => {
   const [friends, setFriends] = useState([]);
@@ -98,9 +99,13 @@ const UserProfilesScreen = ({ navigation, route }) => {
           <Icon name="home" size={24} color={Colors.pink500} />
           <Text style={styles.navText}>Home</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.navButton}>
+        <TouchableOpacity style={styles.navButton} onPress={() => navigation.navigate('Users', { email })}>
           <Icon name="users" size={24} color={Colors.pink500} />
           <Text style={styles.navText}>Friends</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.navButton} onPress={() => navigation.navigate('Weekly Prompts', { email })}>
+          <Ionicons name="book" size={24} color={Colors.pink500} />
+          <Text style={styles.navText}>Journaling</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -218,6 +223,3 @@ const styles = StyleSheet.create({
 });
 
 export default UserProfilesScreen;
-
-
-

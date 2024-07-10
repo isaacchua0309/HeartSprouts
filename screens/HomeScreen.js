@@ -74,6 +74,10 @@ function HomeScreen({ navigation, route }) {
           <Icon name="users" size={24} color={Colors.pink500} />
           <Text style={styles.navText}>Friends</Text>
         </TouchableOpacity>
+        <TouchableOpacity style={styles.navButton} onPress={() => navigation.navigate('Weekly Prompts', { email })}>
+          <Ionicons name="book" size={24} color={Colors.pink500} />
+          <Text style={styles.navText}>Journaling</Text>
+        </TouchableOpacity>
       </View>
     </View>
   );
