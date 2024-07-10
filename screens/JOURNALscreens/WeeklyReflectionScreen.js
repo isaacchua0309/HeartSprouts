@@ -34,7 +34,7 @@ const PromptScreen = ({ navigation, route }) => {
         <Text style={styles.headerTitle}>DAILY</Text>
         <Text style={styles.headerSubtitle}>prompts.</Text>
       </View>
-      <TouchableOpacity style={styles.promptButton} onPress={() => alert('Answer Weekly Prompt pressed')}>
+      <TouchableOpacity style={styles.promptButton} onPress={() => navigation.navigate('Satisfaction Rating')}>
         <Text style={styles.promptButtonText}>Answer Weekly Prompt</Text>
       </TouchableOpacity>
       <FlatList

@@ -1,39 +1,55 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, SafeAreaView, Image } from 'react-native';
+import { View, Text, StyleSheet, SafeAreaView, TouchableOpacity, Image } from 'react-native';
 import Slider from '@react-native-community/slider';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
-const SatisfactionRatingScreen = () => {
+const SatisfactionRatingScreen = ({ navigation, route }) => {
   const [sleepQuality, setSleepQuality] = useState(5);
+
+  const getSleepQualityText = (value) => {
+    if (value <= 2) return "I slept terribly.";
+    if (value <= 4) return "I slept poorly.";
+    if (value <= 6) return "I slept okay.";
+    if (value <= 8) return "I slept well.";
+    return "I slept great!";
+  };
 
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
+        <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
+          <Icon name="arrow-left" size={30} color="#FFFFFF" />
+        </TouchableOpacity>
         <Text style={styles.headerText}>How well did you sleep today?</Text>
-        <Text style={styles.subText}>
-          We ask because you said you want to improve your sleep. After a few days you'll see insights and charts of your sleep quality on the trends page.
-        </Text>
       </View>
+      <Text style={styles.subText}>
+        We ask because you said you want to improve your sleep. After a few days you'll see insights and charts of your sleep quality on the trends page.
+      </Text>
       <View style={styles.imageContainer}>
-        <Image source={require('./path/to/your/image.png')} style={styles.image} />
+        {/* You can add an image here if needed */}
       </View>
       <View style={styles.sliderContainer}>
         <Text style={styles.sliderText}>Last night</Text>
-        <Text style={styles.sleepQualityText}>I slept quite well.</Text>
+        <Text style={styles.sleepQualityText}>{getSleepQualityText(sleepQuality)}</Text>
         <Slider
           style={styles.slider}
           minimumValue={1}
           maximumValue={10}
           step={1}
           value={sleepQuality}
-          onValueChange={value => setSleepQuality(value)}
+          onValueChange={(value) => setSleepQuality(value)}
           minimumTrackTintColor="#FFFFFF"
-          maximumTrackTintColor="#000000"
+          maximumTrackTintColor="#333333"
+          thumbTintColor="#FFFFFF"
         />
         <View style={styles.sliderLabels}>
-          <Text>Not at all</Text>
-          <Text>Very</Text>
+          <Text style={styles.sliderLabelText}>Not at all</Text>
+          <Text style={styles.sliderLabelText}>Very</Text>
         </View>
       </View>
+      <TouchableOpacity style={styles.nextButton} onPress={() => navigation.navigate('Relationships Satisfied')}>
+        <Icon name="chevron-right" size={30} color="#FFFFFF" />
+      </TouchableOpacity>
     </SafeAreaView>
   );
 };
@@ -46,13 +62,16 @@ const styles = StyleSheet.create({
   },
   header: {
     marginTop: 20,
+    flexDirection: 'row',
     alignItems: 'center',
+  },
+  backButton: {
+    marginRight: 10,
   },
   headerText: {
     color: '#FFFFFF',
     fontSize: 20,
     fontWeight: 'bold',
-    textAlign: 'center',
   },
   subText: {
     color: '#FFFFFF',
@@ -91,6 +110,16 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     width: '80%',
     marginTop: 10,
+  },
+  sliderLabelText: {
+    color: '#FFFFFF',
+  },
+  nextButton: {
+    alignSelf: 'flex-end',
+    marginTop: 20,
+    backgroundColor: '#444444',
+    borderRadius: 25,
+    padding: 10,
   },
 });
 

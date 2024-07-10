@@ -20,8 +20,9 @@ const focusItems = [
   { id: '15', name: 'Movies', icon: 'movie' },
 ];
 
-const RelationshipSatisfiedScreen = () => {
+const RelationshipSatisfiedScreen = ({ navigation, route }) => {
   const [selectedItems, setSelectedItems] = useState([]);
+  const [selectedNames, setSelectedNames] = useState([]);
 
   const handlePress = (item) => {
     setSelectedItems((prev) =>
@@ -29,6 +30,14 @@ const RelationshipSatisfiedScreen = () => {
         ? prev.filter((id) => id !== item.id)
         : prev.length < 3
         ? [...prev, item.id]
+        : prev
+    );
+
+    setSelectedNames((prev) =>
+      prev.includes(item.name)
+        ? prev.filter((name) => name !== item.name)
+        : prev.length < 3
+        ? [...prev, item.name]
         : prev
     );
   };
@@ -51,6 +60,9 @@ const RelationshipSatisfiedScreen = () => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
+        <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
+          <Icon name="arrow-left" size={30} color="#FFFFFF" />
+        </TouchableOpacity>
         <Text style={styles.headerText}>What's your main focus for today?</Text>
         <Text style={styles.subText}>Pick up to 3.</Text>
       </View>
@@ -58,9 +70,13 @@ const RelationshipSatisfiedScreen = () => {
         data={focusItems}
         renderItem={renderItem}
         keyExtractor={(item) => item.id}
-        numColumns={3}
+        numColumns={2}
+        key={2} // Force re-render when changing numColumns
         contentContainerStyle={styles.listContainer}
       />
+      <TouchableOpacity style={styles.nextButton} onPress={() => navigation.navigate('Prompt Answer')}>
+        <Icon name="chevron-right" size={30} color="#FFFFFF" />
+      </TouchableOpacity>
     </SafeAreaView>
   );
 };
@@ -73,12 +89,18 @@ const styles = StyleSheet.create({
   },
   header: {
     marginBottom: 20,
+    alignItems: 'center',
+  },
+  backButton: {
+    position: 'absolute',
+    left: 0,
   },
   headerText: {
     color: '#FFFFFF',
     fontSize: 20,
     fontWeight: 'bold',
     textAlign: 'center',
+    marginLeft: 40, // adjust to center the text properly
   },
   subText: {
     color: '#FFFFFF',
@@ -96,6 +118,7 @@ const styles = StyleSheet.create({
     padding: 20,
     borderRadius: 50,
     backgroundColor: '#333333',
+    width: '40%', // ensure the items fit well in two columns
   },
   selectedItem: {
     backgroundColor: '#FFFFFF',
@@ -107,6 +130,13 @@ const styles = StyleSheet.create({
   },
   selectedItemText: {
     color: '#000000',
+  },
+  nextButton: {
+    alignSelf: 'flex-end',
+    marginTop: 20,
+    backgroundColor: '#444444',
+    borderRadius: 25,
+    padding: 10,
   },
 });
 

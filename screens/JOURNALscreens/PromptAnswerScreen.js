@@ -1,14 +1,19 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, SafeAreaView, TextInput, TouchableOpacity, KeyboardAvoidingView } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { useNavigation } from '@react-navigation/native';
 
 const PromptAnswerScreen = () => {
   const [text, setText] = useState('');
+  const navigation = useNavigation();
 
   return (
     <SafeAreaView style={styles.container}>
       <KeyboardAvoidingView behavior="padding" style={styles.avoidingView}>
         <View style={styles.header}>
+          <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
+            <Icon name="arrow-left" size={30} color="#FFFFFF" />
+          </TouchableOpacity>
           <Text style={styles.headerText}>What do you plan to do today?</Text>
         </View>
         <TextInput
@@ -42,12 +47,19 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   header: {
+    flexDirection: 'row',
+    alignItems: 'center',
     marginBottom: 20,
+  },
+  backButton: {
+    marginRight: 10,
   },
   headerText: {
     color: '#FFFFFF',
     fontSize: 20,
     fontWeight: 'bold',
+    flex: 1,
+    textAlign: 'center',
   },
   textInput: {
     flex: 1,
