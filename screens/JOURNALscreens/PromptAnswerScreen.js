@@ -3,9 +3,10 @@ import { View, Text, StyleSheet, SafeAreaView, TextInput, TouchableOpacity, Keyb
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useNavigation } from '@react-navigation/native';
 
-const PromptAnswerScreen = () => {
+const PromptAnswerScreen = ({route}) => {
   const [text, setText] = useState('');
   const navigation = useNavigation();
+  const {email} = route.params;
 
   return (
     <SafeAreaView style={styles.container}>
@@ -28,7 +29,7 @@ const PromptAnswerScreen = () => {
           <TouchableOpacity style={styles.addButton}>
             <Icon name="plus" size={30} color="#FFFFFF" />
           </TouchableOpacity>
-          <TouchableOpacity style={styles.checkButton}>
+          <TouchableOpacity style={styles.checkButton} >
             <Icon name="check" size={30} color="#FFFFFF" />
           </TouchableOpacity>
         </View>

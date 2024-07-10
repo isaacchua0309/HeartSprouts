@@ -1,43 +1,38 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, SafeAreaView, FlatList, TouchableOpacity } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, StyleSheet, SafeAreaView, FlatList, TouchableOpacity, ActivityIndicator } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-
-const focusItems = [
-  { id: '1', name: 'Work', icon: 'briefcase' },
-  { id: '2', name: 'Relaxing', icon: 'weather-sunny' },
-  { id: '3', name: 'Family', icon: 'home' },
-  { id: '4', name: 'Friends', icon: 'account-group' },
-  { id: '5', name: 'Date', icon: 'heart' },
-  { id: '6', name: 'Pets', icon: 'dog' },
-  { id: '7', name: 'Fitness', icon: 'dumbbell' },
-  { id: '8', name: 'Self-care', icon: 'crown' },
-  { id: '9', name: 'Partner', icon: 'account-heart' },
-  { id: '10', name: 'Reading', icon: 'book' },
-  { id: '11', name: 'Learning', icon: 'school' },
-  { id: '12', name: 'Travel', icon: 'train' },
-  { id: '13', name: 'Nature', icon: 'leaf' },
-  { id: '14', name: 'Party', icon: 'party-popper' },
-  { id: '15', name: 'Movies', icon: 'movie' },
-];
+import { firestore } from '../../utils/firebaseHelper'; // Adjust the import based on your project structure
+import { collection, getDocs } from 'firebase/firestore';
 
 const RelationshipSatisfiedScreen = ({ navigation, route }) => {
-  const [selectedItems, setSelectedItems] = useState([]);
-  const [selectedNames, setSelectedNames] = useState([]);
+  const [selectedFriends, setSelectedFriends] = useState([]);
+  const [friends, setFriends] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const { email } = route.params;
 
-  const handlePress = (item) => {
-    setSelectedItems((prev) =>
-      prev.includes(item.id)
-        ? prev.filter((id) => id !== item.id)
-        : prev.length < 3
-        ? [...prev, item.id]
-        : prev
-    );
+  useEffect(() => {
+    const fetchFriends = async () => {
+      try {
+        const friendsCollection = collection(firestore, `Users/${route.params.email}/Friends`);
+        const friendsSnapshot = await getDocs(friendsCollection);
+        const friendsList = friendsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        setFriends(friendsList);
+      } catch (error) {
+        console.error('Error fetching friends: ', error);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-    setSelectedNames((prev) =>
-      prev.includes(item.name)
-        ? prev.filter((name) => name !== item.name)
+    fetchFriends();
+  }, [route.params.email]);
+
+  const handlePress = (friend) => {
+    setSelectedFriends((prev) =>
+      prev.includes(friend.id)
+        ? prev.filter((id) => id !== friend.id)
         : prev.length < 3
-        ? [...prev, item.name]
+        ? [...prev, friend.id]
         : prev
     );
   };
@@ -46,16 +41,24 @@ const RelationshipSatisfiedScreen = ({ navigation, route }) => {
     <TouchableOpacity
       style={[
         styles.item,
-        selectedItems.includes(item.id) && styles.selectedItem,
+        selectedFriends.includes(item.id) && styles.selectedItem,
       ]}
       onPress={() => handlePress(item)}
     >
-      <Icon name={item.icon} size={30} color={selectedItems.includes(item.id) ? '#000' : '#fff'} />
-      <Text style={[styles.itemText, selectedItems.includes(item.id) && styles.selectedItemText]}>
+      <Icon name="account" size={30} color={selectedFriends.includes(item.id) ? '#000' : '#fff'} />
+      <Text style={[styles.itemText, selectedFriends.includes(item.id) && styles.selectedItemText]}>
         {item.name}
       </Text>
     </TouchableOpacity>
   );
+
+  if (loading) {
+    return (
+      <SafeAreaView style={styles.loadingContainer}>
+        <ActivityIndicator size="large" color="#FFFFFF" />
+      </SafeAreaView>
+    );
+  }
 
   return (
     <SafeAreaView style={styles.container}>
@@ -63,18 +66,18 @@ const RelationshipSatisfiedScreen = ({ navigation, route }) => {
         <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
           <Icon name="arrow-left" size={30} color="#FFFFFF" />
         </TouchableOpacity>
-        <Text style={styles.headerText}>What's your main focus for today?</Text>
+        <Text style={styles.headerText}>Pick your friends for today</Text>
         <Text style={styles.subText}>Pick up to 3.</Text>
       </View>
       <FlatList
-        data={focusItems}
+        data={friends}
         renderItem={renderItem}
         keyExtractor={(item) => item.id}
         numColumns={2}
         key={2} // Force re-render when changing numColumns
         contentContainerStyle={styles.listContainer}
       />
-      <TouchableOpacity style={styles.nextButton} onPress={() => navigation.navigate('Prompt Answer')}>
+      <TouchableOpacity style={styles.nextButton} onPress={() => navigation.navigate('Prompt Answer',{email})}>
         <Icon name="chevron-right" size={30} color="#FFFFFF" />
       </TouchableOpacity>
     </SafeAreaView>
@@ -137,6 +140,12 @@ const styles = StyleSheet.create({
     backgroundColor: '#444444',
     borderRadius: 25,
     padding: 10,
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#000000',
   },
 });
 

@@ -4,14 +4,15 @@ import Slider from '@react-native-community/slider';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const SatisfactionRatingScreen = ({ navigation, route }) => {
+  const {email} = route.params;
   const [sleepQuality, setSleepQuality] = useState(5);
 
   const getSleepQualityText = (value) => {
-    if (value <= 2) return "I slept terribly.";
-    if (value <= 4) return "I slept poorly.";
-    if (value <= 6) return "I slept okay.";
-    if (value <= 8) return "I slept well.";
-    return "I slept great!";
+    if (value <= 2) return "I'm very unhappy with my relationships. They lack the connection and support I need.";
+    if (value <= 4) return "I'm somewhat unhappy with my relationships. There are significant areas that need improvement.";
+    if (value <= 6) return "I'm neither satisfied nor dissatisfied with my relationships. They are okay, but there's room for improvement.";
+    if (value <= 8) return "I'm generally happy with my relationships. They provide support and connection most of the time.";
+    return "I'm extremely happy with my relationships. They are fulfilling, supportive, and strong.";
   };
 
   return (
@@ -20,16 +21,16 @@ const SatisfactionRatingScreen = ({ navigation, route }) => {
         <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
           <Icon name="arrow-left" size={30} color="#FFFFFF" />
         </TouchableOpacity>
-        <Text style={styles.headerText}>How well did you sleep today?</Text>
+        <Text style={styles.headerText}>How satisfactory are your relationships?</Text>
       </View>
       <Text style={styles.subText}>
-        We ask because you said you want to improve your sleep. After a few days you'll see insights and charts of your sleep quality on the trends page.
+        You'll see insights and charts of your sleep quality on the trends page.
       </Text>
       <View style={styles.imageContainer}>
         {/* You can add an image here if needed */}
       </View>
       <View style={styles.sliderContainer}>
-        <Text style={styles.sliderText}>Last night</Text>
+        <Text style={styles.sliderText}>This week</Text>
         <Text style={styles.sleepQualityText}>{getSleepQualityText(sleepQuality)}</Text>
         <Slider
           style={styles.slider}
@@ -47,7 +48,7 @@ const SatisfactionRatingScreen = ({ navigation, route }) => {
           <Text style={styles.sliderLabelText}>Very</Text>
         </View>
       </View>
-      <TouchableOpacity style={styles.nextButton} onPress={() => navigation.navigate('Relationships Satisfied')}>
+      <TouchableOpacity style={styles.nextButton} onPress={() => navigation.navigate('Relationships Satisfied',{email})}>
         <Icon name="chevron-right" size={30} color="#FFFFFF" />
       </TouchableOpacity>
     </SafeAreaView>
