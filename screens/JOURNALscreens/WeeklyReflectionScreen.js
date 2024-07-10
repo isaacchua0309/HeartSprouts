@@ -34,6 +34,9 @@ const PromptScreen = ({ navigation, route }) => {
         <Text style={styles.headerTitle}>DAILY</Text>
         <Text style={styles.headerSubtitle}>prompts.</Text>
       </View>
+      <TouchableOpacity style={styles.promptButton} onPress={() => alert('Answer Weekly Prompt pressed')}>
+        <Text style={styles.promptButtonText}>Answer Weekly Prompt</Text>
+      </TouchableOpacity>
       <FlatList
         data={data}
         renderItem={renderItem}
@@ -50,11 +53,12 @@ const styles = StyleSheet.create({
     backgroundColor: '#000',
   },
   header: {
+    flexDirection: 'row',
+    alignItems: 'center',
     paddingHorizontal: 20,
     paddingTop: 10,
-    paddingBottom: 20,
+    paddingBottom: 10,
     backgroundColor: '#000',
-    alignItems: 'center',
     borderBottomWidth: 1,
     borderBottomColor: '#333',
   },
@@ -62,10 +66,24 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 14,
     fontWeight: 'bold',
+    marginLeft: 10,
   },
   headerSubtitle: {
     color: '#fff',
     fontSize: 32,
+    fontWeight: 'bold',
+    marginLeft: 10,
+  },
+  promptButton: {
+    backgroundColor: '#1a73e8',
+    padding: 15,
+    margin: 20,
+    borderRadius: 10,
+    alignItems: 'center',
+  },
+  promptButtonText: {
+    color: '#fff',
+    fontSize: 18,
     fontWeight: 'bold',
   },
   list: {
