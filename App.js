@@ -37,7 +37,7 @@ export default function App() {
               <Stack.Screen name="Users" component={UserProfilesScreen} />
               <Stack.Screen name="Friend Profile" component={FriendProfileScreen} />
               <Stack.Screen name="Friend Creation" component={AddFriendScreen} />
-              <Stack.Screen name="Weekly Prompts" component={PromptScreen} />
+              <Stack.Screen name="Journal" component={PromptScreen} />
               <Stack.Screen name="Satisfaction Rating" component={SatisfactionRatingScreen} />
               <Stack.Screen name="Relationships Satisfied" component={RelationshipSatisfiedScreen} />
               <Stack.Screen name="Prompt Answer" component={PromptAnswerScreen} />

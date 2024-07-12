@@ -95,7 +95,7 @@ const UserProfilesScreen = ({ navigation, route }) => {
         <Icon name="plus" size={24} color="#fff" />
       </TouchableOpacity>
       <View style={styles.navBar}>
-      <TouchableOpacity style={styles.navButton} onPress={() => navigation.navigate('Weekly Prompts', { email })}>
+      <TouchableOpacity style={styles.navButton} onPress={() => navigation.navigate('Journal', { email })}>
           <Ionicons name="book" size={24} color={Colors.green300} />
           <Text style={styles.navText}>Journal</Text>
         </TouchableOpacity>

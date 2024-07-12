@@ -24,7 +24,7 @@ const SatisfactionRatingScreen = ({ navigation, route }) => {
         <Text style={styles.headerText}>How satisfactory are your relationships?</Text>
       </View>
       <Text style={styles.subText}>
-        You'll see insights and charts of your sleep quality on the trends page.
+        You'll see insights and charts of your relationship quality on the trends page.
       </Text>
       <View style={styles.imageContainer}>
         {/* You can add an image here if needed */}

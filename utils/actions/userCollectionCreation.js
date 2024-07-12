@@ -80,7 +80,20 @@ export const createUserDocumentWithFriends = async (name, birthday, email, passw
       tempField: 'tempValue',
     });
 
-    console.log('User document created with Friends subcollection');
+    // Reference to the 'Journal' subcollection in the 'Users' document
+    const journalCollectionRef = collection(userDocRef, 'Journal');
+
+    // Add a sample document to the 'Journal' subcollection
+    const sampleJournalDocRef = doc(journalCollectionRef, 'Sample Journal Entry');
+    await setDoc(sampleJournalDocRef, {
+      Date: new Date().toISOString(),
+      Quality: 10,
+      FriendsSelected: ['Friend1', 'Friend2'],
+      Question: 'What is one thing you appreciate most about your friend/family member?',
+      WordEntry: 'Today, I realized how much I appreciate their support and kindness.'
+    });
+
+    console.log('User document created with Friends and Journal subcollections');
   } catch (error) {
     console.error('Error creating user document: ', error);
   }

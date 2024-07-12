@@ -8,6 +8,7 @@ Journal object:
 Date
 Quality
 Friends selected
+Question
 Word Entry
 
 */
