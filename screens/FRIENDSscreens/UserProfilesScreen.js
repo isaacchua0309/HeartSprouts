@@ -95,17 +95,17 @@ const UserProfilesScreen = ({ navigation, route }) => {
         <Icon name="plus" size={24} color="#fff" />
       </TouchableOpacity>
       <View style={styles.navBar}>
+      <TouchableOpacity style={styles.navButton} onPress={() => navigation.navigate('Weekly Prompts', { email })}>
+          <Ionicons name="book" size={24} color={Colors.green300} />
+          <Text style={styles.navText}>Journal</Text>
+        </TouchableOpacity>
         <TouchableOpacity style={styles.navButton} onPress={() => navigation.navigate('Home', { email })}>
-          <Icon name="home" size={24} color={Colors.pink500} />
+          <Icon name="home" size={24} color={Colors.green300} />
           <Text style={styles.navText}>Home</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.navButton} onPress={() => navigation.navigate('Users', { email })}>
-          <Icon name="users" size={24} color={Colors.pink500} />
+          <Icon name="users" size={24} color={Colors.green300} />
           <Text style={styles.navText}>Friends</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.navButton} onPress={() => navigation.navigate('Weekly Prompts', { email })}>
-          <Ionicons name="book" size={24} color={Colors.pink500} />
-          <Text style={styles.navText}>Journaling</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -145,7 +145,7 @@ const styles = StyleSheet.create({
   },
   featuredText: {
     fontSize: 18,
-    color: Colors.pink500,
+    color: Colors.white700,
     fontWeight: 'bold',
     fontStyle: 'italic'
   },
