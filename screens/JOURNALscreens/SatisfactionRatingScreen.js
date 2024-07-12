@@ -5,9 +5,9 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const SatisfactionRatingScreen = ({ navigation, route }) => {
   const {email} = route.params;
-  const [sleepQuality, setSleepQuality] = useState(5);
+  const [rsQuality, setRsQuality] = useState(5);
 
-  const getSleepQualityText = (value) => {
+  const getRsQualityText = (value) => {
     if (value <= 2) return "I'm very unhappy with my relationships. They lack the connection and support I need.";
     if (value <= 4) return "I'm somewhat unhappy with my relationships. There are significant areas that need improvement.";
     if (value <= 6) return "I'm neither satisfied nor dissatisfied with my relationships. They are okay, but there's room for improvement.";
@@ -31,14 +31,14 @@ const SatisfactionRatingScreen = ({ navigation, route }) => {
       </View>
       <View style={styles.sliderContainer}>
         <Text style={styles.sliderText}>This week</Text>
-        <Text style={styles.sleepQualityText}>{getSleepQualityText(sleepQuality)}</Text>
+        <Text style={styles.sleepQualityText}>{getRsQualityText(rsQuality)}</Text>
         <Slider
           style={styles.slider}
           minimumValue={1}
           maximumValue={10}
           step={1}
           value={sleepQuality}
-          onValueChange={(value) => setSleepQuality(value)}
+          onValueChange={(value) => setRsQuality(value)}
           minimumTrackTintColor="#FFFFFF"
           maximumTrackTintColor="#333333"
           thumbTintColor="#FFFFFF"
@@ -48,7 +48,7 @@ const SatisfactionRatingScreen = ({ navigation, route }) => {
           <Text style={styles.sliderLabelText}>Very</Text>
         </View>
       </View>
-      <TouchableOpacity style={styles.nextButton} onPress={() => navigation.navigate('Relationships Satisfied',{email})}>
+      <TouchableOpacity style={styles.nextButton} onPress={() => navigation.navigate('Relationships Satisfied',{email,rsQuality})}>
         <Icon name="chevron-right" size={30} color="#FFFFFF" />
       </TouchableOpacity>
     </SafeAreaView>
@@ -71,7 +71,7 @@ const styles = StyleSheet.create({
   },
   headerText: {
     color: '#FFFFFF',
-    fontSize: 20,
+    fontSize: 18,
     fontWeight: 'bold',
   },
   subText: {

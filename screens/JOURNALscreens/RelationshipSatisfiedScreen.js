@@ -15,7 +15,7 @@ const RelationshipSatisfiedScreen = ({ navigation, route }) => {
       try {
         const friendsCollection = collection(firestore, `Users/${route.params.email}/Friends`);
         const friendsSnapshot = await getDocs(friendsCollection);
-        const friendsList = friendsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        const friendsList = friendsSnapshot.docs.filter(doc => doc.id !== 'Friends Init').map(doc => ({ id: doc.id, ...doc.data() }));
         setFriends(friendsList);
       } catch (error) {
         console.error('Error fetching friends: ', error);
@@ -52,6 +52,19 @@ const RelationshipSatisfiedScreen = ({ navigation, route }) => {
     </TouchableOpacity>
   );
 
+  const renderFriendPairs = () => {
+    const pairs = [];
+    for (let i = 0; i < friends.length; i += 2) {
+      pairs.push(
+        <View style={styles.pairContainer} key={i}>
+          {renderItem({ item: friends[i] })}
+          {friends[i + 1] && renderItem({ item: friends[i + 1] })}
+        </View>
+      );
+    }
+    return pairs;
+  };
+
   if (loading) {
     return (
       <SafeAreaView style={styles.loadingContainer}>
@@ -69,15 +82,10 @@ const RelationshipSatisfiedScreen = ({ navigation, route }) => {
         <Text style={styles.headerText}>Pick your friends for today</Text>
         <Text style={styles.subText}>Pick up to 3.</Text>
       </View>
-      <FlatList
-        data={friends}
-        renderItem={renderItem}
-        keyExtractor={(item) => item.id}
-        numColumns={2}
-        key={2} // Force re-render when changing numColumns
-        contentContainerStyle={styles.listContainer}
-      />
-      <TouchableOpacity style={styles.nextButton} onPress={() => navigation.navigate('Prompt Answer',{email})}>
+      <View style={styles.listContainer}>
+        {renderFriendPairs()}
+      </View>
+      <TouchableOpacity style={styles.nextButton} onPress={() => navigation.navigate('Prompt Answer', { email })}>
         <Icon name="chevron-right" size={30} color="#FFFFFF" />
       </TouchableOpacity>
     </SafeAreaView>
@@ -112,16 +120,24 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   listContainer: {
+    flex: 1,
     alignItems: 'center',
+    justifyContent: 'center',
+  },
+  pairContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: '100%',
   },
   item: {
     alignItems: 'center',
     justifyContent: 'center',
     margin: 10,
     padding: 20,
-    borderRadius: 50,
+    borderRadius: 10,
     backgroundColor: '#333333',
-    width: '40%', // ensure the items fit well in two columns
+    width: '45%', // Ensure the items fit well in two columns
+    aspectRatio: 1, // Make the items square
   },
   selectedItem: {
     backgroundColor: '#FFFFFF',
