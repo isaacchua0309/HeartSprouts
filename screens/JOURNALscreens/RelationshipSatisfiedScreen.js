@@ -8,7 +8,7 @@ const RelationshipSatisfiedScreen = ({ navigation, route }) => {
   const [selectedFriends, setSelectedFriends] = useState([]);
   const [friends, setFriends] = useState([]);
   const [loading, setLoading] = useState(true);
-  const { email } = route.params;
+  const { email, rsQuality } = route.params;
 
   useEffect(() => {
     const fetchFriends = async () => {
@@ -85,7 +85,7 @@ const RelationshipSatisfiedScreen = ({ navigation, route }) => {
       <View style={styles.listContainer}>
         {renderFriendPairs()}
       </View>
-      <TouchableOpacity style={styles.nextButton} onPress={() => navigation.navigate('Prompt Answer', { email })}>
+      <TouchableOpacity style={styles.nextButton} onPress={() => navigation.navigate('Prompt Answer', { email, rsQuality, selectedFriends })}>
         <Icon name="chevron-right" size={30} color="#FFFFFF" />
       </TouchableOpacity>
     </SafeAreaView>

@@ -37,7 +37,7 @@ const SatisfactionRatingScreen = ({ navigation, route }) => {
           minimumValue={1}
           maximumValue={10}
           step={1}
-          value={sleepQuality}
+          value={rsQuality}
           onValueChange={(value) => setRsQuality(value)}
           minimumTrackTintColor="#FFFFFF"
           maximumTrackTintColor="#333333"

@@ -1,12 +1,53 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, SafeAreaView, TextInput, TouchableOpacity, KeyboardAvoidingView } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, StyleSheet, SafeAreaView, TextInput, TouchableOpacity, KeyboardAvoidingView, ActivityIndicator } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { useNavigation } from '@react-navigation/native';
+import { collection, query, where, getDocs, updateDoc, doc } from 'firebase/firestore';
+import { firestore } from '../../utils/firebaseHelper'; // Import Firestore from your helper file
 
-const PromptAnswerScreen = ({route}) => {
+const PromptAnswerScreen = ({ navigation, route }) => {
   const [text, setText] = useState('');
-  const navigation = useNavigation();
-  const {email} = route.params;
+  const [question, setQuestion] = useState('');
+  const [loading, setLoading] = useState(true);
+  const [questionId, setQuestionId] = useState(null);
+  const { email, rsQuality, selectedFriends } = route.params;
+
+  useEffect(() => {
+    const fetchUnansweredQuestions = async () => {
+      try {
+        const q = query(collection(firestore, 'questions'), where('answered', '==', false));
+        const querySnapshot = await getDocs(q);
+        if (!querySnapshot.empty) {
+          const questions = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+          const randomQuestion = questions[Math.floor(Math.random() * questions.length)];
+          setQuestion(randomQuestion.question);
+          setQuestionId(randomQuestion.id);
+        } else {
+          setQuestion("No more questions available.");
+        }
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching questions: ", error);
+        setLoading(false);
+      }
+    };
+    fetchUnansweredQuestions();
+  }, []);
+
+  const handleQuestionAnswered = async () => {
+    if (questionId) {
+      const questionDoc = doc(firestore, 'questions', questionId);
+      await updateDoc(questionDoc, { answered: true });
+      // Navigate or provide feedback to the user that the question is saved
+    }
+  };
+
+  if (loading) {
+    return (
+      <SafeAreaView style={styles.container}>
+        <ActivityIndicator size="large" color="#FFFFFF" />
+      </SafeAreaView>
+    );
+  }
 
   return (
     <SafeAreaView style={styles.container}>
@@ -15,7 +56,7 @@ const PromptAnswerScreen = ({route}) => {
           <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
             <Icon name="arrow-left" size={30} color="#FFFFFF" />
           </TouchableOpacity>
-          <Text style={styles.headerText}>What do you plan to do today?</Text>
+          <Text style={styles.headerText}>{question}</Text>
         </View>
         <TextInput
           style={styles.textInput}
@@ -29,7 +70,7 @@ const PromptAnswerScreen = ({route}) => {
           <TouchableOpacity style={styles.addButton}>
             <Icon name="plus" size={30} color="#FFFFFF" />
           </TouchableOpacity>
-          <TouchableOpacity style={styles.checkButton} >
+          <TouchableOpacity style={styles.checkButton} onPress={handleQuestionAnswered}>
             <Icon name="check" size={30} color="#FFFFFF" />
           </TouchableOpacity>
         </View>
