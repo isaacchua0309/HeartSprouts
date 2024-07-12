@@ -1,6 +1,8 @@
-import React from 'react';
-import { View, Text, StyleSheet, FlatList, TouchableOpacity, SafeAreaView } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, StyleSheet, FlatList, TouchableOpacity, SafeAreaView, Alert } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import { collection, doc, getDoc, getDocs } from 'firebase/firestore';
+import { firestore } from '../../utils/firebaseHelper'; // Adjust this path to your firebaseHelper
 
 const data = [
   { id: '1', title: 'On Relief of Missing Out', description: 'This week, we\'ll stay away from the hustle.', progress: '0/7' },
@@ -15,6 +17,39 @@ const data = [
 
 const PromptScreen = ({ navigation, route }) => {
   const { email } = route.params;
+  const [hasAddedJournalEntryThisWeek, setHasAddedJournalEntryThisWeek] = useState(false);
+
+  const checkJournalEntryThisWeek = async (email) => {
+    try {
+      const userDocRef = doc(firestore, 'Users', email);
+      const journalCollectionRef = collection(userDocRef, 'Journal');
+      const journalDocs = await getDocs(journalCollectionRef);
+
+      const currentWeek = getCurrentWeek();
+
+      const hasEntryThisWeek = journalDocs.docs.some(doc => {
+        const entryData = doc.data();
+        const entryDate = new Date(entryData.Date);
+        return getCurrentWeek(entryDate) === currentWeek;
+      });
+
+      setHasAddedJournalEntryThisWeek(hasEntryThisWeek);
+    } catch (error) {
+      console.error("Error checking journal entries: ", error);
+      Alert.alert("Error", "Failed to check journal entries. Please try again later.");
+    }
+  };
+
+  useEffect(() => {
+    checkJournalEntryThisWeek(email);
+  }, [email]);
+
+  const getCurrentWeek = (date = new Date()) => {
+    const firstDayOfYear = new Date(date.getFullYear(), 0, 1);
+    const pastDaysOfYear = (date - firstDayOfYear) / 86400000;
+    return Math.ceil((pastDaysOfYear + firstDayOfYear.getDay() + 1) / 7);
+  };
+
   const renderItem = ({ item }) => (
     <TouchableOpacity style={styles.itemContainer} onPress={() => alert(item.title)}>
       <View style={styles.itemTextContainer}>
@@ -34,8 +69,18 @@ const PromptScreen = ({ navigation, route }) => {
         <Text style={styles.headerTitle}>DAILY</Text>
         <Text style={styles.headerSubtitle}>prompts.</Text>
       </View>
-      <TouchableOpacity style={styles.promptButton} onPress={() => navigation.navigate('Satisfaction Rating',{email})}>
-        <Text style={styles.promptButtonText}>Answer Weekly Prompt</Text>
+      <TouchableOpacity
+        style={[styles.promptButton, hasAddedJournalEntryThisWeek && styles.disabledButton]}
+        onPress={() => {
+          if (!hasAddedJournalEntryThisWeek) {
+            navigation.navigate('Satisfaction Rating', { email });
+          }
+        }}
+        disabled={hasAddedJournalEntryThisWeek}
+      >
+        <Text style={styles.promptButtonText}>
+          {hasAddedJournalEntryThisWeek ? "Weekly Prompt Answered" : "Answer Weekly Prompt"}
+        </Text>
       </TouchableOpacity>
       <FlatList
         data={data}
@@ -80,6 +125,9 @@ const styles = StyleSheet.create({
     margin: 20,
     borderRadius: 10,
     alignItems: 'center',
+  },
+  disabledButton: {
+    backgroundColor: '#555',
   },
   promptButtonText: {
     color: '#fff',
