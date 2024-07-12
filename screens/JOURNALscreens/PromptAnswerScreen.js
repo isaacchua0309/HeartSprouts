@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, SafeAreaView, TextInput, TouchableOpacity, KeyboardAvoidingView, ActivityIndicator } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { collection, query, where, getDocs, updateDoc, doc } from 'firebase/firestore';
+import { doc, getDoc, updateDoc } from 'firebase/firestore';
 import { firestore } from '../../utils/firebaseHelper'; // Import Firestore from your helper file
 
 const PromptAnswerScreen = ({ navigation, route }) => {
@@ -11,40 +11,60 @@ const PromptAnswerScreen = ({ navigation, route }) => {
   const [questionId, setQuestionId] = useState(null);
   const { email, rsQuality, selectedFriends } = route.params;
 
-  useEffect(() => {
-    const fetchUnansweredQuestions = async () => {
-      try {
-        const q = query(collection(firestore, 'questions'), where('answered', '==', false));
-        const querySnapshot = await getDocs(q);
-        if (!querySnapshot.empty) {
-          const questions = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-          const randomQuestion = questions[Math.floor(Math.random() * questions.length)];
+  const fetchUnansweredQuestions = async (email) => {
+    setLoading(true);
+    try {
+      const userDocRef = doc(firestore, 'Users', email);
+      const userDoc = await getDoc(userDocRef);
+
+      if (userDoc.exists()) {
+        const userData = userDoc.data();
+        const unansweredQuestions = userData.questions.filter(q => !q.answered);
+        
+        if (unansweredQuestions.length > 0) {
+          const randomQuestion = unansweredQuestions[Math.floor(Math.random() * unansweredQuestions.length)];
           setQuestion(randomQuestion.question);
           setQuestionId(randomQuestion.id);
         } else {
           setQuestion("No more questions available.");
         }
-        setLoading(false);
-      } catch (error) {
-        console.error("Error fetching questions: ", error);
-        setLoading(false);
+      } else {
+        setQuestion("User document does not exist.");
       }
-    };
-    fetchUnansweredQuestions();
-  }, []);
+      setLoading(false);
+    } catch (error) {
+      console.error("Error fetching questions: ", error);
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchUnansweredQuestions(email);
+  }, [email]);
 
   const handleQuestionAnswered = async () => {
     if (questionId) {
-      const questionDoc = doc(firestore, 'questions', questionId);
-      await updateDoc(questionDoc, { answered: true });
-      // Navigate or provide feedback to the user that the question is saved
+      const userDocRef = doc(firestore, 'Users', email);
+      const userDoc = await getDoc(userDocRef);
+      
+      if (userDoc.exists()) {
+        const userData = userDoc.data();
+        const updatedQuestions = userData.questions.map(q => 
+          q.id === questionId ? { ...q, answered: true } : q
+        );
+
+        await updateDoc(userDocRef, { questions: updatedQuestions });
+        fetchUnansweredQuestions(email);
+      }
     }
   };
 
   if (loading) {
     return (
       <SafeAreaView style={styles.container}>
-        <ActivityIndicator size="large" color="#FFFFFF" />
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator size="large" color="#FFFFFF" />
+        </View>
       </SafeAreaView>
     );
   }
@@ -57,6 +77,9 @@ const PromptAnswerScreen = ({ navigation, route }) => {
             <Icon name="arrow-left" size={30} color="#FFFFFF" />
           </TouchableOpacity>
           <Text style={styles.headerText}>{question}</Text>
+          <TouchableOpacity onPress={() => fetchUnansweredQuestions(email)} style={styles.refreshButton}>
+            <Icon name="refresh" size={30} color="#FFFFFF" />
+          </TouchableOpacity>
         </View>
         <TextInput
           style={styles.textInput}
@@ -88,6 +111,11 @@ const styles = StyleSheet.create({
   avoidingView: {
     flex: 1,
   },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -102,6 +130,9 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     flex: 1,
     textAlign: 'center',
+  },
+  refreshButton: {
+    marginLeft: 10,
   },
   textInput: {
     flex: 1,
