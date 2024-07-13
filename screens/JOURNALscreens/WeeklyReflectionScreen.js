@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, FlatList, TouchableOpacity, SafeAreaView, Alert } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import { collection, doc, getDocs, query, orderBy } from 'firebase/firestore';
+import { collection, doc, getDocs, query, orderBy, limit } from 'firebase/firestore';
 import { firestore } from '../../utils/firebaseHelper';
 import { LineChart } from 'react-native-chart-kit';
 import { Dimensions } from 'react-native';
@@ -124,10 +124,11 @@ const PromptScreen = ({ navigation, route }) => {
   };
 
   useEffect(() => {
+    checkJournalEntryThisWeek(email);
     fetchRsQualityData(email);
     fetchJournalEntries(email);
     fetchTopFriends(email);
-  }, []);
+  }, [email]);
 
   const getMonthName = (date) => {
     const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
