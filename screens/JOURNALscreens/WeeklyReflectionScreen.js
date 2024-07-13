@@ -163,9 +163,6 @@ const PromptScreen = ({ navigation, route }) => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
-          <Icon name="arrow-left" size={24} color={Colors.white500} />
-        </TouchableOpacity>
         <Text style={styles.headerTitle}>WEEKLY</Text>
         <Text style={styles.headerSubtitle}>prompts.</Text>
       </View>
