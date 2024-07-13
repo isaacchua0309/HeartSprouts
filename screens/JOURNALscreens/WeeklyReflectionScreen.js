@@ -15,6 +15,7 @@ const PromptScreen = ({ navigation, route }) => {
   const [rsQualityData, setRsQualityData] = useState(new Array(5).fill(0));
   const [journalEntries, setJournalEntries] = useState([]);
   const [topFriends, setTopFriends] = useState([]);
+  const [expandedEntries, setExpandedEntries] = useState({});
 
   const checkJournalEntryThisWeek = async (email) => {
     try {
@@ -135,13 +136,27 @@ const PromptScreen = ({ navigation, route }) => {
     return monthNames[date.getMonth()];
   };
 
-  const renderItem = ({ item }) => (
-    <View style = {styles.itemContainer}>
-      <Text style={styles.itemDate}>{format(item.date, 'PP')}</Text>
-      <Text style={styles.itemQuestion}>{item.question}</Text>
-      <Text style={styles.itemEntry}>{item.wordEntry}</Text>
-    </View>
-  );
+  const renderItem = ({ item }) => {
+    const isExpanded = expandedEntries[item.id];
+    const words = item.wordEntry.split(' ');
+    const preview = words.slice(0, 50).join(' ');
+    const remaining = words.slice(50).join(' ');
+
+    return (
+      <View style={styles.itemContainer}>
+        <Text style={styles.itemDate}>{format(item.date, 'PP')}</Text>
+        <Text style={styles.itemQuestion}>{item.question}</Text>
+        <Text style={styles.itemEntry}>
+          {isExpanded ? item.wordEntry : preview}
+          {words.length > 50 && (
+            <TouchableOpacity onPress={() => setExpandedEntries(prevState => ({ ...prevState, [item.id]: !isExpanded }))}>
+              <Text style={styles.toggleText}>{isExpanded ? ' Less' : '... More'}</Text>
+            </TouchableOpacity>
+          )}
+        </Text>
+      </View>
+    );
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -287,6 +302,11 @@ const styles = StyleSheet.create({
   itemEntry: {
     color: '#aaa',
     fontSize: 14,
+  },
+  toggleText: {
+    color: '#1a73e8',
+    fontSize: 14,
+    marginTop: 5,
   },
   topFriendsContainer: {
     padding: 20,

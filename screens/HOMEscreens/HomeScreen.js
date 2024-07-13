@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Image, FlatList, Modal } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Image, FlatList, Modal, ScrollView } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Colors from '../../constants/colors';
@@ -83,10 +83,99 @@ const MoodOverlay = ({ isVisible, onClose, onSelectEmotion }) => {
   );
 };
 
+const ProfileModal = ({ isVisible, onClose }) => {
+  return (
+    <Modal
+      visible={isVisible}
+      animationType="slide"
+      transparent={true}
+      onRequestClose={onClose}
+    >
+      <View style={styles.profileModalContainer}>
+        <View style={styles.profileModalContent}>
+          <ScrollView>
+            <View style={styles.modalHeader}>
+              <Text style={styles.profileTitle}>your profile.</Text>
+              <TouchableOpacity onPress={onClose}>
+                <Icon name="close" size={24} color="#fff" />
+              </TouchableOpacity>
+            </View>
+            <TouchableOpacity style={styles.premiumButton}>
+              <Text style={styles.premiumButtonText}>Unlock all our exercises, prompts, AI features, iCloud Sync, and more</Text>
+              <TouchableOpacity style={styles.tryButton}>
+                <Text style={styles.tryButtonText}>Try 7 Days Free</Text>
+              </TouchableOpacity>
+            </TouchableOpacity>
+            <Text style={styles.sectionTitle}>PERSONALIZE</Text>
+            <TouchableOpacity style={styles.optionButton}>
+              <Text style={styles.optionButtonText}>Morning Preparation</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.optionButton}>
+              <Text style={styles.optionButtonText}>Evening Reflection</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.optionButton}>
+              <Text style={styles.optionButtonText}>Preferences</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.optionButton}>
+              <Text style={styles.optionButtonText}>Appearance</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.optionButton}>
+              <Text style={styles.optionButtonText}>Stoic Shield</Text>
+            </TouchableOpacity>
+            <Text style={styles.sectionTitle}>ACCOUNT</Text>
+            <TouchableOpacity style={styles.optionButton}>
+              <Text style={styles.optionButtonText}>Notifications</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.optionButton}>
+              <Text style={styles.optionButtonText}>Your Data</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.optionButton}>
+              <Text style={styles.optionButtonText}>About Premium</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.optionButton}>
+              <Text style={styles.optionButtonText}>Redeem Code</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.optionButton}>
+              <Text style={styles.optionButtonText}>Restore Purchase</Text>
+            </TouchableOpacity>
+            <Text style={styles.sectionTitle}>COMMUNITY</Text>
+            <TouchableOpacity style={styles.optionButton}>
+              <Text style={styles.optionButtonText}>Share stoic with Your Friends</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.optionButton}>
+              <Text style={styles.optionButtonText}>Leave Us a Review on the App Store</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.optionButton}>
+              <Text style={styles.optionButtonText}>Join our Discord Community</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.optionButton}>
+              <Text style={styles.optionButtonText}>Instagram</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.optionButton}>
+              <Text style={styles.optionButtonText}>Mastodon</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.optionButton}>
+              <Text style={styles.optionButtonText}>Twitter</Text>
+            </TouchableOpacity>
+            <Text style={styles.sectionTitle}>HELP & SUPPORT</Text>
+            <TouchableOpacity style={styles.optionButton}>
+              <Text style={styles.optionButtonText}>Frequently Asked Questions</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.optionButton}>
+              <Text style={styles.optionButtonText}>Suggest a Feature</Text>
+            </TouchableOpacity>
+          </ScrollView>
+        </View>
+      </View>
+    </Modal>
+  );
+};
+
 const HomeScreen = ({ navigation, route }) => {
   const [currentText, setCurrentText] = useState('');
   const [selectedEmotion, setSelectedEmotion] = useState(null);
   const [isModalVisible, setModalVisible] = useState(false);
+  const [isProfileModalVisible, setProfileModalVisible] = useState(false);
 
   useEffect(() => {
     if (selectedEmotion) {
@@ -112,6 +201,13 @@ const HomeScreen = ({ navigation, route }) => {
   return (
     <View style={styles.container}>
       <TouchableOpacity
+        style={styles.profileButton}
+        onPress={() => setProfileModalVisible(true)}
+      >
+        <Icon name="user" size={24} color="#fff" />
+      </TouchableOpacity>
+
+      <TouchableOpacity
         style={[styles.chooseMoodButton, { backgroundColor: getButtonColor() }]}
         onPress={() => setModalVisible(true)}
       >
@@ -124,6 +220,11 @@ const HomeScreen = ({ navigation, route }) => {
         isVisible={isModalVisible}
         onClose={() => setModalVisible(false)}
         onSelectEmotion={setSelectedEmotion}
+      />
+
+      <ProfileModal
+        isVisible={isProfileModalVisible}
+        onClose={() => setProfileModalVisible(false)}
       />
 
       {selectedEmotion && (
@@ -167,9 +268,18 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.green500,
     padding: 20,
   },
+  profileButton: {
+    position: 'absolute',
+    top: 20,
+    left: 20,
+    padding: 10,
+    backgroundColor: Colors.green700,
+    borderRadius: 8,
+  },
   chooseMoodButton: {
     position: 'absolute',
     top: 20,
+    right: 20,
     padding: 10,
     backgroundColor: Colors.green700,
     borderRadius: 8,
@@ -280,6 +390,67 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginTop: 5,
     color: Colors.white700,
+  },
+  profileModalContainer: {
+    flex: 1,
+    justifyContent: 'flex-end',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  profileModalContent: {
+    height: '80%',
+    backgroundColor: '#000',
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    padding: 20,
+  },
+  modalHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 20,
+  },
+  profileTitle: {
+    color: '#fff',
+    fontSize: 24,
+    fontWeight: 'bold',
+  },
+  premiumButton: {
+    backgroundColor: '#222',
+    padding: 20,
+    borderRadius: 10,
+    alignItems: 'center',
+    marginBottom: 20,
+  },
+  premiumButtonText: {
+    color: '#fff',
+    fontSize: 16,
+    textAlign: 'center',
+    marginBottom: 10,
+  },
+  tryButton: {
+    backgroundColor: '#fff',
+    borderRadius: 10,
+    padding: 10,
+    marginTop: 10,
+  },
+  tryButtonText: {
+    color: '#000',
+    fontWeight: 'bold',
+  },
+  sectionTitle: {
+    color: '#fff',
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 10,
+  },
+  optionButton: {
+    paddingVertical: 15,
+    borderBottomWidth: 1,
+    borderBottomColor: '#333',
+  },
+  optionButtonText: {
+    color: '#fff',
+    fontSize: 16,
   },
 });
 
