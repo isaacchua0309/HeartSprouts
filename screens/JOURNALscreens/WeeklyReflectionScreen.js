@@ -136,14 +136,11 @@ const PromptScreen = ({ navigation, route }) => {
   };
 
   const renderItem = ({ item }) => (
-    <TouchableOpacity
-      style={styles.itemContainer}
-      onPress={() => navigation.navigate('JournalDetail', { journalEntry: item })}
-    >
+    <View style = {styles.itemContainer}>
       <Text style={styles.itemDate}>{format(item.date, 'PP')}</Text>
       <Text style={styles.itemQuestion}>{item.question}</Text>
       <Text style={styles.itemEntry}>{item.wordEntry}</Text>
-    </TouchableOpacity>
+    </View>
   );
 
   return (
