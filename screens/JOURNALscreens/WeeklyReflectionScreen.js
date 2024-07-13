@@ -3,6 +3,11 @@ import { View, Text, StyleSheet, FlatList, TouchableOpacity, SafeAreaView, Alert
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { collection, doc, getDoc, getDocs } from 'firebase/firestore';
 import { firestore } from '../../utils/firebaseHelper'; // Adjust this path to your firebaseHelper
+import { LineChart } from 'react-native-chart-kit';
+import { Dimensions } from 'react-native';
+import { format, startOfWeek, addDays } from 'date-fns';
+
+const screenWidth = Dimensions.get('window').width;
 
 const data = [
   { id: '1', title: 'On Relief of Missing Out', description: 'This week, we\'ll stay away from the hustle.', progress: '0/7' },
@@ -18,6 +23,7 @@ const data = [
 const PromptScreen = ({ navigation, route }) => {
   const { email } = route.params;
   const [hasAddedJournalEntryThisWeek, setHasAddedJournalEntryThisWeek] = useState(false);
+  const [rsQualityData, setRsQualityData] = useState([0, 0, 0, 0, 0, 0, 0]); // Placeholder data
 
   const checkJournalEntryThisWeek = async (email) => {
     try {
@@ -40,8 +46,33 @@ const PromptScreen = ({ navigation, route }) => {
     }
   };
 
+  const fetchRsQualityData = async (email) => {
+    try {
+      const userDocRef = doc(firestore, 'Users', email);
+      const journalCollectionRef = collection(userDocRef, 'Journal');
+      const journalDocs = await getDocs(journalCollectionRef);
+
+      const weekStart = startOfWeek(new Date(), { weekStartsOn: 0 });
+      let qualityData = [0, 0, 0, 0, 0, 0, 0];
+
+      journalDocs.docs.forEach(doc => {
+        const entryData = doc.data();
+        const entryDate = new Date(entryData.Date);
+        if (entryDate >= weekStart) {
+          const dayIndex = entryDate.getDay();
+          qualityData[dayIndex] = entryData.Quality;
+        }
+      });
+
+      setRsQualityData(qualityData);
+    } catch (error) {
+      console.error("Error fetching RS Quality data: ", error);
+    }
+  };
+
   useEffect(() => {
     checkJournalEntryThisWeek(email);
+    fetchRsQualityData(email);
   }, [email]);
 
   const getCurrentWeek = (date = new Date()) => {
@@ -82,6 +113,41 @@ const PromptScreen = ({ navigation, route }) => {
           {hasAddedJournalEntryThisWeek ? "Weekly Prompt Answered" : "Answer Weekly Prompt"}
         </Text>
       </TouchableOpacity>
+      <LineChart
+        data={{
+          labels: ['S', 'M', 'T', 'W', 'T', 'F', 'S'],
+          datasets: [
+            {
+              data: rsQualityData,
+              color: () => `rgba(26, 115, 232, 1)`, // blue
+              strokeWidth: 2,
+            },
+          ],
+        }}
+        width={screenWidth - 40}
+        height={220}
+        chartConfig={{
+          backgroundColor: '#000',
+          backgroundGradientFrom: '#000',
+          backgroundGradientTo: '#000',
+          decimalPlaces: 1,
+          color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+          labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+          style: {
+            borderRadius: 16,
+          },
+          propsForDots: {
+            r: '4',
+            strokeWidth: '2',
+            stroke: '#ffa726',
+          },
+        }}
+        style={{
+          marginVertical: 8,
+          borderRadius: 16,
+          marginHorizontal: 20,
+        }}
+      />
       <FlatList
         data={data}
         renderItem={renderItem}
