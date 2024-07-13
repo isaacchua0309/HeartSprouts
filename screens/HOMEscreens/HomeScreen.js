@@ -101,28 +101,16 @@ const ProfileModal = ({ isVisible, onClose }) => {
               </TouchableOpacity>
             </View>
             <TouchableOpacity style={styles.premiumButton}>
+            <Text style={styles.sectionTitle}>PREMIUM.</Text>
               <Text style={styles.premiumButtonText}>Unlock all our exercises, prompts, AI features, iCloud Sync, and more</Text>
               <TouchableOpacity style={styles.tryButton}>
-                <Text style={styles.tryButtonText}>Try 7 Days Free</Text>
+                <Text style={styles.tryButtonText}>Coming Soon</Text>
               </TouchableOpacity>
-            </TouchableOpacity>
-            <Text style={styles.sectionTitle}>PERSONALIZE</Text>
-            <TouchableOpacity style={styles.optionButton}>
-              <Text style={styles.optionButtonText}>Morning Preparation</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.optionButton}>
-              <Text style={styles.optionButtonText}>Evening Reflection</Text>
-            </TouchableOpacity>
+            </TouchableOpacity>      
+            <Text style={styles.sectionTitle}>ACCOUNT</Text>
             <TouchableOpacity style={styles.optionButton}>
               <Text style={styles.optionButtonText}>Preferences</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.optionButton}>
-              <Text style={styles.optionButtonText}>Appearance</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.optionButton}>
-              <Text style={styles.optionButtonText}>Stoic Shield</Text>
-            </TouchableOpacity>
-            <Text style={styles.sectionTitle}>ACCOUNT</Text>
             <TouchableOpacity style={styles.optionButton}>
               <Text style={styles.optionButtonText}>Notifications</Text>
             </TouchableOpacity>
@@ -130,39 +118,24 @@ const ProfileModal = ({ isVisible, onClose }) => {
               <Text style={styles.optionButtonText}>Your Data</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.optionButton}>
-              <Text style={styles.optionButtonText}>About Premium</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.optionButton}>
-              <Text style={styles.optionButtonText}>Redeem Code</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.optionButton}>
-              <Text style={styles.optionButtonText}>Restore Purchase</Text>
+              <Text style={styles.optionButtonText}>Log Out</Text>
             </TouchableOpacity>
             <Text style={styles.sectionTitle}>COMMUNITY</Text>
             <TouchableOpacity style={styles.optionButton}>
-              <Text style={styles.optionButtonText}>Share stoic with Your Friends</Text>
+              <Text style={styles.optionButtonText}>Share HeartSprouts with Your Friends</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.optionButton}>
               <Text style={styles.optionButtonText}>Leave Us a Review on the App Store</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.optionButton}>
-              <Text style={styles.optionButtonText}>Join our Discord Community</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.optionButton}>
               <Text style={styles.optionButtonText}>Instagram</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.optionButton}>
-              <Text style={styles.optionButtonText}>Mastodon</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.optionButton}>
-              <Text style={styles.optionButtonText}>Twitter</Text>
             </TouchableOpacity>
             <Text style={styles.sectionTitle}>HELP & SUPPORT</Text>
             <TouchableOpacity style={styles.optionButton}>
               <Text style={styles.optionButtonText}>Frequently Asked Questions</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.optionButton}>
-              <Text style={styles.optionButtonText}>Suggest a Feature</Text>
+              <Text style={styles.optionButtonText}>Contact Us</Text>
             </TouchableOpacity>
           </ScrollView>
         </View>

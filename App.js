@@ -23,6 +23,12 @@ import SatisfactionRatingScreen from './screens/JOURNALscreens/SatisfactionRatin
 import RelationshipSatisfiedScreen from './screens/JOURNALscreens/RelationshipSatisfiedScreen';
 const Stack = createStackNavigator();
 
+const forFadeAndScale = ({ current }) => ({
+  cardStyle: {
+    opacity: current.progress,
+  }
+});
+
 export default function App() {
   return (
     <Provider store={store}>
@@ -32,11 +38,17 @@ export default function App() {
             <Stack.Navigator screenOptions={{ headerShown: false }}>
               <Stack.Screen name="Getting Started" component={GettingStartedScreen} />
               <Stack.Screen name="Login" component={LoginScreen} />
-              <Stack.Screen name="Home" component={HomeScreen} />
-              <Stack.Screen name="Users" component={UserProfilesScreen} />
+              <Stack.Screen name="Home" component={HomeScreen} options={{
+                  cardStyleInterpolator: forFadeAndScale,
+                }}/>
+              <Stack.Screen name="Users" component={UserProfilesScreen} options={{
+                  cardStyleInterpolator: forFadeAndScale,
+                }}/>
               <Stack.Screen name="Friend Profile" component={FriendProfileScreen} />
               <Stack.Screen name="Friend Creation" component={AddFriendScreen} />
-              <Stack.Screen name="Journal" component={PromptScreen} />
+              <Stack.Screen name="Journal" component={PromptScreen} options={{
+                  cardStyleInterpolator: forFadeAndScale,
+                }}/>
               <Stack.Screen name="Satisfaction Rating" component={SatisfactionRatingScreen} />
               <Stack.Screen name="Relationships Satisfied" component={RelationshipSatisfiedScreen} />
               <Stack.Screen name="Prompt Answer" component={PromptAnswerScreen} />
