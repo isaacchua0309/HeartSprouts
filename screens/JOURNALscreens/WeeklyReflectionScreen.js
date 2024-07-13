@@ -1,45 +1,38 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, FlatList, TouchableOpacity, SafeAreaView, Alert } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import { collection, doc, getDoc, getDocs } from 'firebase/firestore';
-import { firestore } from '../../utils/firebaseHelper'; // Adjust this path to your firebaseHelper
+import { collection, doc, getDocs, query, orderBy } from 'firebase/firestore';
+import { firestore } from '../../utils/firebaseHelper';
 import { LineChart } from 'react-native-chart-kit';
 import { Dimensions } from 'react-native';
-import { format, startOfWeek, addDays } from 'date-fns';
+import { startOfWeek, subWeeks, isSameWeek, format } from 'date-fns';
 
 const screenWidth = Dimensions.get('window').width;
-
-const data = [
-  { id: '1', title: 'On Relief of Missing Out', description: 'This week, we\'ll stay away from the hustle.', progress: '0/7' },
-  { id: '2', title: 'On Embracing Change', description: 'This week, we won\'t be afraid to make changes in our lives.', progress: '0/7' },
-  { id: '3', title: 'On Starting Over', description: 'This week, we\'ll start fresh and find ourselves once again.', progress: '0/7' },
-  { id: '4', title: 'On Letting Go', description: 'This week, we\'ll say goodbye.', progress: '0/7' },
-  { id: '5', title: 'On Purpose', description: 'This week, we\'ll be. But on purpose.', progress: '0/7' },
-  { id: '6', title: 'On Joy and Happiness', description: 'This week, we\'ll spend some time joyfully.', progress: '0/7' },
-  { id: '7', title: 'On Rest and Recovery', description: 'This week, we\'ll explore resting on purpose.', progress: '0/7' },
-  { id: '8', title: 'On Quantity and Quality', description: 'This week, we\'ll compare more with better.', progress: '0/7' },
-];
 
 const PromptScreen = ({ navigation, route }) => {
   const { email } = route.params;
   const [hasAddedJournalEntryThisWeek, setHasAddedJournalEntryThisWeek] = useState(false);
-  const [rsQualityData, setRsQualityData] = useState([0, 0, 0, 0, 0, 0, 0]); // Placeholder data
+  const [rsQualityData, setRsQualityData] = useState(new Array(5).fill(0));
+  const [journalEntries, setJournalEntries] = useState([]);
+  const [topFriends, setTopFriends] = useState([]);
 
   const checkJournalEntryThisWeek = async (email) => {
     try {
       const userDocRef = doc(firestore, 'Users', email);
       const journalCollectionRef = collection(userDocRef, 'Journal');
-      const journalDocs = await getDocs(journalCollectionRef);
+      const journalQuery = query(journalCollectionRef, orderBy('Date', 'desc'), limit(1));
+      const journalDocs = await getDocs(journalQuery);
 
-      const currentWeek = getCurrentWeek();
-
-      const hasEntryThisWeek = journalDocs.docs.some(doc => {
-        const entryData = doc.data();
-        const entryDate = new Date(entryData.Date);
-        return getCurrentWeek(entryDate) === currentWeek;
-      });
-
-      setHasAddedJournalEntryThisWeek(hasEntryThisWeek);
+      if (!journalDocs.empty) {
+        const mostRecentEntry = journalDocs.docs[0].data();
+        const mostRecentEntryDate = new Date(mostRecentEntry.Date);
+        const currentWeek = startOfWeek(new Date(), { weekStartsOn: 0 });
+        if (isSameWeek(mostRecentEntryDate, currentWeek, { weekStartsOn: 0 })) {
+          setHasAddedJournalEntryThisWeek(true);
+        } else {
+          setHasAddedJournalEntryThisWeek(false);
+        }
+      }
     } catch (error) {
       console.error("Error checking journal entries: ", error);
       Alert.alert("Error", "Failed to check journal entries. Please try again later.");
@@ -52,15 +45,19 @@ const PromptScreen = ({ navigation, route }) => {
       const journalCollectionRef = collection(userDocRef, 'Journal');
       const journalDocs = await getDocs(journalCollectionRef);
 
-      const weekStart = startOfWeek(new Date(), { weekStartsOn: 0 });
-      let qualityData = [0, 0, 0, 0, 0, 0, 0];
+      const endDate = new Date();
+      const startDate = subWeeks(endDate, 4);
+      let qualityData = new Array(5).fill(0);
 
       journalDocs.docs.forEach(doc => {
         const entryData = doc.data();
         const entryDate = new Date(entryData.Date);
-        if (entryDate >= weekStart) {
-          const dayIndex = entryDate.getDay();
-          qualityData[dayIndex] = entryData.Quality;
+
+        for (let i = 0; i < 5; i++) {
+          const startOfCurrentWeek = startOfWeek(subWeeks(endDate, i), { weekStartsOn: 0 });
+          if (isSameWeek(entryDate, startOfCurrentWeek, { weekStartsOn: 0 })) {
+            qualityData[4 - i] += entryData.Quality;
+          }
         }
       });
 
@@ -70,24 +67,81 @@ const PromptScreen = ({ navigation, route }) => {
     }
   };
 
-  useEffect(() => {
-    checkJournalEntryThisWeek(email);
-    fetchRsQualityData(email);
-  }, [email]);
+  const fetchJournalEntries = async (email) => {
+    try {
+      const userDocRef = doc(firestore, 'Users', email);
+      const journalCollectionRef = collection(userDocRef, 'Journal');
+      const journalQuery = query(journalCollectionRef, orderBy('Date', 'desc'));
+      const journalDocs = await getDocs(journalQuery);
 
-  const getCurrentWeek = (date = new Date()) => {
-    const firstDayOfYear = new Date(date.getFullYear(), 0, 1);
-    const pastDaysOfYear = (date - firstDayOfYear) / 86400000;
-    return Math.ceil((pastDaysOfYear + firstDayOfYear.getDay() + 1) / 7);
+      const entries = journalDocs.docs.map(doc => ({
+        id: doc.id,
+        date: new Date(doc.data().Date),
+        friends: doc.data().FriendsSelected,
+        quality: doc.data().Quality,
+        question: doc.data().Question,
+        wordEntry: doc.data().WordEntry
+      }));
+
+      setJournalEntries(entries);
+    } catch (error) {
+      console.error("Error fetching journal entries: ", error);
+    }
+  };
+
+  const fetchTopFriends = async (email) => {
+    try {
+      const userDocRef = doc(firestore, 'Users', email);
+      const journalCollectionRef = collection(userDocRef, 'Journal');
+      const journalDocs = await getDocs(journalCollectionRef);
+
+      const friendCounts = {};
+
+      journalDocs.docs.forEach(doc => {
+        const entryData = doc.data();
+        const entryDate = new Date(entryData.Date);
+
+        if (entryDate >= subWeeks(new Date(), 4)) {
+          entryData.FriendsSelected.forEach(friend => {
+            if (friendCounts[friend]) {
+              friendCounts[friend]++;
+            } else {
+              friendCounts[friend] = 1;
+            }
+          });
+        }
+      });
+
+      const sortedFriends = Object.entries(friendCounts)
+        .sort((a, b) => b[1] - a[1])
+        .slice(0, 2)
+        .map(entry => entry[0]);
+
+      setTopFriends(sortedFriends);
+    } catch (error) {
+      console.error("Error fetching top friends: ", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchRsQualityData(email);
+    fetchJournalEntries(email);
+    fetchTopFriends(email);
+  }, []);
+
+  const getMonthName = (date) => {
+    const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    return monthNames[date.getMonth()];
   };
 
   const renderItem = ({ item }) => (
-    <TouchableOpacity style={styles.itemContainer} onPress={() => alert(item.title)}>
-      <View style={styles.itemTextContainer}>
-        <Text style={styles.itemTitle}>{item.title}</Text>
-        <Text style={styles.itemDescription}>{item.description}</Text>
-      </View>
-      <Text style={styles.itemProgress}>{item.progress}</Text>
+    <TouchableOpacity
+      style={styles.itemContainer}
+      onPress={() => navigation.navigate('JournalDetail', { journalEntry: item })}
+    >
+      <Text style={styles.itemDate}>{format(item.date, 'PP')}</Text>
+      <Text style={styles.itemQuestion}>{item.question}</Text>
+      <Text style={styles.itemEntry}>{item.wordEntry}</Text>
     </TouchableOpacity>
   );
 
@@ -115,17 +169,19 @@ const PromptScreen = ({ navigation, route }) => {
       </TouchableOpacity>
       <LineChart
         data={{
-          labels: ['S', 'M', 'T', 'W', 'T', 'F', 'S'],
+          labels: Array.from({ length: 5 }, (_, i) => getMonthName(subWeeks(new Date(), 4 - i))),
           datasets: [
             {
               data: rsQualityData,
-              color: () => `rgba(26, 115, 232, 1)`, // blue
+              color: () => `rgba(26, 115, 232, 1)`,
               strokeWidth: 2,
             },
           ],
         }}
         width={screenWidth - 40}
         height={220}
+        withShadow={true}
+        withBezier={true}
         chartConfig={{
           backgroundColor: '#000',
           backgroundGradientFrom: '#000',
@@ -148,8 +204,18 @@ const PromptScreen = ({ navigation, route }) => {
           marginHorizontal: 20,
         }}
       />
+      <View style={styles.topFriendsContainer}>
+        <Text style={styles.topFriendsTitle}>Top Friends Selected:</Text>
+        {topFriends.length > 0 ? (
+          topFriends.map((friend, index) => (
+            <Text key={index} style={styles.friendName}>{friend}</Text>
+          ))
+        ) : (
+          <Text style={styles.noFriendsText}>No friends selected in the past month.</Text>
+        )}
+      </View>
       <FlatList
-        data={data}
+        data={journalEntries}
         renderItem={renderItem}
         keyExtractor={item => item.id}
         contentContainerStyle={styles.list}
@@ -207,27 +273,44 @@ const styles = StyleSheet.create({
     backgroundColor: '#333',
     padding: 20,
     borderRadius: 10,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
     marginBottom: 15,
   },
-  itemTextContainer: {
-    maxWidth: '80%',
+  itemDate: {
+    color: '#aaa',
+    fontSize: 14,
+    marginBottom: 5,
   },
-  itemTitle: {
+  itemQuestion: {
     color: '#fff',
     fontSize: 18,
     fontWeight: 'bold',
     marginBottom: 5,
   },
-  itemDescription: {
+  itemEntry: {
     color: '#aaa',
     fontSize: 14,
   },
-  itemProgress: {
+  topFriendsContainer: {
+    padding: 20,
+    backgroundColor: '#222',
+    borderRadius: 10,
+    marginVertical: 10,
+    marginHorizontal: 20,
+  },
+  topFriendsTitle: {
+    color: '#fff',
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 10,
+  },
+  friendName: {
+    color: '#fff',
+    fontSize: 16,
+    marginBottom: 5,
+  },
+  noFriendsText: {
     color: '#aaa',
-    fontSize: 14,
+    fontSize: 16,
   },
 });
 
