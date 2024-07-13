@@ -149,7 +149,7 @@ const PromptScreen = ({ navigation, route }) => {
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <Icon name="arrow-left" size={24} color="#fff" />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>DAILY</Text>
+        <Text style={styles.headerTitle}>WEEKLY</Text>
         <Text style={styles.headerSubtitle}>prompts.</Text>
       </View>
       <TouchableOpacity
