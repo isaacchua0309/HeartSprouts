@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, SafeAreaView, FlatList, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { View, Text, StyleSheet, SafeAreaView, TouchableOpacity, ActivityIndicator } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { firestore } from '../../utils/firebaseHelper'; // Adjust the import based on your project structure
 import { collection, getDocs } from 'firebase/firestore';
+import Colors from '../../constants/colors'; // Make sure to adjust the import path according to your project structure
 
 const RelationshipSatisfiedScreen = ({ navigation, route }) => {
   const [selectedFriends, setSelectedFriends] = useState([]);
@@ -45,7 +46,7 @@ const RelationshipSatisfiedScreen = ({ navigation, route }) => {
       ]}
       onPress={() => handlePress(item)}
     >
-      <Icon name="account" size={30} color={selectedFriends.includes(item.id) ? '#000' : '#fff'} />
+      <Icon name="account" size={30} color={selectedFriends.includes(item.id) ? Colors.green700 : Colors.white500} />
       <Text style={[styles.itemText, selectedFriends.includes(item.id) && styles.selectedItemText]}>
         {item.name}
       </Text>
@@ -68,7 +69,7 @@ const RelationshipSatisfiedScreen = ({ navigation, route }) => {
   if (loading) {
     return (
       <SafeAreaView style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color="#FFFFFF" />
+        <ActivityIndicator size="large" color={Colors.white500} />
       </SafeAreaView>
     );
   }
@@ -77,16 +78,16 @@ const RelationshipSatisfiedScreen = ({ navigation, route }) => {
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
         <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
-          <Icon name="arrow-left" size={30} color="#FFFFFF" />
+          <Icon name="arrow-left" size={30} color={Colors.white500} />
         </TouchableOpacity>
-        <Text style={styles.headerText}>Pick your friends for today</Text>
+        <Text style={styles.headerText}>Which relationships were the highlights of your week?</Text>
         <Text style={styles.subText}>Pick up to 3.</Text>
       </View>
       <View style={styles.listContainer}>
         {renderFriendPairs()}
       </View>
       <TouchableOpacity style={styles.nextButton} onPress={() => navigation.navigate('Prompt Answer', { email, rsQuality, selectedFriends })}>
-        <Icon name="chevron-right" size={30} color="#FFFFFF" />
+        <Icon name="chevron-right" size={30} color={Colors.white500} />
       </TouchableOpacity>
     </SafeAreaView>
   );
@@ -95,7 +96,7 @@ const RelationshipSatisfiedScreen = ({ navigation, route }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#000000',
+    backgroundColor: Colors.green500,
     padding: 20,
   },
   header: {
@@ -107,14 +108,14 @@ const styles = StyleSheet.create({
     left: 0,
   },
   headerText: {
-    color: '#FFFFFF',
+    color: Colors.white500,
     fontSize: 20,
     fontWeight: 'bold',
     textAlign: 'center',
-    marginLeft: 40, // adjust to center the text properly
+    marginHorizontal: 40, // Adjust to center the text properly
   },
   subText: {
-    color: '#FFFFFF',
+    color: Colors.white500,
     fontSize: 14,
     textAlign: 'center',
     marginTop: 10,
@@ -135,33 +136,39 @@ const styles = StyleSheet.create({
     margin: 10,
     padding: 20,
     borderRadius: 10,
-    backgroundColor: '#333333',
+    backgroundColor: Colors.green700,
     width: '45%', // Ensure the items fit well in two columns
     aspectRatio: 1, // Make the items square
   },
   selectedItem: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: Colors.white500,
   },
   itemText: {
-    color: '#FFFFFF',
+    color: Colors.white500,
     marginTop: 10,
     textAlign: 'center',
   },
   selectedItemText: {
-    color: '#000000',
+    color: Colors.green700,
   },
   nextButton: {
-    alignSelf: 'flex-end',
+    alignSelf: 'center',
     marginTop: 20,
-    backgroundColor: '#444444',
+    marginBottom:20,
+    backgroundColor: Colors.green700,
     borderRadius: 25,
     padding: 10,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.8,
+    shadowRadius: 2,
+    elevation: 5,
   },
   loadingContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#000000',
+    backgroundColor: Colors.green500,
   },
 });
 

@@ -11,9 +11,11 @@ import {
   Alert
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { doc, getDoc, updateDoc, collection, addDoc, setDoc } from 'firebase/firestore';
+import { doc, getDoc, updateDoc, collection, setDoc } from 'firebase/firestore';
 import { firestore } from '../../utils/firebaseHelper'; // Import Firestore from your helper file
 import { format } from 'date-fns';
+import Colors from '../../constants/colors'; // Make sure to adjust the import path according to your project structure
+
 const PromptAnswerScreen = ({ navigation, route }) => {
   const [text, setText] = useState('');
   const [question, setQuestion] = useState('');
@@ -53,74 +55,72 @@ const PromptAnswerScreen = ({ navigation, route }) => {
     fetchUnansweredQuestions(email);
   }, [email]);
 
-const addJournalEntry = async () => {
-  setJournalLoading(true);
-  try {
-    const userDocRef = doc(firestore, 'Users', email);
-    const journalCollectionRef = collection(userDocRef, 'Journal');
+  const addJournalEntry = async () => {
+    setJournalLoading(true);
+    try {
+      const userDocRef = doc(firestore, 'Users', email);
+      const journalCollectionRef = collection(userDocRef, 'Journal');
 
-    // Format the current date and time as the document ID
-    const currentDate = new Date();
-    const formattedDate = format(currentDate, 'yyyyMMddHHmmss');
+      // Format the current date and time as the document ID
+      const currentDate = new Date();
+      const formattedDate = format(currentDate, 'yyyyMMddHHmmss');
 
-    // Add the journal entry with the formatted date as the document ID
-    await setDoc(doc(journalCollectionRef, formattedDate), {
-      Date: currentDate.toISOString(),
-      Quality: rsQuality,
-      FriendsSelected: selectedFriends,
-      Question: question,
-      WordEntry: text
-    });
-
-    // Fetch the current XP value
-    const userDoc = await getDoc(userDocRef);
-    if (userDoc.exists()) {
-      const userData = userDoc.data();
-      const currentXP = userData.XP || 0;
-
-      // Update the XP value
-      const newXP = currentXP + 100;
-      await updateDoc(userDocRef, {
-        XP: newXP,
+      // Add the journal entry with the formatted date as the document ID
+      await setDoc(doc(journalCollectionRef, formattedDate), {
+        Date: currentDate.toISOString(),
+        Quality: rsQuality,
+        FriendsSelected: selectedFriends,
+        Question: question,
+        WordEntry: text
       });
 
-      // Optionally mark the question as answered
-      if (questionId) {
+      // Fetch the current XP value
+      const userDoc = await getDoc(userDocRef);
+      if (userDoc.exists()) {
+        const userData = userDoc.data();
+        const currentXP = userData.XP || 0;
+
+        // Update the XP value
+        const newXP = currentXP + 100;
         await updateDoc(userDocRef, {
-          [`questions.${questionId}.answered`]: true
+          XP: newXP,
         });
-      }
-    }
 
-    // Show success alert and navigate to the Journal screen on confirmation
-    Alert.alert(
-      "Success",
-      "Journal entry added successfully!",
-      [
-        {
-          text: "OK",
-          onPress: () => {
-            setText('');
-            navigation.navigate('Journal',{email});
-          }
+        // Optionally mark the question as answered
+        if (questionId) {
+          await updateDoc(userDocRef, {
+            [`questions.${questionId}.answered`]: true
+          });
         }
-      ]
-    );
-  } catch (error) {
-    console.error("Error adding journal entry: ", error);
-    Alert.alert("Error", "Failed to add journal entry. Please try again later.");
-  } finally {
-    setJournalLoading(false);
-  }
-};
+      }
 
-  
+      // Show success alert and navigate to the Journal screen on confirmation
+      Alert.alert(
+        "Success",
+        "Journal entry added successfully!",
+        [
+          {
+            text: "OK",
+            onPress: () => {
+              setText('');
+              navigation.navigate('Journal', { email });
+            }
+          }
+        ]
+      );
+    } catch (error) {
+      console.error("Error adding journal entry: ", error);
+      Alert.alert("Error", "Failed to add journal entry. Please try again later.");
+    } finally {
+      setJournalLoading(false);
+    }
+  };
 
   if (loading) {
     return (
       <SafeAreaView style={styles.container}>
         <View style={styles.loadingContainer}>
-          <ActivityIndicator size="large" color="#FFFFFF" />
+          <ActivityIndicator size="large" color={Colors.white500} />
         </View>
       </SafeAreaView>
     );
@@ -131,32 +131,29 @@ const addJournalEntry = async () => {
       <KeyboardAvoidingView behavior="padding" style={styles.avoidingView}>
         <View style={styles.header}>
           <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
-            <Icon name="arrow-left" size={30} color="#FFFFFF" />
+            <Icon name="arrow-left" size={30} color={Colors.white500} />
           </TouchableOpacity>
           <Text style={styles.headerText}>{question}</Text>
           <TouchableOpacity onPress={() => fetchUnansweredQuestions(email)} style={styles.refreshButton}>
-            <Icon name="refresh" size={30} color="#FFFFFF" />
+            <Icon name="refresh" size={30} color={Colors.white500} />
           </TouchableOpacity>
         </View>
         <TextInput
           style={styles.textInput}
           placeholder="Start writing..."
-          placeholderTextColor="#888888"
+          placeholderTextColor={Colors.white700}
           multiline
           value={text}
           onChangeText={setText}
         />
         <View style={styles.footer}>
-          <TouchableOpacity style={styles.addButton}>
-            <Icon name="plus" size={30} color="#FFFFFF" />
-          </TouchableOpacity>
           <TouchableOpacity style={styles.checkButton} onPress={addJournalEntry}>
-            <Icon name="check" size={30} color="#FFFFFF" />
+            <Icon name="check" size={30} color={Colors.white500} />
           </TouchableOpacity>
         </View>
         {journalLoading && (
           <View style={styles.loadingOverlay}>
-            <ActivityIndicator size="large" color="#FFFFFF" />
+            <ActivityIndicator size="large" color={Colors.white500} />
           </View>
         )}
       </KeyboardAvoidingView>
@@ -167,7 +164,7 @@ const addJournalEntry = async () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#000000',
+    backgroundColor: Colors.green500,
     padding: 20,
   },
   avoidingView: {
@@ -187,7 +184,7 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
   headerText: {
-    color: '#FFFFFF',
+    color: Colors.white500,
     fontSize: 20,
     fontWeight: 'bold',
     flex: 1,
@@ -198,34 +195,35 @@ const styles = StyleSheet.create({
   },
   textInput: {
     flex: 1,
-    color: '#FFFFFF',
+    color: Colors.white500,
     fontSize: 16,
     marginTop: 20,
     padding: 10,
-    backgroundColor: '#333333',
+    backgroundColor: Colors.green700,
     borderRadius: 10,
+    marginHorizontal:10
   },
   footer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+    justifyContent: 'center',
     alignItems: 'center',
     marginTop: 10,
-  },
-  addButton: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    width: 50,
-    height: 50,
-    backgroundColor: '#444444',
-    borderRadius: 25,
+    marginBottom:20
   },
   checkButton: {
     alignItems: 'center',
     justifyContent: 'center',
     width: 50,
     height: 50,
-    backgroundColor: '#444444',
+    backgroundColor: Colors.green700,
     borderRadius: 25,
+    marginHorizontal: 10,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.8,
+    shadowRadius: 2,
+    elevation: 5,
   },
   loadingOverlay: {
     position: 'absolute',

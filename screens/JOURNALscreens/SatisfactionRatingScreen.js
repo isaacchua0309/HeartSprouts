@@ -2,9 +2,10 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, SafeAreaView, TouchableOpacity, Image } from 'react-native';
 import Slider from '@react-native-community/slider';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import Colors from '../../constants/colors'; // Make sure to adjust the import path according to your project structure
 
 const SatisfactionRatingScreen = ({ navigation, route }) => {
-  const {email} = route.params;
+  const { email } = route.params;
   const [rsQuality, setRsQuality] = useState(5);
 
   const getRsQualityText = (value) => {
@@ -19,38 +20,37 @@ const SatisfactionRatingScreen = ({ navigation, route }) => {
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
         <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
-          <Icon name="arrow-left" size={30} color="#FFFFFF" />
+          <Icon name="arrow-left" size={30} color={Colors.white500} />
         </TouchableOpacity>
         <Text style={styles.headerText}>How satisfactory are your relationships?</Text>
       </View>
       <Text style={styles.subText}>
         You'll see insights and charts of your relationship quality on the trends page.
       </Text>
-      <View style={styles.imageContainer}>
-        {/* You can add an image here if needed */}
-      </View>
-      <View style={styles.sliderContainer}>
-        <Text style={styles.sliderText}>This week</Text>
-        <Text style={styles.sleepQualityText}>{getRsQualityText(rsQuality)}</Text>
-        <Slider
-          style={styles.slider}
-          minimumValue={1}
-          maximumValue={10}
-          step={1}
-          value={rsQuality}
-          onValueChange={(value) => setRsQuality(value)}
-          minimumTrackTintColor="#FFFFFF"
-          maximumTrackTintColor="#333333"
-          thumbTintColor="#FFFFFF"
-        />
-        <View style={styles.sliderLabels}>
-          <Text style={styles.sliderLabelText}>Not at all</Text>
-          <Text style={styles.sliderLabelText}>Very</Text>
+      <View style={styles.contentContainer}>
+        <View style={styles.sliderContainer}>
+          <Text style={styles.sliderText}>This week</Text>
+          <Text style={styles.rsQualityText}>{getRsQualityText(rsQuality)}</Text>
+          <Slider
+            style={styles.slider}
+            minimumValue={1}
+            maximumValue={10}
+            step={1}
+            value={rsQuality}
+            onValueChange={(value) => setRsQuality(value)}
+            minimumTrackTintColor={Colors.white500}
+            maximumTrackTintColor={Colors.green700}
+            thumbTintColor={Colors.white500}
+          />
+          <View style={styles.sliderLabels}>
+            <Text style={styles.sliderLabelText}>Not at all</Text>
+            <Text style={styles.sliderLabelText}>Very</Text>
+          </View>
         </View>
+        <TouchableOpacity style={styles.nextButton} onPress={() => navigation.navigate('Relationships Satisfied', { email, rsQuality })}>
+          <Icon name="chevron-right" size={30} color={Colors.white500} />
+        </TouchableOpacity>
       </View>
-      <TouchableOpacity style={styles.nextButton} onPress={() => navigation.navigate('Relationships Satisfied',{email,rsQuality})}>
-        <Icon name="chevron-right" size={30} color="#FFFFFF" />
-      </TouchableOpacity>
     </SafeAreaView>
   );
 };
@@ -58,7 +58,7 @@ const SatisfactionRatingScreen = ({ navigation, route }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#000000',
+    backgroundColor: Colors.green500,
     padding: 20,
   },
   header: {
@@ -70,57 +70,67 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
   headerText: {
-    color: '#FFFFFF',
-    fontSize: 18,
+    color: Colors.white500,
+    fontSize: 20,
     fontWeight: 'bold',
+    flex: 1,
+    textAlign: 'center',
   },
   subText: {
-    color: '#FFFFFF',
-    fontSize: 14,
+    color: Colors.white500,
+    fontSize: 16,
     textAlign: 'center',
     marginTop: 10,
+    paddingHorizontal: 20,
   },
-  imageContainer: {
-    alignItems: 'center',
-    marginVertical: 20,
-  },
-  image: {
-    width: 100,
-    height: 100,
+  contentContainer: {
+    flex: 1,
+    justifyContent: 'space-between',
+    paddingVertical: 20,
   },
   sliderContainer: {
     alignItems: 'center',
+    flex: 1,
   },
   sliderText: {
-    color: '#FFFFFF',
-    fontSize: 16,
+    color: Colors.white500,
+    fontSize: 18,
     marginBottom: 10,
   },
-  sleepQualityText: {
-    color: '#FFFFFF',
+  rsQualityText: {
+    color: Colors.white500,
     fontSize: 18,
     fontWeight: 'bold',
-    marginBottom: 10,
+    marginBottom: 20,
+    textAlign: 'center',
+    paddingHorizontal: 20,
   },
   slider: {
-    width: '80%',
+    width: '100%',
     height: 40,
   },
   sliderLabels: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    width: '80%',
+    width: '100%',
     marginTop: 10,
+    paddingHorizontal: 40,
   },
   sliderLabelText: {
-    color: '#FFFFFF',
+    color: Colors.white500,
+    fontSize: 16,
   },
   nextButton: {
-    alignSelf: 'flex-end',
+    alignSelf: 'center',
     marginTop: 20,
-    backgroundColor: '#444444',
+    backgroundColor: Colors.green700,
     borderRadius: 25,
     padding: 10,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.8,
+    shadowRadius: 2,
+    elevation: 5,
   },
 });
 
