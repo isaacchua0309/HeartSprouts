@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Image, FlatList, Modal, ScrollView } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Image, Modal, ScrollView } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Colors from '../../constants/colors';
@@ -101,12 +101,12 @@ const ProfileModal = ({ isVisible, onClose }) => {
               </TouchableOpacity>
             </View>
             <TouchableOpacity style={styles.premiumButton}>
-            <Text style={styles.sectionTitle}>PREMIUM.</Text>
+              <Text style={styles.sectionTitle}>PREMIUM.</Text>
               <Text style={styles.premiumButtonText}>Unlock all our exercises, prompts, AI features, iCloud Sync, and more</Text>
               <TouchableOpacity style={styles.tryButton}>
                 <Text style={styles.tryButtonText}>Coming Soon</Text>
               </TouchableOpacity>
-            </TouchableOpacity>      
+            </TouchableOpacity>
             <Text style={styles.sectionTitle}>ACCOUNT</Text>
             <TouchableOpacity style={styles.optionButton}>
               <Text style={styles.optionButtonText}>Preferences</Text>
@@ -296,13 +296,9 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   speechBubbleWrapper: {
-    marginBottom: 30,
-    alignItems: 'center',
-  },
-  speechBubbleWrapper: {
     marginBottom: 30, // Adjust this value to move the bubble upwards
     // Shadows for iOS
-    shadowColor: Colors.black500,
+    shadowColor: Colors.black300,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.30,
     shadowRadius: 3.84,
@@ -337,7 +333,7 @@ const styles = StyleSheet.create({
     borderRadius: 150,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#e7bc87',
+    backgroundColor: Colors.brown300,
   },
   image: {
     width: 200,
@@ -371,7 +367,7 @@ const styles = StyleSheet.create({
   },
   profileModalContent: {
     height: '80%',
-    backgroundColor: '#000',
+    backgroundColor: Colors.green700,
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
     padding: 20,
@@ -383,35 +379,35 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   profileTitle: {
-    color: '#fff',
+    color: Colors.white500,
     fontSize: 24,
     fontWeight: 'bold',
   },
   premiumButton: {
-    backgroundColor: '#222',
+    backgroundColor: Colors.green500,
     padding: 20,
     borderRadius: 10,
     alignItems: 'center',
     marginBottom: 20,
   },
   premiumButtonText: {
-    color: '#fff',
+    color: Colors.white500,
     fontSize: 16,
     textAlign: 'center',
     marginBottom: 10,
   },
   tryButton: {
-    backgroundColor: '#fff',
+    backgroundColor: Colors.white500,
     borderRadius: 10,
     padding: 10,
     marginTop: 10,
   },
   tryButtonText: {
-    color: '#000',
+    color: Colors.black300,
     fontWeight: 'bold',
   },
   sectionTitle: {
-    color: '#fff',
+    color: Colors.white500,
     fontSize: 18,
     fontWeight: 'bold',
     marginBottom: 10,
@@ -419,10 +415,10 @@ const styles = StyleSheet.create({
   optionButton: {
     paddingVertical: 15,
     borderBottomWidth: 1,
-    borderBottomColor: '#333',
+    borderBottomColor: Colors.green500,
   },
   optionButtonText: {
-    color: '#fff',
+    color: Colors.white500,
     fontSize: 16,
   },
 });
