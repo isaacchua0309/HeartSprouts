@@ -222,7 +222,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     backgroundColor: Colors.green500,
     borderTopWidth: 4,
-    borderColor: Colors.green700,
+    borderColor: Colors.green300,
     position: 'absolute',
     bottom: 0,
   },
