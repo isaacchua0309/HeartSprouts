@@ -51,7 +51,6 @@ const UserProfilesScreen = ({ navigation, route }) => {
       Alert.alert('Error', 'There was an error fetching events. Please try again later.');
     }
   };
-  
 
   useFocusEffect(
     useCallback(() => {
@@ -105,8 +104,13 @@ const UserProfilesScreen = ({ navigation, route }) => {
           </View>
         </View>
         <View style={styles.featured}>
-          <Text style={styles.featuredText}>Build Healthy Relationships</Text>
-          <Text style={styles.subtitleText}>Your personal connections</Text>
+          <View style={styles.featuredTextContainer}>
+            <Text style={styles.featuredText}>Build Healthy Relationships</Text>
+            <Text style={styles.subtitleText}>Your personal connections</Text>
+          </View>
+          <TouchableOpacity style={styles.addButton} onPress={handleAddFriendPress}>
+            <Icon name="plus" size={24} color="#fff" />
+          </TouchableOpacity>
         </View>
       </View>
 
@@ -125,9 +129,6 @@ const UserProfilesScreen = ({ navigation, route }) => {
           ))}
         </View>
       </ScrollView>
-      <TouchableOpacity style={styles.floatingButton} onPress={handleAddFriendPress}>
-        <Icon name="plus" size={24} color="#fff" />
-      </TouchableOpacity>
       <View style={styles.navBar}>
         <TouchableOpacity style={styles.navButton} onPress={() => navigation.navigate('Journal', { email })}>
           <Ionicons name="book" size={24} color={Colors.green300} />
@@ -212,59 +213,60 @@ const styles = StyleSheet.create({
     marginLeft: 20,
   },
   featured: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
     paddingVertical: 20,
     backgroundColor: Colors.green500,
+  },
+  featuredTextContainer: {
+    flex: 1,
   },
   featuredText: {
     fontSize: 18,
     color: Colors.pink500,
     fontWeight: 'bold',
-    fontStyle: 'italic'
+    fontStyle: 'italic',
   },
   subtitleText: {
     fontSize: 16,
     color: Colors.white700,
-    fontStyle: 'italic'
+    fontStyle: 'italic',
+  },
+  addButton: {
+    marginLeft: 10,
+    backgroundColor: Colors.pink500,
+    padding: 10,
+    borderRadius: 20,
+    elevation: 2,
   },
   profileContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    justifyContent: 'space-around',
+    justifyContent: 'space-between',
     padding: 10,
   },
   profileCard: {
-    width: '30%',
+    width: '45%', // Two cards per row
+    marginBottom: 20, // Space between rows
     backgroundColor: Colors.green500,
-    margin: 6,
     borderRadius: 10,
     alignItems: 'center',
   },
   profileImage: {
-    width: 100,
-    height: 100,
+    width: 140,
+    height: 140,
     borderRadius: 24,
     marginBottom: 8,
   },
   profileName: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: Colors.white700
+    color: Colors.white700,
   },
   profileStatus: {
     fontSize: 14,
     color: '#757575',
-  },
-  floatingButton: {
-    position: 'absolute',
-    width: 60,
-    height: 60,
-    alignItems: 'center',
-    justifyContent: 'center',
-    right: 30,
-    bottom: 110,
-    backgroundColor: Colors.pink500,
-    borderRadius: 30,
-    elevation: 18,
   },
   navBar: {
     flexDirection: 'row',
