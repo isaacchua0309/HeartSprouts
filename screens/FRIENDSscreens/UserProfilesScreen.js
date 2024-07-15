@@ -1,16 +1,18 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import { View, Text, Image, TouchableOpacity, StyleSheet, ScrollView, Alert } from 'react-native';
+import { View, Text, Image, TouchableOpacity, StyleSheet, ScrollView, Alert, Modal } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { useFocusEffect } from '@react-navigation/native';
 import { firestore } from '../../utils/firebaseHelper';
 import { collection, getDocs } from 'firebase/firestore';
 import Colors from '../../constants/colors';
-import { requestPermissions, scheduleNotification } from '../../utils/notificationHandler';
+import { requestPermissions, scheduleNotification, getAllScheduledNotifications } from '../../utils/notificationHandler';
 import fetchEventsForFriend from '../../utils/actions/fetchEventsForFriend';
 import { Ionicons } from '@expo/vector-icons';
 
 const UserProfilesScreen = ({ navigation, route }) => {
   const [friends, setFriends] = useState([]);
+  const [notifications, setNotifications] = useState([]);
+  const [isModalVisible, setModalVisible] = useState(false);
   const { email } = route.params;
 
   const fetchFriends = async () => {
@@ -27,6 +29,16 @@ const UserProfilesScreen = ({ navigation, route }) => {
     } catch (error) {
       console.error('Error fetching friends: ', error);
       Alert.alert('Error', 'There was an error fetching friends. Please try again later.');
+    }
+  };
+
+  const fetchNotifications = async () => {
+    try {
+      const scheduledNotifications = await getAllScheduledNotifications();
+      setNotifications(scheduledNotifications);
+    } catch (error) {
+      console.error('Error fetching scheduled notifications: ', error);
+      Alert.alert('Error', 'There was an error fetching scheduled notifications. Please try again.');
     }
   };
 
@@ -62,27 +74,31 @@ const UserProfilesScreen = ({ navigation, route }) => {
     navigation.navigate('Friend Creation', { email });
   };
 
+  const handleNotificationsPress = () => {
+    fetchNotifications();
+    setModalVisible(true);
+  };
+
   return (
     <View style={styles.container}>
-
-    <View style={styles.fullHeader}>
-
-      <View style={styles.header}>
-        <Text style={styles.headerText}>Relationship Manager</Text>
-        <View style={styles.headerButtons}>
-          <TouchableOpacity style={styles.searchButton}>
-            <Icon name="search" size={20} color="#fff" />
-          </TouchableOpacity>
+      <View style={styles.fullHeader}>
+        <View style={styles.header}>
+          <Text style={styles.headerText}>Relationship Manager</Text>
+          <View style={styles.headerButtons}>
+            <TouchableOpacity style={styles.searchButton}>
+              <Icon name="search" size={20} color="#fff" />
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.bellButton} onPress={handleNotificationsPress}>
+              <Icon name="bell" size={20} color="#fff" />
+            </TouchableOpacity>
+          </View>
         </View>
-        </View>
-
         <View style={styles.featured}>
           <Text style={styles.featuredText}>Build Healthy Relationships</Text>
           <Text style={styles.subtitleText}>Your personal connections</Text>
         </View>
-
       </View>
-      
+
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         <View style={styles.profileContainer}>
           {friends.map((friend) => (
@@ -102,7 +118,7 @@ const UserProfilesScreen = ({ navigation, route }) => {
         <Icon name="plus" size={24} color="#fff" />
       </TouchableOpacity>
       <View style={styles.navBar}>
-      <TouchableOpacity style={styles.navButton} onPress={() => navigation.navigate('Journal', { email })}>
+        <TouchableOpacity style={styles.navButton} onPress={() => navigation.navigate('Journal', { email })}>
           <Ionicons name="book" size={24} color={Colors.green300} />
           <Text style={styles.navText}>Journal</Text>
         </TouchableOpacity>
@@ -115,21 +131,44 @@ const UserProfilesScreen = ({ navigation, route }) => {
           <Text style={styles.navText}>Friends</Text>
         </TouchableOpacity>
       </View>
+
+      <Modal
+        visible={isModalVisible}
+        animationType="slide"
+        transparent={true}
+        onRequestClose={() => setModalVisible(false)}
+      >
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContainer}>
+            <Text style={styles.modalTitle}>Upcoming Notifications</Text>
+            <ScrollView contentContainerStyle={styles.modalContent}>
+              {notifications.map((notification, index) => (
+                <View key={index} style={styles.notificationItem}>
+                  <Text style={styles.notificationTitle}>{notification.title}</Text>
+                  <Text style={styles.notificationTime}>{new Date(notification.time).toLocaleString()}</Text>
+                </View>
+              ))}
+            </ScrollView>
+            <TouchableOpacity style={styles.closeButton} onPress={() => setModalVisible(false)}>
+              <Text style={styles.closeButtonText}>Close</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-      flex: 1,
-      justifyContent: 'center',
-      alignItems: 'center',
-      backgroundColor: Colors.green500,
-      padding: 20,
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: Colors.green500,
+    padding: 20,
   },
   scrollContainer: {
     paddingBottom: 160, // Space for the fixed navbar
-    
   },
   fullHeader: {
     borderBottomWidth: 4,
@@ -151,7 +190,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   searchButton: {
-    marginLeft: 100
+    marginLeft: 20,
+  },
+  bellButton: {
+    marginLeft: 20,
   },
   featured: {
     paddingVertical: 20,
@@ -180,12 +222,6 @@ const styles = StyleSheet.create({
     margin: 6,
     borderRadius: 10,
     alignItems: 'center',
-    // padding: 12,
-    // shadowColor: '#000',
-    // shadowOffset: { width: 0, height: 2 },
-    // shadowOpacity: 0.2,
-    // shadowRadius: 2,
-    // elevation: 3,
   },
   profileImage: {
     width: 100,
@@ -196,7 +232,6 @@ const styles = StyleSheet.create({
   profileName: {
     fontSize: 18,
     fontWeight: 'bold',
-    // marginBottom: 5,
     color: Colors.white700
   },
   profileStatus: {
@@ -234,6 +269,49 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginTop: 5,
     color: Colors.white500,
+  },
+  modalOverlay: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0,0,0,0.5)',
+  },
+  modalContainer: {
+    width: '80%',
+    backgroundColor: Colors.white500,
+    borderRadius: 10,
+    padding: 20,
+    alignItems: 'center',
+  },
+  modalTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginBottom: 20,
+  },
+  modalContent: {
+    maxHeight: 400,
+  },
+  notificationItem: {
+    marginBottom: 20,
+  },
+  notificationTitle: {
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  notificationTime: {
+    fontSize: 14,
+    color: '#757575',
+  },
+  closeButton: {
+    marginTop: 20,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    backgroundColor: Colors.green500,
+    borderRadius: 5,
+  },
+  closeButtonText: {
+    color: Colors.white500,
+    fontSize: 16,
   },
 });
 

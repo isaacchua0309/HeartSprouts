@@ -27,7 +27,6 @@ import {
   where,
   writeBatch,
   setDoc,
-  getDoc
 } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import Colors from '../../constants/colors';
@@ -53,7 +52,6 @@ const FriendProfileScreen = ({ navigation, route }) => {
   );
   const [newImage, setNewImage] = useState(friend.image);
   const [imageUploading, setImageUploading] = useState(false);
-  const [dateError, setDateError] = useState(false); // New state to track date error
   const scrollViewRef = useRef(null);
 
   useEffect(() => {
@@ -91,13 +89,6 @@ const FriendProfileScreen = ({ navigation, route }) => {
   };
 
   const handleAddEvent = async () => {
-    const today = new Date();
-    today.setHours(0, 0, 0, 0); // Normalize time to midnight
-    if (eventDate <= today) {
-      Alert.alert('Error', 'The event date must be at least one day after today.');
-      return;
-    }
-
     if (eventName.trim()) {
       setIsLoading(true);
       try {
@@ -150,15 +141,8 @@ const FriendProfileScreen = ({ navigation, route }) => {
 
   const handleDateChange = (event, selectedDate) => {
     const currentDate = selectedDate || eventDate;
-    const today = new Date();
-    today.setHours(0, 0, 0, 0); // Normalize time to midnight
-    if (currentDate > today) {
-      setDateError(false);
-      setEventDate(currentDate);
-    } else {
-      setDateError(true);
-    }
     setShowPicker(false);
+    setEventDate(currentDate);
   };
 
   const scrollToClosestEvent = () => {
@@ -395,10 +379,9 @@ const FriendProfileScreen = ({ navigation, route }) => {
             mode="date"
             display="default"
             onChange={handleDateChange}
-            minimumDate={new Date(Date.now() + 24 * 60 * 60 * 1000)} // Ensure only dates after today can be selected
           />
         )}
-        <Button title="Add Event" onPress={handleAddEvent} disabled={isLoading || dateError} color={Colors.green300} />
+        <Button title="Add Event" onPress={handleAddEvent} disabled={isLoading} color={Colors.green300} />
         {isFetching ? (
           <ActivityIndicator size="large" color={Colors.green300} />
         ) : (
