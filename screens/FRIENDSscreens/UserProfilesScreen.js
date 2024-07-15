@@ -108,8 +108,8 @@ const UserProfilesScreen = ({ navigation, route }) => {
         </View>
         <View style={styles.featured}>
           <View style={styles.featuredTextContainer}>
-            <Text style={styles.featuredText}>Build Healthy Relationships</Text>
-            <Text style={styles.subtitleText}>Your personal connections</Text>
+            <Text style={styles.featuredText}>Your personal connections</Text>
+            <Text style={styles.subtitleText}>Click to add a profile :)</Text>
           </View>
           <TouchableOpacity style={styles.addButton} onPress={handleAddFriendPress}>
             <Icon name="plus" size={24} color="#fff" />
@@ -185,14 +185,16 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: Colors.green500,
-    padding: 20,
+    paddingHorizontal: 20,
   },
   scrollContainer: {
     paddingBottom: 160, // Space for the fixed navbar
+    paddingTop: 20
   },
   fullHeader: {
     borderBottomWidth: 4,
     borderColor: Colors.green300,
+    paddingHorizontal: 50,
   },
   header: {
     flexDirection: 'row',
@@ -224,16 +226,17 @@ const styles = StyleSheet.create({
   },
   featuredTextContainer: {
     flex: 1,
+
   },
   featuredText: {
-    fontSize: 18,
-    color: Colors.pink500,
+    fontSize: 16,
+    color: Colors.white700,
     fontWeight: 'bold',
     fontStyle: 'italic',
   },
   subtitleText: {
     fontSize: 16,
-    color: Colors.white700,
+    color: Colors.pink500,
     fontStyle: 'italic',
   },
   addButton: {
