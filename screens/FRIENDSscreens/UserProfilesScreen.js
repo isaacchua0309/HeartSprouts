@@ -1,5 +1,5 @@
-import React, { useEffect, useState, useCallback } from 'react';
-import { View, Text, Image, TouchableOpacity, StyleSheet, ScrollView, Alert, Modal } from 'react-native';
+import React, { useState, useCallback } from 'react';
+import { View, Text, Image, TouchableOpacity, StyleSheet, ScrollView, Alert, Modal, ActivityIndicator } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { useFocusEffect } from '@react-navigation/native';
 import { firestore } from '../../utils/firebaseHelper';
@@ -11,8 +11,9 @@ import { Ionicons } from '@expo/vector-icons';
 
 const UserProfilesScreen = ({ navigation, route }) => {
   const [friends, setFriends] = useState([]);
-  const [notifications, setNotifications] = useState([]);
+  const [events, setEvents] = useState([]);
   const [isModalVisible, setModalVisible] = useState(false);
+  const [loading, setLoading] = useState(false); // Loading state
   const { email } = route.params;
 
   const fetchFriends = async () => {
@@ -32,15 +33,25 @@ const UserProfilesScreen = ({ navigation, route }) => {
     }
   };
 
-  const fetchNotifications = async () => {
+  const fetchEvents = async () => {
     try {
-      const scheduledNotifications = await getAllScheduledNotifications();
-      setNotifications(scheduledNotifications);
+      setLoading(true); // Start loading
+      const allEvents = [];
+      for (const friend of friends) {
+        const events = await fetchEventsForFriend(email, friend.name);
+        allEvents.push(...events.map(event => ({ ...event, friendName: friend.name })));
+      }
+      const futureEvents = allEvents.filter(a => a.date.seconds > (Date.now() / 1000)); // Filter future events
+      futureEvents.sort((a, b) => a.date.seconds - b.date.seconds); // Sort events by date
+      setEvents(futureEvents);
+      setLoading(false); // Stop loading
     } catch (error) {
-      console.error('Error fetching scheduled notifications: ', error);
-      Alert.alert('Error', 'There was an error fetching scheduled notifications. Please try again.');
+      setLoading(false); // Stop loading on error
+      console.error('Error fetching events: ', error);
+      Alert.alert('Error', 'There was an error fetching events. Please try again later.');
     }
   };
+  
 
   useFocusEffect(
     useCallback(() => {
@@ -74,9 +85,9 @@ const UserProfilesScreen = ({ navigation, route }) => {
     navigation.navigate('Friend Creation', { email });
   };
 
-  const handleNotificationsPress = () => {
-    fetchNotifications();
+  const handleNotificationsPress = async () => {
     setModalVisible(true);
+    await fetchEvents();
   };
 
   return (
@@ -140,15 +151,20 @@ const UserProfilesScreen = ({ navigation, route }) => {
       >
         <View style={styles.modalOverlay}>
           <View style={styles.modalContainer}>
-            <Text style={styles.modalTitle}>Upcoming Notifications</Text>
-            <ScrollView contentContainerStyle={styles.modalContent}>
-              {notifications.map((notification, index) => (
-                <View key={index} style={styles.notificationItem}>
-                  <Text style={styles.notificationTitle}>{notification.title}</Text>
-                  <Text style={styles.notificationTime}>{new Date(notification.time).toLocaleString()}</Text>
-                </View>
-              ))}
-            </ScrollView>
+            <Text style={styles.modalTitle}>Upcoming Events</Text>
+            {loading ? (
+              <ActivityIndicator size="large" color={Colors.green500} />
+            ) : (
+              <ScrollView contentContainerStyle={styles.modalContent}>
+                {events.map((event, index) => (
+                  <View key={index} style={styles.notificationItem}>
+                    <Text style={styles.notificationTitle}>{event.title}</Text>
+                    <Text style={styles.notificationTime}>{new Date(event.date.seconds * 1000).toLocaleString()}</Text>
+                    <Text style={styles.notificationFriend}>Friend: {event.friendName}</Text>
+                  </View>
+                ))}
+              </ScrollView>
+            )}
             <TouchableOpacity style={styles.closeButton} onPress={() => setModalVisible(false)}>
               <Text style={styles.closeButtonText}>Close</Text>
             </TouchableOpacity>
@@ -301,6 +317,10 @@ const styles = StyleSheet.create({
   notificationTime: {
     fontSize: 14,
     color: '#757575',
+  },
+  notificationFriend: {
+    fontSize: 14,
+    color: Colors.green700,
   },
   closeButton: {
     marginTop: 20,

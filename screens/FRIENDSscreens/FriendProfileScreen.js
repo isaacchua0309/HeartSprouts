@@ -35,7 +35,7 @@ import {
   scheduleNotification,
   cancelNotification,
   getAllScheduledNotifications,
-} from '../../utils/actions/notificationsHelper'; // Import notification helpers
+} from '../../utils/actions/notificationsHelper';
 
 const FriendProfileScreen = ({ navigation, route }) => {
   const { friend, email } = route.params;
@@ -43,6 +43,7 @@ const FriendProfileScreen = ({ navigation, route }) => {
   const [eventName, setEventName] = useState('');
   const [eventDate, setEventDate] = useState(new Date());
   const [showPicker, setShowPicker] = useState(false);
+  const [isDatePicker, setIsDatePicker] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const [isFetching, setIsFetching] = useState(true);
   const [isEditing, setIsEditing] = useState(false);
@@ -96,7 +97,7 @@ const FriendProfileScreen = ({ navigation, route }) => {
           collection(firestore, `Users/${email}/Friends/${friend.name}/Events`),
           {
             title: eventName,
-            date: eventDate,
+            date: Timestamp.fromDate(eventDate),
             description: '', // Add a description field if needed
           }
         );
@@ -143,6 +144,12 @@ const FriendProfileScreen = ({ navigation, route }) => {
     const currentDate = selectedDate || eventDate;
     setShowPicker(false);
     setEventDate(currentDate);
+    if (isDatePicker) {
+      setShowPicker(true);
+      setIsDatePicker(false);
+    } else {
+      setIsDatePicker(true);
+    }
   };
 
   const scrollToClosestEvent = () => {
@@ -370,13 +377,16 @@ const FriendProfileScreen = ({ navigation, route }) => {
           onChangeText={setEventName}
           placeholder="Enter event name"
         />
-        <TouchableOpacity style={styles.dateInput} onPress={() => setShowPicker(true)}>
+        <TouchableOpacity style={styles.dateInput} onPress={() => { setIsDatePicker(true); setShowPicker(true); }}>
           <Text>{eventDate.toDateString()}</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.dateInput} onPress={() => { setIsDatePicker(false); setShowPicker(true); }}>
+          <Text>{eventDate.toLocaleTimeString()}</Text>
         </TouchableOpacity>
         {showPicker && (
           <DateTimePicker
             value={eventDate}
-            mode="date"
+            mode={isDatePicker ? "date" : "time"}
             display="default"
             onChange={handleDateChange}
           />
@@ -391,7 +401,7 @@ const FriendProfileScreen = ({ navigation, route }) => {
                 <Text style={styles.eventTitle}>{event.title}</Text>
                 {event.date && event.date.seconds && (
                   <Text style={styles.eventDate}>
-                    {new Date(event.date.seconds * 1000).toLocaleDateString()}
+                    {new Date(event.date.seconds * 1000).toLocaleDateString()} at {new Date(event.date.seconds * 1000).toLocaleTimeString()}
                   </Text>
                 )}
                 <Text style={styles.eventDescription}>{event.description}</Text>
