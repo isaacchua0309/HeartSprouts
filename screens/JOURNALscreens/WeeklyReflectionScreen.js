@@ -24,7 +24,8 @@ const PromptScreen = ({ navigation, route }) => {
     topFriends,
     setTopFriends,
     loading,
-    setLoading
+    setLoading,
+    expandedEntries
   } = useContext(JournalContext);
 
   const checkJournalEntryThisWeek = async (email) => {
