@@ -27,9 +27,16 @@ import {
   where,
   writeBatch,
   setDoc,
+  getDoc
 } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import Colors from '../../constants/colors';
+import {
+  requestNotificationPermissions,
+  scheduleNotification,
+  cancelNotification,
+  getAllScheduledNotifications,
+} from '../../utils/actions/notificationsHelper'; // Import notification helpers
 
 const FriendProfileScreen = ({ navigation, route }) => {
   const { friend, email } = route.params;
@@ -46,10 +53,12 @@ const FriendProfileScreen = ({ navigation, route }) => {
   );
   const [newImage, setNewImage] = useState(friend.image);
   const [imageUploading, setImageUploading] = useState(false);
+  const [dateError, setDateError] = useState(false); // New state to track date error
   const scrollViewRef = useRef(null);
 
   useEffect(() => {
     fetchEvents();
+    requestNotificationPermissions(); // Request notification permissions on component mount
   }, [friend]);
 
   useEffect(() => {
@@ -82,10 +91,17 @@ const FriendProfileScreen = ({ navigation, route }) => {
   };
 
   const handleAddEvent = async () => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0); // Normalize time to midnight
+    if (eventDate <= today) {
+      Alert.alert('Error', 'The event date must be at least one day after today.');
+      return;
+    }
+
     if (eventName.trim()) {
       setIsLoading(true);
       try {
-        await addDoc(
+        const eventDocRef = await addDoc(
           collection(firestore, `Users/${email}/Friends/${friend.name}/Events`),
           {
             title: eventName,
@@ -93,6 +109,9 @@ const FriendProfileScreen = ({ navigation, route }) => {
             description: '', // Add a description field if needed
           }
         );
+        const notificationId = await scheduleNotification(eventName, 'Event is coming up!', eventDate);
+        await updateDoc(eventDocRef, { notificationId });
+
         Alert.alert('Success', 'Event added successfully');
         setEventName('');
         setEventDate(new Date());
@@ -111,7 +130,16 @@ const FriendProfileScreen = ({ navigation, route }) => {
 
   const handleDeleteEvent = async (eventId) => {
     try {
-      await deleteDoc(doc(firestore, `Users/${email}/Friends/${friend.name}/Events`, eventId));
+      const eventDocRef = doc(firestore, `Users/${email}/Friends/${friend.name}/Events`, eventId);
+      const eventDoc = await getDoc(eventDocRef);
+      if (eventDoc.exists) {
+        const { notificationId } = eventDoc.data();
+        if (notificationId) {
+          await cancelNotification(notificationId);
+        }
+      }
+
+      await deleteDoc(eventDocRef);
       Alert.alert('Success', 'Event deleted successfully');
       fetchEvents(); // Refresh events list
     } catch (error) {
@@ -122,8 +150,15 @@ const FriendProfileScreen = ({ navigation, route }) => {
 
   const handleDateChange = (event, selectedDate) => {
     const currentDate = selectedDate || eventDate;
+    const today = new Date();
+    today.setHours(0, 0, 0, 0); // Normalize time to midnight
+    if (currentDate > today) {
+      setDateError(false);
+      setEventDate(currentDate);
+    } else {
+      setDateError(true);
+    }
     setShowPicker(false);
-    setEventDate(currentDate);
   };
 
   const scrollToClosestEvent = () => {
@@ -264,6 +299,17 @@ const FriendProfileScreen = ({ navigation, route }) => {
     );
   };
 
+  const handleCheckNotifications = async () => {
+    try {
+      const scheduledNotifications = await getAllScheduledNotifications();
+      console.log('Scheduled Notifications:', scheduledNotifications);
+      Alert.alert('Scheduled Notifications', JSON.stringify(scheduledNotifications));
+    } catch (error) {
+      console.error('Error fetching scheduled notifications: ', error);
+      Alert.alert('Error', 'There was an error fetching scheduled notifications. Please try again.');
+    }
+  };
+
   if (!friend) {
     return (
       <View style={styles.container}>
@@ -349,9 +395,10 @@ const FriendProfileScreen = ({ navigation, route }) => {
             mode="date"
             display="default"
             onChange={handleDateChange}
+            minimumDate={new Date(Date.now() + 24 * 60 * 60 * 1000)} // Ensure only dates after today can be selected
           />
         )}
-        <Button title="Add Event" onPress={handleAddEvent} disabled={isLoading} color={Colors.green300} />
+        <Button title="Add Event" onPress={handleAddEvent} disabled={isLoading || dateError} color={Colors.green300} />
         {isFetching ? (
           <ActivityIndicator size="large" color={Colors.green300} />
         ) : (
@@ -372,6 +419,7 @@ const FriendProfileScreen = ({ navigation, route }) => {
             ))}
           </ScrollView>
         )}
+        <Button title="Check Notifications" onPress={handleCheckNotifications} color={Colors.blue500} />
       </View>
     </View>
   );
