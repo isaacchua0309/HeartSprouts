@@ -21,6 +21,7 @@ import PromptScreen from './screens/JOURNALscreens/WeeklyReflectionScreen';
 import PromptAnswerScreen from './screens/JOURNALscreens/PromptAnswerScreen';
 import SatisfactionRatingScreen from './screens/JOURNALscreens/SatisfactionRatingScreen';
 import RelationshipSatisfiedScreen from './screens/JOURNALscreens/RelationshipSatisfiedScreen';
+import { FriendsProvider } from './utils/FriendsContext';
 const Stack = createStackNavigator();
 
 const forFadeAndScale = ({ current }) => ({
@@ -32,6 +33,7 @@ const forFadeAndScale = ({ current }) => ({
 export default function App() {
   return (
     <Provider store={store}>
+      <FriendsProvider>
       <View style={styles.rootScreen}>
         <NavigationContainer>
           <SafeAreaView style={{ flex: 1 }}>
@@ -61,6 +63,7 @@ export default function App() {
           </SafeAreaView>
         </NavigationContainer>
       </View>
+      </FriendsProvider>
     </Provider>
   );
 }

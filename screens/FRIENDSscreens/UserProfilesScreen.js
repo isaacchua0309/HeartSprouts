@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useContext, useEffect } from 'react';
 import { View, Text, Image, TouchableOpacity, StyleSheet, ScrollView, Alert, Modal, ActivityIndicator } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { useFocusEffect } from '@react-navigation/native';
@@ -8,13 +8,12 @@ import Colors from '../../constants/colors';
 import { requestPermissions, scheduleNotification, getAllScheduledNotifications } from '../../utils/notificationHandler';
 import fetchEventsForFriend from '../../utils/actions/fetchEventsForFriend';
 import { Ionicons } from '@expo/vector-icons';
+import { FriendsContext } from '../../utils/FriendsContext';
 
 const UserProfilesScreen = ({ navigation, route }) => {
-  const [friends, setFriends] = useState([]);
-  const [events, setEvents] = useState([]);
-  const [isModalVisible, setModalVisible] = useState(false);
-  const [loading, setLoading] = useState(false); // Loading state
   const { email } = route.params;
+  const { friends, setFriends, events, setEvents, loading, setLoading } = useContext(FriendsContext);
+  const [isModalVisible, setModalVisible] = useState(false);
 
   const fetchFriends = async () => {
     try {
@@ -27,21 +26,24 @@ const UserProfilesScreen = ({ navigation, route }) => {
           ...doc.data(),
         }));
       setFriends(friendsList);
+      return friendsList; // Return the friends list for chaining
     } catch (error) {
       console.error('Error fetching friends: ', error);
       Alert.alert('Error', 'There was an error fetching friends. Please try again later.');
     }
   };
 
-  const fetchEvents = async () => {
+  const fetchEvents = async (friendsList) => {
     try {
       setLoading(true); // Start loading
-      const allEvents = [];
-      for (const friend of friends) {
-        const events = await fetchEventsForFriend(email, friend.name);
-        allEvents.push(...events.map(event => ({ ...event, friendName: friend.name })));
-      }
-      const futureEvents = allEvents.filter(a => a.date.seconds > (Date.now() / 1000)); // Filter future events
+      const allEvents = await Promise.all(
+        friendsList.map(async (friend) => {
+          const events = await fetchEventsForFriend(email, friend.name);
+          return events.map(event => ({ ...event, friendName: friend.name }));
+        })
+      );
+      const flattenedEvents = allEvents.flat();
+      const futureEvents = flattenedEvents.filter(a => a.date.seconds > (Date.now() / 1000)); // Filter future events
       futureEvents.sort((a, b) => a.date.seconds - b.date.seconds); // Sort events by date
       setEvents(futureEvents);
       setLoading(false); // Stop loading
@@ -72,7 +74,11 @@ const UserProfilesScreen = ({ navigation, route }) => {
         }
       };
 
-      fetchFriends().then(() => setupNotifications());
+      fetchFriends().then((friendsList) => {
+        if (friendsList && friendsList.length > 0) {
+          fetchEvents(friendsList).then(() => setupNotifications());
+        }
+      });
     }, [email])
   );
 
@@ -86,7 +92,7 @@ const UserProfilesScreen = ({ navigation, route }) => {
 
   const handleNotificationsPress = async () => {
     setModalVisible(true);
-    await fetchEvents();
+    await fetchEvents(friends);
   };
 
   return (
@@ -95,9 +101,6 @@ const UserProfilesScreen = ({ navigation, route }) => {
         <View style={styles.header}>
           <Text style={styles.headerText}>Relationship Manager</Text>
           <View style={styles.headerButtons}>
-            <TouchableOpacity style={styles.searchButton}>
-              <Icon name="search" size={20} color="#fff" />
-            </TouchableOpacity>
             <TouchableOpacity style={styles.bellButton} onPress={handleNotificationsPress}>
               <Icon name="bell" size={20} color="#fff" />
             </TouchableOpacity>
