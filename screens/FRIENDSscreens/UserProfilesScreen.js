@@ -238,9 +238,11 @@ const styles = StyleSheet.create({
   },
   addButton: {
     marginLeft: 10,
+    alignItems: 'center',
     backgroundColor: Colors.pink500,
     padding: 10,
-    borderRadius: 20,
+    width: 50,
+    borderRadius: 25,
     elevation: 2,
   },
   profileContainer: {

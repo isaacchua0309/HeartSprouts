@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Image, Modal, ScrollView } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Image, Modal } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Colors from '../../constants/colors';
+import ExperienceBar from './ExperienceBar'; // Adjust the path as needed
 
 const emotions = [
   { name: 'Happy', color: '#FFD700' },
@@ -93,47 +94,44 @@ const ProfileModal = ({ isVisible, onClose }) => {
     >
       <View style={styles.profileModalContainer}>
         <View style={styles.profileModalContent}>
-          {/* <ScrollView> */}
+          <View style={styles.modalHeader}>
+            <Text style={styles.profileTitle}>your profile.</Text>
+            <TouchableOpacity onPress={onClose}>
+              <Icon name="close" size={24} color="#fff" />
+            </TouchableOpacity>
+          </View>
 
-            <View style={styles.modalHeader}>
-              <Text style={styles.profileTitle}>your profile.</Text>
-              <TouchableOpacity onPress={onClose}>
-                <Icon name="close" size={24} color="#fff" />
-              </TouchableOpacity>
-            </View>
+          <TouchableOpacity style={styles.premiumButton}>
+            <Text style={styles.sectionTitle}>PREMIUM.</Text>
+            <Text style={styles.premiumButtonText}>Unlock all our exercises, prompts, AI features, iCloud Sync, and more</Text>
+            <TouchableOpacity style={styles.tryButton}>
+              <Text style={styles.tryButtonText}>Coming Soon!</Text>
+            </TouchableOpacity>
+          </TouchableOpacity>
 
-            <TouchableOpacity style={styles.premiumButton}>
-              <Text style={styles.sectionTitle}>PREMIUM.</Text>
-              <Text style={styles.premiumButtonText}>Unlock all our exercises, prompts, AI features, iCloud Sync, and more</Text>
-              <TouchableOpacity style={styles.tryButton}>
-                <Text style={styles.tryButtonText}>Coming Soon!</Text>
-              </TouchableOpacity>
-            </TouchableOpacity>
+          <Text style={styles.sectionTitle}>ACCOUNT</Text>
+          <TouchableOpacity style={styles.optionButton}>
+            <Text style={styles.optionButtonText}>Settings</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.optionButton}>
+            <Text style={styles.optionButtonText}>Log Out</Text>
+          </TouchableOpacity>
 
-            <Text style={styles.sectionTitle}>ACCOUNT</Text>
-            <TouchableOpacity style={styles.optionButton}>
-              <Text style={styles.optionButtonText}>Settings</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.optionButton}>
-              <Text style={styles.optionButtonText}>Log Out</Text>
-            </TouchableOpacity>
+          <Text style={styles.sectionTitle}>COMMUNITY</Text>
+          <TouchableOpacity style={styles.optionButton}>
+            <Text style={styles.optionButtonText}>Share HeartSprouts with Your Friends</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.optionButton}>
+            <Text style={styles.optionButtonText}>Instagram (coming soon!)</Text>
+          </TouchableOpacity>
 
-            <Text style={styles.sectionTitle}>COMMUNITY</Text>
-            <TouchableOpacity style={styles.optionButton}>
-              <Text style={styles.optionButtonText}>Share HeartSprouts with Your Friends</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.optionButton}>
-              <Text style={styles.optionButtonText}>Instagram (coming soon!)</Text>
-            </TouchableOpacity>
-
-            <Text style={styles.sectionTitle}>HELP & SUPPORT</Text>
-            <TouchableOpacity style={styles.optionButton}>
-              <Text style={styles.optionButtonText}>Frequently Asked Questions (FAQs)</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.optionButton}>
-              <Text style={styles.optionButtonText}>Contact Us / Send Feedback</Text>
-            </TouchableOpacity>
-          {/* </ScrollView> */}
+          <Text style={styles.sectionTitle}>HELP & SUPPORT</Text>
+          <TouchableOpacity style={styles.optionButton}>
+            <Text style={styles.optionButtonText}>Frequently Asked Questions (FAQs)</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.optionButton}>
+            <Text style={styles.optionButtonText}>Contact Us / Send Feedback</Text>
+          </TouchableOpacity>
         </View>
       </View>
     </Modal>
@@ -145,6 +143,7 @@ const HomeScreen = ({ navigation, route }) => {
   const [selectedEmotion, setSelectedEmotion] = useState(null);
   const [isModalVisible, setModalVisible] = useState(false);
   const [isProfileModalVisible, setProfileModalVisible] = useState(false);
+  const [petImage, setPetImage] = useState(require('../../assets/characterimages/lvl1.jpg'));
 
   useEffect(() => {
     if (selectedEmotion) {
@@ -165,6 +164,57 @@ const HomeScreen = ({ navigation, route }) => {
   const getButtonColor = () => {
     const emotion = emotions.find(e => e.name === selectedEmotion);
     return emotion ? emotion.color : Colors.green700;
+  };
+
+  const handleUpdatePetImage = (level) => {
+    switch (level) {
+      case 1:
+        setPetImage(require('../../assets/characterimages/lvl1.jpg'));
+        break;
+      case 2:
+        setPetImage(require('../../assets/characterimages/lvl2.jpg'));
+        break;
+      case 3:
+          setPetImage(require('../../assets/characterimages/lvl3.jpg'));
+        break;
+      case 4:
+        setPetImage(require('../../assets/characterimages/lvl4.jpg'));
+        break;
+      case 5:
+        setPetImage(require('../../assets/characterimages/lvl5.jpg'));
+        break;
+      case 6:
+          setPetImage(require('../../assets/characterimages/lvl6.jpg'));
+      case 7:
+        setPetImage(require('../../assets/characterimages/lvl7.jpg'));
+        break;
+      case 8:
+        setPetImage(require('../../assets/characterimages/lvl8.jpg'));
+        break;
+      case 9:
+          setPetImage(require('../../assets/characterimages/lvl9.jpg'));
+        break;
+      case 10:
+        setPetImage(require('../../assets/characterimages/lvl10.jpg'));
+        break;
+      case 11:
+        setPetImage(require('../../assets/characterimages/lvl11.jpg'));
+        break;
+      case 12:
+          setPetImage(require('../../assets/characterimages/lvl12.jpg'));
+        break;
+      case 13:
+        setPetImage(require('../../assets/characterimages/lvl13.jpg'));
+        break;
+      case 14:
+        setPetImage(require('../../assets/characterimages/lvl14.jpg'));
+        break;
+      case 15:
+        setPetImage(require('../../assets/characterimages/lvl15.jpg'));
+        break;
+      default:
+        setPetImage(require('../../assets/characterimages/lvl1.jpg'));
+    }
   };
 
   return (
@@ -208,8 +258,10 @@ const HomeScreen = ({ navigation, route }) => {
       )}
 
       <View style={styles.circle}>
-        <Image source={require('../../assets/characterimages/lvl1.jpg')} style={styles.image} />
+        <Image source={petImage} style={styles.image} />
       </View>
+
+      <ExperienceBar email={email} onUpdatePetImage={handleUpdatePetImage} />
 
       <View style={styles.navBar}>
         <TouchableOpacity style={styles.navButton} onPress={() => navigation.navigate('Journal', { email })}>
