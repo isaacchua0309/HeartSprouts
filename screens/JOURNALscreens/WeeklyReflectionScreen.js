@@ -161,10 +161,10 @@ const PromptScreen = ({ navigation, route }) => {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.headerTitle}>WEEKLY</Text>
-        <Text style={styles.headerSubtitle}>prompts.</Text>
+        <Text style={styles.headerSubtitle}>journal prompts.</Text>
       </View>
       <TouchableOpacity
         style={[styles.promptButton, hasAddedJournalEntryThisWeek && styles.disabledButton]}
@@ -219,7 +219,6 @@ const PromptScreen = ({ navigation, route }) => {
             yAxisMax: 10, // Ensure y-axis range is from 0 to 10
           }}
           style={{
-            marginVertical: 8,
             borderRadius: 16,
             marginHorizontal: 20,
           }}
@@ -254,23 +253,25 @@ const PromptScreen = ({ navigation, route }) => {
           <Text style={styles.navText}>Friends</Text>
         </TouchableOpacity>
       </View>
-    </SafeAreaView>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    alignItems: 'center',
     backgroundColor: Colors.green500,
+    padding: 20,
   },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 20,
-    paddingTop: 10,
+    // paddingTop: 10,
     paddingBottom: 10,
-    backgroundColor: Colors.green700,
-    borderBottomWidth: 1,
+    backgroundColor: Colors.green500,
+    borderBottomWidth: 3,
     borderBottomColor: Colors.green300,
   },
   headerTitle: {
@@ -287,10 +288,11 @@ const styles = StyleSheet.create({
   },
   promptButton: {
     backgroundColor: Colors.green300,
-    padding: 15,
+    padding: 12,
     margin: 20,
     borderRadius: 10,
     alignItems: 'center',
+    width: '100%'
   },
   disabledButton: {
     backgroundColor: Colors.green700,
@@ -301,7 +303,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   list: {
-    paddingHorizontal: 20,
+    paddingHorizontal: 0,
   },
   itemContainer: {
     backgroundColor: Colors.green700,
@@ -335,6 +337,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginVertical: 10,
     marginHorizontal: 20,
+    width: '100%'
   },
   topFriendsTitle: {
     color: Colors.white500,

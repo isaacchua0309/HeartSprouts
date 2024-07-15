@@ -64,6 +64,9 @@ const UserProfilesScreen = ({ navigation, route }) => {
 
   return (
     <View style={styles.container}>
+
+    <View style={styles.fullHeader}>
+
       <View style={styles.header}>
         <Text style={styles.headerText}>Relationship Manager</Text>
         <View style={styles.headerButtons}>
@@ -71,12 +74,16 @@ const UserProfilesScreen = ({ navigation, route }) => {
             <Icon name="search" size={20} color="#fff" />
           </TouchableOpacity>
         </View>
-      </View>
-      <ScrollView contentContainerStyle={styles.scrollContainer}>
+        </View>
+
         <View style={styles.featured}>
           <Text style={styles.featuredText}>Build Healthy Relationships</Text>
           <Text style={styles.subtitleText}>Your personal connections</Text>
         </View>
+
+      </View>
+      
+      <ScrollView contentContainerStyle={styles.scrollContainer}>
         <View style={styles.profileContainer}>
           {friends.map((friend) => (
             <TouchableOpacity
@@ -114,17 +121,25 @@ const UserProfilesScreen = ({ navigation, route }) => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: Colors.green300,
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+      backgroundColor: Colors.green500,
+      padding: 20,
   },
   scrollContainer: {
     paddingBottom: 160, // Space for the fixed navbar
+    
+  },
+  fullHeader: {
+    borderBottomWidth: 4,
+    borderColor: Colors.green300,
   },
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    padding: 15,
+    padding: 0,
     backgroundColor: Colors.green500,
   },
   headerText: {
@@ -136,16 +151,15 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   searchButton: {
-    padding: 5,
+    marginLeft: 100
   },
   featured: {
-    padding: 20,
-    backgroundColor: Colors.green300,
-    alignItems: 'center',
+    paddingVertical: 20,
+    backgroundColor: Colors.green500,
   },
   featuredText: {
     fontSize: 18,
-    color: Colors.white700,
+    color: Colors.pink500,
     fontWeight: 'bold',
     fontStyle: 'italic'
   },
@@ -161,28 +175,29 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   profileCard: {
-    width: '45%',
-    backgroundColor: '#fff',
-    marginBottom: 15,
+    width: '30%',
+    backgroundColor: Colors.green500,
+    margin: 6,
     borderRadius: 10,
     alignItems: 'center',
-    padding: 10,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 2,
-    elevation: 3,
+    // padding: 12,
+    // shadowColor: '#000',
+    // shadowOffset: { width: 0, height: 2 },
+    // shadowOpacity: 0.2,
+    // shadowRadius: 2,
+    // elevation: 3,
   },
   profileImage: {
-    width: 80,
-    height: 80,
-    borderRadius: 40,
-    marginBottom: 10,
+    width: 100,
+    height: 100,
+    borderRadius: 24,
+    marginBottom: 8,
   },
   profileName: {
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: 'bold',
-    marginBottom: 5,
+    // marginBottom: 5,
+    color: Colors.white700
   },
   profileStatus: {
     fontSize: 14,
@@ -194,7 +209,7 @@ const styles = StyleSheet.create({
     height: 60,
     alignItems: 'center',
     justifyContent: 'center',
-    right: 20,
+    right: 30,
     bottom: 110,
     backgroundColor: Colors.pink500,
     borderRadius: 30,

@@ -8,7 +8,7 @@ const Colors = {
     pink500: '#FFC0CB',
     pink700: '#FF85C1',
     black300: '#333333',
-    brown300: 'e7bc87'
+    brown300: '#e7bc87'
 
    };
    

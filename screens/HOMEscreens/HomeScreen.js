@@ -93,51 +93,47 @@ const ProfileModal = ({ isVisible, onClose }) => {
     >
       <View style={styles.profileModalContainer}>
         <View style={styles.profileModalContent}>
-          <ScrollView>
+          {/* <ScrollView> */}
+
             <View style={styles.modalHeader}>
               <Text style={styles.profileTitle}>your profile.</Text>
               <TouchableOpacity onPress={onClose}>
                 <Icon name="close" size={24} color="#fff" />
               </TouchableOpacity>
             </View>
+
             <TouchableOpacity style={styles.premiumButton}>
               <Text style={styles.sectionTitle}>PREMIUM.</Text>
               <Text style={styles.premiumButtonText}>Unlock all our exercises, prompts, AI features, iCloud Sync, and more</Text>
               <TouchableOpacity style={styles.tryButton}>
-                <Text style={styles.tryButtonText}>Coming Soon</Text>
+                <Text style={styles.tryButtonText}>Coming Soon!</Text>
               </TouchableOpacity>
             </TouchableOpacity>
+
             <Text style={styles.sectionTitle}>ACCOUNT</Text>
             <TouchableOpacity style={styles.optionButton}>
-              <Text style={styles.optionButtonText}>Preferences</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.optionButton}>
-              <Text style={styles.optionButtonText}>Notifications</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.optionButton}>
-              <Text style={styles.optionButtonText}>Your Data</Text>
+              <Text style={styles.optionButtonText}>Settings</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.optionButton}>
               <Text style={styles.optionButtonText}>Log Out</Text>
             </TouchableOpacity>
+
             <Text style={styles.sectionTitle}>COMMUNITY</Text>
             <TouchableOpacity style={styles.optionButton}>
               <Text style={styles.optionButtonText}>Share HeartSprouts with Your Friends</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.optionButton}>
-              <Text style={styles.optionButtonText}>Leave Us a Review on the App Store</Text>
+              <Text style={styles.optionButtonText}>Instagram (coming soon!)</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.optionButton}>
-              <Text style={styles.optionButtonText}>Instagram</Text>
-            </TouchableOpacity>
+
             <Text style={styles.sectionTitle}>HELP & SUPPORT</Text>
             <TouchableOpacity style={styles.optionButton}>
-              <Text style={styles.optionButtonText}>Frequently Asked Questions</Text>
+              <Text style={styles.optionButtonText}>Frequently Asked Questions (FAQs)</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.optionButton}>
-              <Text style={styles.optionButtonText}>Contact Us</Text>
+              <Text style={styles.optionButtonText}>Contact Us / Send Feedback</Text>
             </TouchableOpacity>
-          </ScrollView>
+          {/* </ScrollView> */}
         </View>
       </View>
     </Modal>
@@ -212,7 +208,7 @@ const HomeScreen = ({ navigation, route }) => {
       )}
 
       <View style={styles.circle}>
-        <Image source={require('../../assets/characterimages/lvl5.jpg')} style={styles.image} />
+        <Image source={require('../../assets/characterimages/lvl1.jpg')} style={styles.image} />
       </View>
 
       <View style={styles.navBar}>
@@ -244,7 +240,7 @@ const styles = StyleSheet.create({
   profileButton: {
     position: 'absolute',
     top: 20,
-    left: 20,
+    left: 30,
     padding: 10,
     backgroundColor: Colors.green700,
     borderRadius: 8,
@@ -252,7 +248,7 @@ const styles = StyleSheet.create({
   chooseMoodButton: {
     position: 'absolute',
     top: 20,
-    right: 20,
+    right: 30,
     padding: 10,
     backgroundColor: Colors.green700,
     borderRadius: 8,
@@ -401,6 +397,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     padding: 10,
     marginTop: 10,
+    marginBottom: 10
   },
   tryButtonText: {
     color: Colors.black300,
@@ -410,7 +407,8 @@ const styles = StyleSheet.create({
     color: Colors.white500,
     fontSize: 18,
     fontWeight: 'bold',
-    marginBottom: 10,
+    marginBottom: 5,
+    marginTop: 16
   },
   optionButton: {
     paddingVertical: 15,
