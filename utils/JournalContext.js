@@ -8,7 +8,8 @@ export const JournalProvider = ({ children }) => {
   const [journalEntries, setJournalEntries] = useState([]);
   const [topFriends, setTopFriends] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [expandedEntries, setExpandedEntries] = useState({}); // Add expandedEntries state
+  const [expandedEntries, setExpandedEntries] = useState({});
+  const [shouldRefresh, setShouldRefresh] = useState(false); // Add shouldRefresh state
 
   return (
     <JournalContext.Provider value={{
@@ -23,7 +24,9 @@ export const JournalProvider = ({ children }) => {
       loading,
       setLoading,
       expandedEntries,
-      setExpandedEntries
+      setExpandedEntries,
+      shouldRefresh,
+      setShouldRefresh,
     }}>
       {children}
     </JournalContext.Provider>

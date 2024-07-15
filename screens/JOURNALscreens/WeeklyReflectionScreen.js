@@ -1,5 +1,13 @@
 import React, { useEffect, useContext } from 'react';
-import { View, Text, StyleSheet, FlatList, TouchableOpacity, Alert, ActivityIndicator } from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  FlatList,
+  TouchableOpacity,
+  Alert,
+  ActivityIndicator
+} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { collection, doc, getDocs, query, orderBy, limit } from 'firebase/firestore';
 import { firestore } from '../../utils/firebaseHelper';
@@ -25,7 +33,9 @@ const PromptScreen = ({ navigation, route }) => {
     setTopFriends,
     loading,
     setLoading,
-    expandedEntries
+    expandedEntries,
+    shouldRefresh,
+    setShouldRefresh,
   } = useContext(JournalContext);
 
   const checkJournalEntryThisWeek = async (email) => {
@@ -142,10 +152,15 @@ const PromptScreen = ({ navigation, route }) => {
       await fetchJournalEntries(email);
       await fetchTopFriends(email);
       setLoading(false);
+      setShouldRefresh(false); // Reset shouldRefresh state
     };
 
-    fetchData();
-  }, [email]);
+    if (shouldRefresh) {
+      fetchData();
+    } else {
+      setLoading(false);
+    }
+  }, [email, shouldRefresh]);
 
   const getMonthName = (date) => {
     const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
@@ -213,11 +228,11 @@ const PromptScreen = ({ navigation, route }) => {
           ],
         }}
         width={screenWidth - 40}
-        height={220} // Increased height
+        height={220}
         withShadow={true}
         withBezier={true}
-        fromZero={true} // Ensure y-axis starts from 0
-        yAxisInterval={1} // Sets the interval of y-axis labels
+        fromZero={true}
+        yAxisInterval={1}
         chartConfig={{
           backgroundColor: Colors.green700,
           backgroundGradientFrom: Colors.green700,
@@ -233,12 +248,12 @@ const PromptScreen = ({ navigation, route }) => {
             strokeWidth: '2',
             stroke: Colors.green300,
           },
-          yAxisLabel: '', // Optional, you can add a unit if needed
-          yAxisSuffix: '', // Optional, you can add a suffix if needed
-          yLabelsOffset: 20, // Adjusts the y-axis label offset
-          xLabelsOffset: 5, // Adjusts the x-axis label offset
+          yAxisLabel: '',
+          yAxisSuffix: '',
+          yLabelsOffset: 20,
+          xLabelsOffset: 5,
           yAxisMin: 0,
-          yAxisMax: 10, // Ensure y-axis range is from 0 to 10
+          yAxisMax: 10,
         }}
         style={{
           borderRadius: 16,
@@ -296,7 +311,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 20,
-    // paddingTop: 10,
     paddingBottom: 10,
     backgroundColor: Colors.green500,
     borderBottomWidth: 3,

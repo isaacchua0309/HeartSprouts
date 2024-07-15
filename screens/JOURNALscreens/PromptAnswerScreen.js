@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import {
   View,
   Text,
@@ -12,9 +12,10 @@ import {
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { doc, getDoc, updateDoc, collection, setDoc } from 'firebase/firestore';
-import { firestore } from '../../utils/firebaseHelper'; // Import Firestore from your helper file
+import { firestore } from '../../utils/firebaseHelper';
 import { format } from 'date-fns';
-import Colors from '../../constants/colors'; // Make sure to adjust the import path according to your project structure
+import Colors from '../../constants/colors';
+import { JournalContext } from '../../utils/JournalContext'; // Import JournalContext
 
 const PromptAnswerScreen = ({ navigation, route }) => {
   const [text, setText] = useState('');
@@ -23,6 +24,10 @@ const PromptAnswerScreen = ({ navigation, route }) => {
   const [journalLoading, setJournalLoading] = useState(false);
   const [questionId, setQuestionId] = useState(null);
   const { email, rsQuality, selectedFriends } = route.params;
+
+  const {
+    setShouldRefresh,
+  } = useContext(JournalContext); // Destructure setShouldRefresh from context
 
   const fetchUnansweredQuestions = async (email) => {
     try {
@@ -61,11 +66,9 @@ const PromptAnswerScreen = ({ navigation, route }) => {
       const userDocRef = doc(firestore, 'Users', email);
       const journalCollectionRef = collection(userDocRef, 'Journal');
 
-      // Format the current date and time as the document ID
       const currentDate = new Date();
       const formattedDate = format(currentDate, 'yyyyMMddHHmmss');
 
-      // Add the journal entry with the formatted date as the document ID
       await setDoc(doc(journalCollectionRef, formattedDate), {
         Date: currentDate.toISOString(),
         Quality: rsQuality,
@@ -74,19 +77,16 @@ const PromptAnswerScreen = ({ navigation, route }) => {
         WordEntry: text
       });
 
-      // Fetch the current XP value
       const userDoc = await getDoc(userDocRef);
       if (userDoc.exists()) {
         const userData = userDoc.data();
         const currentXP = userData.XP || 0;
 
-        // Update the XP value
         const newXP = currentXP + 100;
         await updateDoc(userDocRef, {
           XP: newXP,
         });
 
-        // Optionally mark the question as answered
         if (questionId) {
           await updateDoc(userDocRef, {
             [`questions.${questionId}.answered`]: true
@@ -94,7 +94,8 @@ const PromptAnswerScreen = ({ navigation, route }) => {
         }
       }
 
-      // Show success alert and navigate to the Journal screen on confirmation
+      setShouldRefresh(true); // Set shouldRefresh to true
+
       Alert.alert(
         "Success",
         "Journal entry added successfully!",
@@ -201,15 +202,14 @@ const styles = StyleSheet.create({
     padding: 10,
     backgroundColor: Colors.green700,
     borderRadius: 10,
-    marginHorizontal:10
+    marginHorizontal: 10,
   },
   footer: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
     justifyContent: 'center',
     alignItems: 'center',
     marginTop: 10,
-    marginBottom:20
+    marginBottom: 20,
   },
   checkButton: {
     alignItems: 'center',
