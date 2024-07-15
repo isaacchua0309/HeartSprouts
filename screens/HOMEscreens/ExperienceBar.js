@@ -10,28 +10,46 @@ const ExperienceBar = ({ email, onUpdatePetImage }) => {
 
   useEffect(() => {
     const fetchUserData = async () => {
-      const userDocRef = doc(firestore, 'Users', email);
-      const userDoc = await getDoc(userDocRef);
-      const userData = userDoc.data();
+      try {
+        const userDocRef = doc(firestore, 'Users', email);
+        const userDoc = await getDoc(userDocRef);
+        const userData = userDoc.data();
 
-      const totalXp = userData.XP || 0;
-      const currentLevel = Math.floor(totalXp / 200) + 1;
-      const xpInCurrentLevel = totalXp % 200;
+        if (userData) {
+          const totalXp = userData.XP || 0;
+          const currentLevel = Math.floor(totalXp / 200) + 1;
+          const xpInCurrentLevel = totalXp % 200;
 
-      setXp(xpInCurrentLevel);
-      setLevel(currentLevel);
-      onUpdatePetImage(currentLevel);
+          setXp(xpInCurrentLevel);
+          setLevel(currentLevel);
+          onUpdatePetImage(currentLevel);
+        }
+      } catch (error) {
+        console.error('Error fetching user data: ', error);
+      }
     };
 
     fetchUserData();
   }, [email, onUpdatePetImage]);
 
   useEffect(() => {
-    if (level > 15) {
-      setLevel(15);
-      setXp(0);
+    if (xp >= 200) {
+      handleLevelUp();
     }
-  }, [level]);
+  }, [xp]);
+
+  const handleLevelUp = async () => {
+    const newLevel = level + 1;
+    setLevel(newLevel);
+    setXp(0);
+    onUpdatePetImage(newLevel);
+
+    const userDocRef = doc(firestore, 'Users', email);
+    await updateDoc(userDocRef, {
+      XP: newLevel * 200,
+      level: newLevel,
+    });
+  };
 
   const xpForNextLevel = 200;
   const progress = (xp / xpForNextLevel) * 100;
@@ -39,10 +57,10 @@ const ExperienceBar = ({ email, onUpdatePetImage }) => {
   return (
     <View style={styles.container}>
       <Text style={styles.levelText}>Level: {level}</Text>
+      <Text style={styles.xpText}>{xp} / {xpForNextLevel} XP</Text>
       <View style={styles.progressBar}>
         <View style={[styles.progress, { width: `${progress}%` }]} />
       </View>
-      <Text style={styles.xpText}>{xp} / {xpForNextLevel} XP</Text>
     </View>
   );
 };
@@ -51,29 +69,35 @@ const styles = StyleSheet.create({
   container: {
     padding: 16,
     alignItems: 'center',
+    width: '100%', // Ensure it takes the full width of the container
   },
   levelText: {
     fontSize: 18,
     color: Colors.white500,
+    fontWeight: 'bold'
+  },
+  xpText: {
+    fontSize: 14,
+    color: Colors.white700,
+    marginTop: 8, // Add margin for spacing
+    fontStyle: 'italic'
   },
   progressBar: {
-    width: '100%',
+    width: '80%',
     height: 20,
-    backgroundColor: Colors.white500,
+    backgroundColor: Colors.white700,
     borderRadius: 10,
     overflow: 'hidden',
     marginVertical: 8,
   },
   progress: {
     height: '100%',
-    backgroundColor: '#76c7c0',
-  },
-  xpText: {
-    fontSize: 14,
-    color: Colors.white500,
+    backgroundColor: Colors.pink500,
   },
 });
 
 export default ExperienceBar;
+
+
 
 
