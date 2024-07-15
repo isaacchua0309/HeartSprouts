@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, FlatList, TouchableOpacity, SafeAreaView, Alert, ScrollView } from 'react-native';
+import React, { useEffect, useContext } from 'react';
+import { View, Text, StyleSheet, FlatList, TouchableOpacity, Alert, ActivityIndicator } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { collection, doc, getDocs, query, orderBy, limit } from 'firebase/firestore';
 import { firestore } from '../../utils/firebaseHelper';
@@ -8,16 +8,24 @@ import { Dimensions } from 'react-native';
 import { startOfWeek, subWeeks, isSameWeek, format } from 'date-fns';
 import { Ionicons } from '@expo/vector-icons';
 import Colors from '../../constants/colors';
+import { JournalContext } from '../../utils/JournalContext';
 
 const screenWidth = Dimensions.get('window').width;
 
 const PromptScreen = ({ navigation, route }) => {
   const { email } = route.params;
-  const [hasAddedJournalEntryThisWeek, setHasAddedJournalEntryThisWeek] = useState(false);
-  const [rsQualityData, setRsQualityData] = useState(new Array(5).fill(0));
-  const [journalEntries, setJournalEntries] = useState([]);
-  const [topFriends, setTopFriends] = useState([]);
-  const [expandedEntries, setExpandedEntries] = useState({});
+  const {
+    hasAddedJournalEntryThisWeek,
+    setHasAddedJournalEntryThisWeek,
+    rsQualityData,
+    setRsQualityData,
+    journalEntries,
+    setJournalEntries,
+    topFriends,
+    setTopFriends,
+    loading,
+    setLoading
+  } = useContext(JournalContext);
 
   const checkJournalEntryThisWeek = async (email) => {
     try {
@@ -127,10 +135,15 @@ const PromptScreen = ({ navigation, route }) => {
   };
 
   useEffect(() => {
-    checkJournalEntryThisWeek(email);
-    fetchRsQualityData(email);
-    fetchJournalEntries(email);
-    fetchTopFriends(email);
+    const fetchData = async () => {
+      await checkJournalEntryThisWeek(email);
+      await fetchRsQualityData(email);
+      await fetchJournalEntries(email);
+      await fetchTopFriends(email);
+      setLoading(false);
+    };
+
+    fetchData();
   }, [email]);
 
   const getMonthName = (date) => {
@@ -160,6 +173,14 @@ const PromptScreen = ({ navigation, route }) => {
     );
   };
 
+  if (loading) {
+    return (
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size="large" color={Colors.green300} />
+      </View>
+    );
+  }
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -179,50 +200,50 @@ const PromptScreen = ({ navigation, route }) => {
           {hasAddedJournalEntryThisWeek ? "Weekly Prompt Answered" : "Answer Weekly Prompt"}
         </Text>
       </TouchableOpacity>
-        <LineChart
-          data={{
-            labels: Array.from({ length: 5 }, (_, i) => getMonthName(subWeeks(new Date(), 4 - i))),
-            datasets: [
-              {
-                data: rsQualityData,
-                color: () => `rgba(26, 115, 232, 1)`,
-                strokeWidth: 2,
-              },
-            ],
-          }}
-          width={screenWidth - 40}
-          height={220} // Increased height
-          withShadow={true}
-          withBezier={true}
-          fromZero={true} // Ensure y-axis starts from 0
-          yAxisInterval={1} // Sets the interval of y-axis labels
-          chartConfig={{
-            backgroundColor: Colors.green700,
-            backgroundGradientFrom: Colors.green700,
-            backgroundGradientTo: Colors.green700,
-            decimalPlaces: 1,
-            color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-            labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-            style: {
-              borderRadius: 16,
+      <LineChart
+        data={{
+          labels: Array.from({ length: 5 }, (_, i) => getMonthName(subWeeks(new Date(), 4 - i))),
+          datasets: [
+            {
+              data: rsQualityData,
+              color: () => `rgba(26, 115, 232, 1)`,
+              strokeWidth: 2,
             },
-            propsForDots: {
-              r: '4',
-              strokeWidth: '2',
-              stroke: Colors.green300,
-            },
-            yAxisLabel: '', // Optional, you can add a unit if needed
-            yAxisSuffix: '', // Optional, you can add a suffix if needed
-            yLabelsOffset: 20, // Adjusts the y-axis label offset
-            xLabelsOffset: 5, // Adjusts the x-axis label offset
-            yAxisMin: 0,
-            yAxisMax: 10, // Ensure y-axis range is from 0 to 10
-          }}
-          style={{
+          ],
+        }}
+        width={screenWidth - 40}
+        height={220} // Increased height
+        withShadow={true}
+        withBezier={true}
+        fromZero={true} // Ensure y-axis starts from 0
+        yAxisInterval={1} // Sets the interval of y-axis labels
+        chartConfig={{
+          backgroundColor: Colors.green700,
+          backgroundGradientFrom: Colors.green700,
+          backgroundGradientTo: Colors.green700,
+          decimalPlaces: 1,
+          color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+          labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+          style: {
             borderRadius: 16,
-            marginHorizontal: 20,
-          }}
-        />
+          },
+          propsForDots: {
+            r: '4',
+            strokeWidth: '2',
+            stroke: Colors.green300,
+          },
+          yAxisLabel: '', // Optional, you can add a unit if needed
+          yAxisSuffix: '', // Optional, you can add a suffix if needed
+          yLabelsOffset: 20, // Adjusts the y-axis label offset
+          xLabelsOffset: 5, // Adjusts the x-axis label offset
+          yAxisMin: 0,
+          yAxisMax: 10, // Ensure y-axis range is from 0 to 10
+        }}
+        style={{
+          borderRadius: 16,
+          marginHorizontal: 20,
+        }}
+      />
       <View style={styles.topFriendsContainer}>
         <Text style={styles.topFriendsTitle}>Top Friends Selected:</Text>
         {topFriends.length > 0 ? (
@@ -263,6 +284,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: Colors.green500,
     padding: 20,
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: Colors.green500,
   },
   header: {
     flexDirection: 'row',
