@@ -26,10 +26,13 @@ export const JournalProvider = ({ children }) => {
       let qualityData = new Array(5).fill(0);
       let hasEntryThisWeek = false;
 
+      const friendCounts = {}; // to track friend mentions
+
       journalDocs.docs.forEach(doc => {
         const entryData = doc.data();
         const entryDate = new Date(entryData.Date);
 
+        // Update quality data
         for (let i = 0; i < 5; i++) {
           const startOfCurrentWeek = startOfWeek(subWeeks(endDate, i), { weekStartsOn: 0 });
           if (isSameWeek(entryDate, startOfCurrentWeek, { weekStartsOn: 0 })) {
@@ -37,14 +40,31 @@ export const JournalProvider = ({ children }) => {
           }
         }
 
+        // Check if the entry is in the current week
         const currentWeekStart = startOfWeek(new Date(), { weekStartsOn: 0 });
         if (isSameWeek(entryDate, currentWeekStart, { weekStartsOn: 0 })) {
           hasEntryThisWeek = true;
         }
+
+        // Count friends
+        entryData.FriendsSelected.forEach(friend => {
+          if (friendCounts[friend]) {
+            friendCounts[friend]++;
+          } else {
+            friendCounts[friend] = 1;
+          }
+        });
       });
+
+      // Sort and get top friends
+      const sortedFriends = Object.entries(friendCounts)
+        .sort((a, b) => b[1] - a[1])
+        .slice(0, 2)
+        .map(entry => entry[0]);
 
       setRsQualityData(qualityData);
       setHasAddedJournalEntryThisWeek(hasEntryThisWeek);
+      setTopFriends(sortedFriends);
 
       const entries = journalDocs.docs.map(doc => ({
         id: doc.id,

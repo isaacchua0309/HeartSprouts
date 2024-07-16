@@ -14,13 +14,9 @@ const PromptScreen = ({ navigation, route }) => {
   const { email } = route.params;
   const {
     hasAddedJournalEntryThisWeek,
-    setHasAddedJournalEntryThisWeek,
     rsQualityData,
-    setRsQualityData,
     journalEntries,
-    setJournalEntries,
     topFriends,
-    setTopFriends,
     loading,
     setLoading,
     expandedEntries,
