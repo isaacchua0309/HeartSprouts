@@ -1,6 +1,5 @@
-// HomeScreen.js
-import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Image } from 'react-native';
+import React, { useState, useEffect, useCallback } from 'react';
+import { View, Text, TouchableOpacity, StyleSheet, Image, ActivityIndicator } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Colors from '../../constants/colors';
@@ -18,6 +17,9 @@ const HomeScreen = ({ navigation, route }) => {
   const [isProfileModalVisible, setProfileModalVisible] = useState(false);
   const [isSettingsModalVisible, setSettingsModalVisible] = useState(false);
   const [petImage, setPetImage] = useState(require('../../assets/characterimages/lvl1.jpg'));
+  const [loading, setLoading] = useState(true);
+
+  const { email } = route.params;
 
   useEffect(() => {
     if (selectedEmotion) {
@@ -33,14 +35,12 @@ const HomeScreen = ({ navigation, route }) => {
     }
   }, [selectedEmotion]);
 
-  const { email } = route.params;
-
   const getButtonColor = () => {
     const emotion = emotions.find(e => e.name === selectedEmotion);
     return emotion ? emotion.color : Colors.green700;
   };
 
-  const handleUpdatePetImage = (level) => {
+  const handleUpdatePetImage = useCallback((level) => {
     switch (level) {
       case 1:
         setPetImage(require('../../assets/characterimages/lvl1.jpg'));
@@ -89,7 +89,19 @@ const HomeScreen = ({ navigation, route }) => {
       default:
         setPetImage(require('../../assets/characterimages/lvl1.jpg'));
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    setLoading(false);
+  }, []);
+
+  if (loading) {
+    return (
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size="large" color={Colors.white500} />
+      </View>
+    );
+  }
 
   return (
     <View style={styles.container}>
@@ -171,6 +183,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: Colors.green500,
     padding: 20,
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: Colors.green500,
   },
   profileButton: {
     position: 'absolute',

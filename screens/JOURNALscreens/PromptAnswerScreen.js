@@ -13,7 +13,7 @@ import {
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { doc, getDoc, updateDoc, collection, setDoc } from 'firebase/firestore';
 import { firestore } from '../../utils/firebaseHelper';
-import { format } from 'date-fns';
+import { format, startOfWeek, isSameWeek } from 'date-fns'; // Import necessary date-fns functions
 import Colors from '../../constants/colors';
 import { JournalContext } from '../../utils/JournalContext'; // Import JournalContext
 
@@ -25,9 +25,7 @@ const PromptAnswerScreen = ({ navigation, route }) => {
   const [questionId, setQuestionId] = useState(null);
   const { email, rsQuality, selectedFriends } = route.params;
 
-  const {
-    setShouldRefresh,
-  } = useContext(JournalContext); // Destructure setShouldRefresh from context
+  const { setShouldRefresh, setHasAddedJournalEntryThisWeek } = useContext(JournalContext); // Destructure necessary functions from context
 
   const fetchUnansweredQuestions = async (email) => {
     try {
@@ -92,6 +90,12 @@ const PromptAnswerScreen = ({ navigation, route }) => {
             [`questions.${questionId}.answered`]: true
           });
         }
+      }
+
+      // Check if the entry is for the current week
+      const currentWeekStart = startOfWeek(new Date(), { weekStartsOn: 0 });
+      if (isSameWeek(currentDate, currentWeekStart, { weekStartsOn: 0 })) {
+        setHasAddedJournalEntryThisWeek(true); // Set hasAddedJournalEntryThisWeek to true
       }
 
       setShouldRefresh(true); // Set shouldRefresh to true
