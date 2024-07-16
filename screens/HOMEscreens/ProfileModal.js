@@ -1,10 +1,18 @@
-// ProfileModal.js
-import React from 'react';
+import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Modal } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Colors from '../../constants/colors';
 
-const ProfileModal = ({ isVisible, onClose }) => {
+const ProfileModal = ({ isVisible, onClose, navigation}) => {
+  const [isLogoutModalVisible, setLogoutModalVisible] = useState(false);
+
+  const handleLogout = () => {
+    // Add your logout logic here
+    setLogoutModalVisible(false);
+    navigation.navigate('Getting Started');
+    onClose();
+  };
+
   return (
     <Modal
       visible={isVisible}
@@ -30,10 +38,7 @@ const ProfileModal = ({ isVisible, onClose }) => {
           </TouchableOpacity>
 
           <Text style={styles.sectionTitle}>ACCOUNT</Text>
-          <TouchableOpacity style={styles.optionButton}>
-            <Text style={styles.optionButtonText}>Settings</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.optionButton}>
+          <TouchableOpacity style={styles.optionButton} onPress={() => setLogoutModalVisible(true)}>
             <Text style={styles.optionButtonText}>Log Out</Text>
           </TouchableOpacity>
 
@@ -54,6 +59,33 @@ const ProfileModal = ({ isVisible, onClose }) => {
           </TouchableOpacity>
         </View>
       </View>
+
+      <Modal
+        visible={isLogoutModalVisible}
+        animationType="fade"
+        transparent={true}
+        onRequestClose={() => setLogoutModalVisible(false)}
+      >
+        <View style={styles.logoutModalContainer}>
+          <View style={styles.logoutModalContent}>
+            <Text style={styles.logoutText}>Are you sure you want to log out?</Text>
+            <View style={styles.logoutButtons}>
+              <TouchableOpacity
+                style={[styles.logoutButton, styles.confirmButton]}
+                onPress={handleLogout}
+              >
+                <Text style={styles.buttonText}>Yes</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[styles.logoutButton, styles.cancelButton]}
+                onPress={() => setLogoutModalVisible(false)}
+              >
+                <Text style={styles.buttonText}>No</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
     </Modal>
   );
 };
@@ -119,6 +151,48 @@ const styles = StyleSheet.create({
   optionButtonText: {
     color: Colors.white500,
     fontSize: 16,
+  },
+  logoutModalContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  logoutModalContent: {
+    width: '80%',
+    backgroundColor: Colors.green700,
+    borderRadius: 10,
+    padding: 20,
+    alignItems: 'center',
+  },
+  logoutText: {
+    color: Colors.white500,
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 20,
+    textAlign: 'center',
+  },
+  logoutButtons: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: '100%',
+  },
+  logoutButton: {
+    padding: 10,
+    borderRadius: 10,
+    marginHorizontal: 10,
+    flex: 1,
+    alignItems: 'center',
+  },
+  confirmButton: {
+    backgroundColor: Colors.green500,
+  },
+  cancelButton: {
+    backgroundColor: Colors.red500,
+  },
+  buttonText: {
+    color: Colors.white500,
+    fontWeight: 'bold',
   },
 });
 
