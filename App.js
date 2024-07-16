@@ -23,6 +23,8 @@ import SatisfactionRatingScreen from './screens/JOURNALscreens/SatisfactionRatin
 import RelationshipSatisfiedScreen from './screens/JOURNALscreens/RelationshipSatisfiedScreen';
 import { FriendsProvider } from './utils/FriendsContext';
 import { JournalProvider } from './utils/JournalContext';
+import ResetPasswordScreen from './screens/REGISTERscreens/ResetPasswordScreen';
+
 const Stack = createStackNavigator();
 
 const forFadeAndScale = ({ current }) => ({
@@ -42,6 +44,7 @@ export default function App() {
             <Stack.Navigator screenOptions={{ headerShown: false }}>
               <Stack.Screen name="Getting Started" component={GettingStartedScreen} />
               <Stack.Screen name="Login" component={LoginScreen} />
+              <Stack.Screen name="ResetPassword" component={ResetPasswordScreen} />
               <Stack.Screen name="Home" component={HomeScreen} options={{
                   cardStyleInterpolator: forFadeAndScale,
                 }}/>
