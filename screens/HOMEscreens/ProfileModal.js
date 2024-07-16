@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Modal } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Modal, Share } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Colors from '../../constants/colors';
 
@@ -11,6 +11,25 @@ const ProfileModal = ({ isVisible, onClose, navigation}) => {
     setLogoutModalVisible(false);
     navigation.navigate('Getting Started');
     onClose();
+  };
+
+  const handleShare = async () => {
+    try {
+      const result = await Share.share({
+        message: 'Check out HeartSprouts! It’s a great app for emotional well-being. Get it here: https://github.com/isaacchua0309/HeartSprouts',
+      });
+      if (result.action === Share.sharedAction) {
+        if (result.activityType) {
+          // shared with activity type of result.activityType
+        } else {
+          // shared
+        }
+      } else if (result.action === Share.dismissedAction) {
+        // dismissed
+      }
+    } catch (error) {
+      alert(error.message);
+    }
   };
 
   return (
@@ -43,7 +62,7 @@ const ProfileModal = ({ isVisible, onClose, navigation}) => {
           </TouchableOpacity>
 
           <Text style={styles.sectionTitle}>COMMUNITY</Text>
-          <TouchableOpacity style={styles.optionButton}>
+          <TouchableOpacity style={styles.optionButton} onPress= {handleShare}>
             <Text style={styles.optionButtonText}>Share HeartSprouts with Your Friends</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.optionButton}>
