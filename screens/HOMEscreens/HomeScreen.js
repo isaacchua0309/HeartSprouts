@@ -1,163 +1,22 @@
+// HomeScreen.js
 import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Image, Modal } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Image } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Colors from '../../constants/colors';
 import ExperienceBar from './ExperienceBar'; // Adjust the path as needed
-
-const emotions = [
-  { name: 'Happy', color: '#FFD700' },
-  { name: 'Sad', color: '#1E90FF' },
-  { name: 'Angry', color: '#FF4500' },
-  { name: 'Anxious', color: '#8A2BE2' },
-  { name: 'Excited', color: '#FF6347' },
-  { name: 'Tired', color: '#808080' },
-  { name: 'Grateful', color: '#32CD32' }
-];
-
-const quotes = {
-  Happy: [
-    "I love seeing you this happy. It’s a beautiful reflection of your wonderful soul!",
-    "Seeing you happy warms my heart. Keep smiling and spreading your beautiful light :)",
-    "I'm so happy to see you so happy! Keep holding onto this feeling and cherish every second :>",
-    "You deserve every bit of this happiness. Your joy makes the world a better place!",
-    "Your smile is a gift that brightens my day. I'm so grateful to see you so happy :>"
-  ],
-  Sad: [
-    "I'm here for you, always. You're not alone in this.",
-    "It's okay to feel sad. I'm here to support you through it.",
-    "Even in tough times, you are incredibly strong. We'll get through this together.",
-    "You have a beautiful heart, and brighter days are ahead.",
-    "You are loved and valued more than you know. We'll face this together."
-
-  ],
-  Angry: [
-    "Let your anger be the fuel for your future success.",
-    "Anger is one letter short of danger. Handle it with care.",
-    "Transform your anger into passion and determination."
-  ],
-  Anxious: [
-    "This too shall pass.",
-    "Take a deep breath. Everything will be okay.",
-    "One step at a time, one moment at a time.",
-    "You are stronger than your anxiety. Take it one step at a time, and know I'm here for you.",
-    "Remember to be kind to yourself. You're doing your best, and that's enough."
-
-  ],
-  Excited: [
-    "Embrace the thrill and enjoy every moment!",
-    "Your excitement is contagious. Spread it everywhere!",
-    "Today is the day for new adventures!",
-    "I'm so proud of you and all the exciting things you're doing. Keep it up!",
-    "Your excitement is a reminder of how amazing life can be. Keep chasing your dreams!"
-  ],
-  Tired: [
-    "Rest if you must, but don't you quit.",
-    "Recharge, refresh, and tackle tomorrow anew.",
-    "It's okay to take a break. You deserve it.",
-    "Even superheroes need rest. Take some time for yourself.",
-    "You've been working so hard. It's okay to take a break and recharge.",
-    "It's okay to feel tired. You're doing your best, and that's enough."
-  ],
-  Grateful: [
-    "Your thankful heart shines so brightly. It's wonderful to see.",
-    "Your gratitude adds so much beauty to the world around you.",
-    "Your heart of gratitude shines brightly.",
-    "Your ability to find joy in the small things is truly inspiring.",
-    "Your grateful spirit makes every moment special."
-  ],
-};
-
-const MoodOverlay = ({ isVisible, onClose, onSelectEmotion }) => {
-  return (
-    <Modal
-      visible={isVisible}
-      transparent={true}
-      animationType="slide"
-      onRequestClose={onClose}
-    >
-      <View style={styles.modalBackground}>
-        <View style={styles.modalContent}>
-          <Text style={styles.modalTitle}>How are you feeling today?</Text>
-          <View style={styles.emotionsContainer}>
-            {emotions.map((emotion) => (
-              <TouchableOpacity
-                key={emotion.name}
-                style={[styles.emotionButton, { backgroundColor: emotion.color }]}
-                onPress={() => {
-                  onSelectEmotion(emotion.name);
-                  onClose();
-                }}
-              >
-                <Text style={styles.emotionButtonText}>{emotion.name}</Text>
-              </TouchableOpacity>
-            ))}
-          </View>
-        </View>
-      </View>
-    </Modal>
-  );
-};
-
-const ProfileModal = ({ isVisible, onClose }) => {
-  return (
-    <Modal
-      visible={isVisible}
-      animationType="slide"
-      transparent={true}
-      onRequestClose={onClose}
-    >
-      <View style={styles.profileModalContainer}>
-        <View style={styles.profileModalContent}>
-          <View style={styles.modalHeader}>
-            <Text style={styles.profileTitle}>your profile.</Text>
-            <TouchableOpacity onPress={onClose}>
-              <Icon name="close" size={24} color="#fff" />
-            </TouchableOpacity>
-          </View>
-
-          <TouchableOpacity style={styles.premiumButton}>
-            <Text style={styles.sectionTitle}>PREMIUM.</Text>
-            <Text style={styles.premiumButtonText}>Unlock all our exercises, prompts, AI features, iCloud Sync, and more</Text>
-            <TouchableOpacity style={styles.tryButton}>
-              <Text style={styles.tryButtonText}>Coming Soon!</Text>
-            </TouchableOpacity>
-          </TouchableOpacity>
-
-          <Text style={styles.sectionTitle}>ACCOUNT</Text>
-          <TouchableOpacity style={styles.optionButton}>
-            <Text style={styles.optionButtonText}>Settings</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.optionButton}>
-            <Text style={styles.optionButtonText}>Log Out</Text>
-          </TouchableOpacity>
-
-          <Text style={styles.sectionTitle}>COMMUNITY</Text>
-          <TouchableOpacity style={styles.optionButton}>
-            <Text style={styles.optionButtonText}>Share HeartSprouts with Your Friends</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.optionButton}>
-            <Text style={styles.optionButtonText}>Instagram (coming soon!)</Text>
-          </TouchableOpacity>
-
-          <Text style={styles.sectionTitle}>HELP & SUPPORT</Text>
-          <TouchableOpacity style={styles.optionButton}>
-            <Text style={styles.optionButtonText}>Frequently Asked Questions (FAQs)</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.optionButton}>
-            <Text style={styles.optionButtonText}>Contact Us / Send Feedback</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
-    </Modal>
-  );
-};
+import MoodOverlay from './MoodOverlay'; // Adjust the path as needed
+import ProfileModal from './ProfileModal'; // Adjust the path as needed
+import SettingsModal from './SettingsModal'; // Adjust the path as needed
+import quotes from '../../constants/quotes';
+import emotions from '../../constants/emotions';
 
 const HomeScreen = ({ navigation, route }) => {
   const [currentText, setCurrentText] = useState('');
   const [selectedEmotion, setSelectedEmotion] = useState(null);
   const [isModalVisible, setModalVisible] = useState(false);
   const [isProfileModalVisible, setProfileModalVisible] = useState(false);
+  const [isSettingsModalVisible, setSettingsModalVisible] = useState(false);
   const [petImage, setPetImage] = useState(require('../../assets/characterimages/lvl1.jpg'));
 
   useEffect(() => {
@@ -259,6 +118,15 @@ const HomeScreen = ({ navigation, route }) => {
       <ProfileModal
         isVisible={isProfileModalVisible}
         onClose={() => setProfileModalVisible(false)}
+        onSettingsPress={() => {
+          setProfileModalVisible(false);
+          setSettingsModalVisible(true);
+        }}
+      />
+
+      <SettingsModal
+        isVisible={isSettingsModalVisible}
+        onClose={() => setSettingsModalVisible(false)}
       />
 
       {selectedEmotion && (
@@ -325,39 +193,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
   },
-  modalBackground: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-  },
-  modalContent: {
-    backgroundColor: Colors.green300,
-    padding: 22,
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderRadius: 10,
-    width: '80%',
-  },
-  modalTitle: {
-    fontSize: 18,
-    marginBottom: 12,
-    fontWeight: '600'
-  },
-  emotionsContainer: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'center',
-  },
-  emotionButton: {
-    padding: 10,
-    borderRadius: 20,
-    margin: 5,
-  },
-  emotionButtonText: {
-    color: '#fff',
-    fontWeight: 'bold',
-  },
   speechBubbleWrapper: {
     marginBottom: 30, // Adjust this value to move the bubble upwards
     // Shadows for iOS
@@ -422,69 +257,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginTop: 5,
     color: Colors.white700,
-  },
-  profileModalContainer: {
-    flex: 1,
-    justifyContent: 'flex-end',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-  },
-  profileModalContent: {
-    height: '80%',
-    backgroundColor: Colors.green700,
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
-    padding: 20,
-  },
-  modalHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 20,
-  },
-  profileTitle: {
-    color: Colors.white500,
-    fontSize: 24,
-    fontWeight: 'bold',
-  },
-  premiumButton: {
-    backgroundColor: Colors.green500,
-    padding: 20,
-    borderRadius: 10,
-    alignItems: 'center',
-    marginBottom: 20,
-  },
-  premiumButtonText: {
-    color: Colors.white500,
-    fontSize: 16,
-    textAlign: 'center',
-    marginBottom: 10,
-  },
-  tryButton: {
-    backgroundColor: Colors.white500,
-    borderRadius: 10,
-    padding: 10,
-    marginTop: 10,
-    marginBottom: 10
-  },
-  tryButtonText: {
-    color: Colors.black300,
-    fontWeight: 'bold',
-  },
-  sectionTitle: {
-    color: Colors.white500,
-    fontSize: 18,
-    fontWeight: 'bold',
-    marginBottom: 5,
-    marginTop: 16
-  },
-  optionButton: {
-    paddingVertical: 15,
-    borderBottomWidth: 1,
-    borderBottomColor: Colors.green500,
-  },
-  optionButtonText: {
-    color: Colors.white500,
-    fontSize: 16,
   },
 });
 
