@@ -128,13 +128,9 @@ const HomeScreen = ({ navigation, route }) => {
       />
 
       <ProfileModal
-        navigation = {navigation}
         isVisible={isProfileModalVisible}
         onClose={() => setProfileModalVisible(false)}
-        onSettingsPress={() => {
-          setProfileModalVisible(false);
-          setSettingsModalVisible(true);
-        }}
+        navigation={navigation}
       />
 
       <SettingsModal
