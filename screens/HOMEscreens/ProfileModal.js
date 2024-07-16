@@ -135,10 +135,9 @@ const styles = StyleSheet.create({
   },
   premiumButton: {
     backgroundColor: Colors.green500,
-    padding: 20,
+    padding:12,
     borderRadius: 10,
     alignItems: 'center',
-    marginBottom: 20,
   },
   premiumButtonText: {
     color: Colors.white500,
@@ -161,8 +160,7 @@ const styles = StyleSheet.create({
     color: Colors.white500,
     fontSize: 18,
     fontWeight: 'bold',
-    marginBottom: 5,
-    marginTop: 16
+    marginTop: 12
   },
   optionButton: {
     paddingVertical: 15,

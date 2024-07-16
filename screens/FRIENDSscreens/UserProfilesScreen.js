@@ -97,6 +97,7 @@ const UserProfilesScreen = ({ navigation, route }) => {
 
   return (
     <View style={styles.container}>
+
       <View style={styles.fullHeader}>
         <View style={styles.header}>
           <Text style={styles.headerText}>Relationship Manager</Text>
@@ -106,6 +107,7 @@ const UserProfilesScreen = ({ navigation, route }) => {
             </TouchableOpacity>
           </View>
         </View>
+
         <View style={styles.featured}>
           <View style={styles.featuredTextContainer}>
             <Text style={styles.featuredText}>Your personal connections</Text>
@@ -115,6 +117,7 @@ const UserProfilesScreen = ({ navigation, route }) => {
             <Icon name="plus" size={24} color="#fff" />
           </TouchableOpacity>
         </View>
+
       </View>
 
       <ScrollView contentContainerStyle={styles.scrollContainer}>
@@ -189,12 +192,12 @@ const styles = StyleSheet.create({
   },
   scrollContainer: {
     paddingBottom: 160, // Space for the fixed navbar
-    paddingTop: 20
+    paddingTop: 20,
   },
   fullHeader: {
     borderBottomWidth: 4,
     borderColor: Colors.green300,
-    paddingHorizontal: 50,
+    paddingHorizontal: '10%',
   },
   header: {
     flexDirection: 'row',
@@ -226,7 +229,6 @@ const styles = StyleSheet.create({
   },
   featuredTextContainer: {
     flex: 1,
-
   },
   featuredText: {
     fontSize: 16,
