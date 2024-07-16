@@ -1,20 +1,10 @@
 import React, { useEffect, useContext } from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  FlatList,
-  TouchableOpacity,
-  Alert,
-  ActivityIndicator
-} from 'react-native';
-import Icon from 'react-native-vector-icons/FontAwesome';
-import { collection, doc, getDocs, query, orderBy, limit } from 'firebase/firestore';
-import { firestore } from '../../utils/firebaseHelper';
+import { View, Text, StyleSheet, FlatList, TouchableOpacity, Alert, ActivityIndicator } from 'react-native';
 import { LineChart } from 'react-native-chart-kit';
 import { Dimensions } from 'react-native';
-import { startOfWeek, subWeeks, isSameWeek, format } from 'date-fns';
+import { startOfWeek, subWeeks, format } from 'date-fns';
 import { Ionicons } from '@expo/vector-icons';
+import Icon from 'react-native-vector-icons/FontAwesome';
 import Colors from '../../constants/colors';
 import { JournalContext } from '../../utils/JournalContext';
 
@@ -36,121 +26,12 @@ const PromptScreen = ({ navigation, route }) => {
     expandedEntries,
     shouldRefresh,
     setShouldRefresh,
+    fetchJournalData,
   } = useContext(JournalContext);
-
-  const checkJournalEntryThisWeek = async (email) => {
-    try {
-      const userDocRef = doc(firestore, 'Users', email);
-      const journalCollectionRef = collection(userDocRef, 'Journal');
-      const journalQuery = query(journalCollectionRef, orderBy('Date', 'desc'), limit(1));
-      const journalDocs = await getDocs(journalQuery);
-
-      if (!journalDocs.empty) {
-        const mostRecentEntry = journalDocs.docs[0].data();
-        const mostRecentEntryDate = new Date(mostRecentEntry.Date);
-        const currentWeek = startOfWeek(new Date(), { weekStartsOn: 0 });
-        if (isSameWeek(mostRecentEntryDate, currentWeek, { weekStartsOn: 0 })) {
-          setHasAddedJournalEntryThisWeek(true);
-        } else {
-          setHasAddedJournalEntryThisWeek(false);
-        }
-      }
-    } catch (error) {
-      console.error("Error checking journal entries: ", error);
-      Alert.alert("Error", "Failed to check journal entries. Please try again later.");
-    }
-  };
-
-  const fetchRsQualityData = async (email) => {
-    try {
-      const userDocRef = doc(firestore, 'Users', email);
-      const journalCollectionRef = collection(userDocRef, 'Journal');
-      const journalDocs = await getDocs(journalCollectionRef);
-
-      const endDate = new Date();
-      const startDate = subWeeks(endDate, 4);
-      let qualityData = new Array(5).fill(0);
-
-      journalDocs.docs.forEach(doc => {
-        const entryData = doc.data();
-        const entryDate = new Date(entryData.Date);
-
-        for (let i = 0; i < 5; i++) {
-          const startOfCurrentWeek = startOfWeek(subWeeks(endDate, i), { weekStartsOn: 0 });
-          if (isSameWeek(entryDate, startOfCurrentWeek, { weekStartsOn: 0 })) {
-            qualityData[4 - i] += entryData.Quality;
-          }
-        }
-      });
-
-      setRsQualityData(qualityData);
-    } catch (error) {
-      console.error("Error fetching RS Quality data: ", error);
-    }
-  };
-
-  const fetchJournalEntries = async (email) => {
-    try {
-      const userDocRef = doc(firestore, 'Users', email);
-      const journalCollectionRef = collection(userDocRef, 'Journal');
-      const journalQuery = query(journalCollectionRef, orderBy('Date', 'desc'));
-      const journalDocs = await getDocs(journalQuery);
-
-      const entries = journalDocs.docs.map(doc => ({
-        id: doc.id,
-        date: new Date(doc.data().Date),
-        friends: doc.data().FriendsSelected,
-        quality: doc.data().Quality,
-        question: doc.data().Question,
-        wordEntry: doc.data().WordEntry
-      }));
-
-      setJournalEntries(entries);
-    } catch (error) {
-      console.error("Error fetching journal entries: ", error);
-    }
-  };
-
-  const fetchTopFriends = async (email) => {
-    try {
-      const userDocRef = doc(firestore, 'Users', email);
-      const journalCollectionRef = collection(userDocRef, 'Journal');
-      const journalDocs = await getDocs(journalCollectionRef);
-
-      const friendCounts = {};
-
-      journalDocs.docs.forEach(doc => {
-        const entryData = doc.data();
-        const entryDate = new Date(entryData.Date);
-
-        if (entryDate >= subWeeks(new Date(), 4)) {
-          entryData.FriendsSelected.forEach(friend => {
-            if (friendCounts[friend]) {
-              friendCounts[friend]++;
-            } else {
-              friendCounts[friend] = 1;
-            }
-          });
-        }
-      });
-
-      const sortedFriends = Object.entries(friendCounts)
-        .sort((a, b) => b[1] - a[1])
-        .slice(0, 2)
-        .map(entry => entry[0]);
-
-      setTopFriends(sortedFriends);
-    } catch (error) {
-      console.error("Error fetching top friends: ", error);
-    }
-  };
 
   useEffect(() => {
     const fetchData = async () => {
-      await checkJournalEntryThisWeek(email);
-      await fetchRsQualityData(email);
-      await fetchJournalEntries(email);
-      await fetchTopFriends(email);
+      await fetchJournalData(email);
       setLoading(false);
       setShouldRefresh(false); // Reset shouldRefresh state
     };
@@ -282,7 +163,7 @@ const PromptScreen = ({ navigation, route }) => {
           <Text style={styles.navText}>Journal</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.navButton} onPress={() => navigation.navigate('Home', { email })}>
-          <Ionicons name="home" size={24} color={Colors.green300} />
+          <Icon name="home" size={24} color={Colors.green300} />
           <Text style={styles.navText}>Home</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.navButton} onPress={() => navigation.navigate('Users', { email })}>

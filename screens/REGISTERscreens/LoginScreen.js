@@ -1,15 +1,21 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, SafeAreaView, Alert, ImageBackground } from 'react-native';
+import React, { useState, useContext } from 'react';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, SafeAreaView, Alert, ImageBackground, ActivityIndicator } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Colors from '../../constants/colors';
 import { getAuth, signInWithEmailAndPassword } from '@firebase/auth';
 import { getFirebaseApp } from '../../utils/firebaseHelper';
+import { FriendsContext } from '../../utils/FriendsContext';
+import { JournalContext } from '../../utils/JournalContext';
 
 const LoginScreen = ({ navigation }) => {
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
+
+  const { fetchFriends, setLoading: setFriendsLoading } = useContext(FriendsContext);
+  const { fetchJournalData, setLoading: setJournalLoading } = useContext(JournalContext);
 
   const togglePasswordVisibility = () => {
     setPasswordVisible(!passwordVisible);
@@ -24,12 +30,22 @@ const LoginScreen = ({ navigation }) => {
 
   const handleSignIn = async () => {
     try {
+      setLoading(true);
       await signInWithEmailAndPassword(auth, email, password);
-      // Sign-in successful
+
+      setFriendsLoading(true);
+      setJournalLoading(true);
+
+      await Promise.all([fetchFriends(email), fetchJournalData(email)]);
+
+      setFriendsLoading(false);
+      setJournalLoading(false);
+      setLoading(false);
+
       Alert.alert('Log In Successful', 'Glad to have you back!');
-      navigation.navigate('Home', {email});
+      navigation.navigate('Home', { email });
     } catch (error) {
-      // Handle errors here
+      setLoading(false);
       setError(error.message);
       Alert.alert('Log In Failed', 'Please Check Email and Password');
     }
@@ -42,19 +58,12 @@ const LoginScreen = ({ navigation }) => {
       </TouchableOpacity>
 
       <View style={styles.body}>
-      <View style={styles.contentContainer}>
-        {/* <Text style={styles.mainText}></Text> */}
-        <ImageBackground
-          source={ require('../../assets/HeartSproutsWORD.png')} // Replace with your image URL or local path
-          style={styles.firstimage}
-        />
-        <ImageBackground
-          source={ require('../../assets/somesprouts.png')} // Replace with your image URL or local path
-          style={styles.secondimage}
-        />
-      </View>
+        <View style={styles.contentContainer}>
+          <ImageBackground source={require('../../assets/HeartSproutsWORD.png')} style={styles.firstimage} />
+          <ImageBackground source={require('../../assets/somesprouts.png')} style={styles.secondimage} />
+        </View>
 
-      <TextInput 
+        <TextInput 
           style={styles.input}
           placeholder="Email"
           placeholderTextColor={Colors.white700}
@@ -63,32 +72,36 @@ const LoginScreen = ({ navigation }) => {
           keyboardType="email-address"
           autoCapitalize="none"
         />
-      <View style={styles.passwordContainer}>
-        <TextInput 
+        <View style={styles.passwordContainer}>
+          <TextInput 
             style={styles.passwordInput}
             placeholder="Password"
             placeholderTextColor={Colors.white700}
             secureTextEntry={!passwordVisible}
             value={password}
             onChangeText={setPassword}
-        />
-        <TouchableOpacity onPress={togglePasswordVisibility} style={styles.eyeIcon}>
+          />
+          <TouchableOpacity onPress={togglePasswordVisibility} style={styles.eyeIcon}>
             <Icon name={passwordVisible ? "eye-off" : "eye"} size={20} color="#FFFFFF" />
-        </TouchableOpacity>
-      </View>
+          </TouchableOpacity>
+        </View>
 
-      <View style={styles.forgotPasswordContainer}>
-        <Text style={styles.forgotPassword}>Forgot Password?</Text>
-        <TouchableOpacity onPress={() => alert('Reset Password Pressed')}>
-          <Text style={styles.resetPassword}>    Reset Password</Text>
-        </TouchableOpacity>
+        <View style={styles.forgotPasswordContainer}>
+          <Text style={styles.forgotPassword}>Forgot Password?</Text>
+          <TouchableOpacity onPress={() => alert('Reset Password Pressed')}>
+            <Text style={styles.resetPassword}> Reset Password</Text>
+          </TouchableOpacity>
+        </View>
+        {error ? <Text style={styles.errorText}>{error}</Text> : null}
+        {loading ? (
+          <ActivityIndicator size="large" color={Colors.white500} />
+        ) : (
+          <TouchableOpacity style={styles.signInButton} onPress={handleSignIn}>
+            <Text style={styles.signInText}>SIGN IN</Text>
+          </TouchableOpacity>
+        )}
       </View>
-      {error ? <Text style={styles.errorText}>{error}</Text> : null}
-      <TouchableOpacity style={styles.signInButton} onPress={handleSignIn}>
-        <Text style={styles.signInText}>SIGN IN</Text>
-      </TouchableOpacity>
-    </View>
-  </SafeAreaView>
+    </SafeAreaView>
   );
 }
 
