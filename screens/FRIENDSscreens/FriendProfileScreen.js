@@ -370,7 +370,7 @@ const FriendProfileScreen = ({ navigation, route }) => {
             </>
           )}
         </View>
-        <Text style={styles.label}>Add Events For Timely Notifications Before Events!</Text>
+        <Text style={styles.label}>Receive Timely Notifications Before Events!</Text>
         <TextInput
           style={styles.input}
           value={eventName}
@@ -391,9 +391,9 @@ const FriendProfileScreen = ({ navigation, route }) => {
             onChange={handleDateChange}
           />
         )}
-        <Button title="Add Event" onPress={handleAddEvent} disabled={isLoading} color={Colors.green300} />
+        <Button title="Add Event" onPress={handleAddEvent} disabled={isLoading} color={Colors.white500} />
         {isFetching ? (
-          <ActivityIndicator size="large" color={Colors.green300} />
+          <ActivityIndicator size="large" color={Colors.white500} />
         ) : (
           <ScrollView style={styles.eventsContainer} ref={scrollViewRef}>
             {events.map((event, index) => (
@@ -406,7 +406,7 @@ const FriendProfileScreen = ({ navigation, route }) => {
                 )}
                 <Text style={styles.eventDescription}>{event.description}</Text>
                 <TouchableOpacity style={styles.deleteButton} onPress={() => handleDeleteEvent(event.id)}>
-                  <Icon name="trash" size={24} color="#ff0000" />
+                  <Icon name="trash" size={24} color={Colors.red500} />
                 </TouchableOpacity>
               </View>
             ))}
@@ -421,13 +421,13 @@ const FriendProfileScreen = ({ navigation, route }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.white500,
+    backgroundColor: Colors.green500,
   },
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingLeft: 24,
+    paddingHorizontal: 24,
     paddingTop: 16,
     backgroundColor: Colors.green500,
   },
@@ -448,10 +448,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   profileImage: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
-    marginBottom: 10,
+    width: 150,
+    height: 150,
+    borderRadius: 75,
+    // marginBottom: 10,
   },
   placeholderImage: {
     width: 100,
@@ -463,9 +463,10 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   profileName: {
-    fontSize: 24,
+    fontSize: 32,
     fontWeight: 'bold',
-    marginTop: '10%',
+    marginTop: '5%',
+    color: Colors.white500
   },
   profileStatus: {
     fontSize: 16,
@@ -474,13 +475,15 @@ const styles = StyleSheet.create({
   },
   profileBirthday: {
     fontSize: 16,
-    color: '#757575',
+    color: Colors.white700,
     marginBottom: 20,
     fontStyle: 'italic',
   },
   label: {
-    fontSize: 18,
-    marginBottom: 10,
+    fontSize: 19,
+    marginBottom: 12,
+    alignItems: 'center',
+    color: Colors.white700
   },
   input: {
     height: 44,
@@ -520,6 +523,8 @@ const styles = StyleSheet.create({
   eventTitle: {
     fontSize: 18,
     fontWeight: 'bold',
+    color: Colors.black300,
+    marginBottom:'3%'
   },
   eventDate: {
     fontSize: 16,

@@ -2,11 +2,13 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { firestore } from '../../utils/firebaseHelper';
 import { doc, getDoc, updateDoc } from 'firebase/firestore';
+import ConfettiCannon from 'react-native-confetti-cannon';
 import Colors from '../../constants/colors';
 
 const ExperienceBar = ({ email, onUpdatePetImage }) => {
   const [xp, setXp] = useState(0);
   const [level, setLevel] = useState(1);
+  const [showConfetti, setShowConfetti] = useState(false);
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -39,16 +41,21 @@ const ExperienceBar = ({ email, onUpdatePetImage }) => {
   }, [xp]);
 
   const handleLevelUp = async () => {
-    const newLevel = level + 1;
-    setLevel(newLevel);
-    setXp(0);
-    onUpdatePetImage(newLevel);
+    setShowConfetti(true);
+    setTimeout(async () => {
+      const newLevel = level + 1;
+      setLevel(newLevel);
+      setXp(0);
+      onUpdatePetImage(newLevel);
 
-    const userDocRef = doc(firestore, 'Users', email);
-    await updateDoc(userDocRef, {
-      XP: newLevel * 200,
-      level: newLevel,
-    });
+      const userDocRef = doc(firestore, 'Users', email);
+      await updateDoc(userDocRef, {
+        XP: newLevel * 200,
+        level: newLevel,
+      });
+
+      setShowConfetti(false);
+    }, 3000); // Duration of confetti animation
   };
 
   const xpForNextLevel = 200;
@@ -61,6 +68,15 @@ const ExperienceBar = ({ email, onUpdatePetImage }) => {
       <View style={styles.progressBar}>
         <View style={[styles.progress, { width: `${progress}%` }]} />
       </View>
+      {showConfetti && (
+        <ConfettiCannon
+          count={50} // Reduce the number of pieces
+          origin={{ x: -10, y: 0 }}
+          autoStart={true}
+          fadeOut={true}
+          fallSpeed={3000} // Adjust the fall speed
+        />
+      )}
     </View>
   );
 };
@@ -97,6 +113,9 @@ const styles = StyleSheet.create({
 });
 
 export default ExperienceBar;
+
+
+
 
 
 
