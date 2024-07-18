@@ -110,8 +110,7 @@ const UserProfilesScreen = ({ navigation, route }) => {
 
         <View style={styles.featured}>
           <View style={styles.featuredTextContainer}>
-            <Text style={styles.featuredText}>Your personal connections</Text>
-            <Text style={styles.subtitleText}>Click to add a profile :)</Text>
+            <Text style={styles.featuredText}>Your closest personal connections</Text>
           </View>
           <TouchableOpacity style={styles.addButton} onPress={handleAddFriendPress}>
             <Icon name="plus" size={24} color="#fff" />
