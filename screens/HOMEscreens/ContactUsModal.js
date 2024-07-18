@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Modal } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Modal, Linking } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Colors from '../../constants/colors';
 
@@ -9,12 +9,23 @@ const ContactUsModal = ({ isVisible, onClose }) => {
   const [message, setMessage] = useState('');
 
   const handleSubmit = () => {
-    // Add logic to handle form submission, e.g., send data to a server or email
-    alert('Thank you for your feedback!');
-    setName('');
-    setEmail('');
-    setMessage('');
-    onClose();
+    const recipient = 'heartsproutsdev@gmail.com'; // Replace with your business email
+    const subject = `Feedback from ${name}`;
+    const body = `Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`;
+
+    const mailtoUrl = `mailto:${recipient}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+
+    Linking.openURL(mailtoUrl)
+      .then(() => {
+        setName('');
+        setEmail('');
+        setMessage('');
+        onClose();
+      })
+      .catch((error) => {
+        console.error('Error opening email client:', error);
+        alert('Please try again.');
+      });
   };
 
   return (
