@@ -9,6 +9,7 @@ import { requestPermissions, scheduleNotification, getAllScheduledNotifications 
 import fetchEventsForFriend from '../../utils/actions/fetchEventsForFriend';
 import { Ionicons } from '@expo/vector-icons';
 import { FriendsContext } from '../../utils/FriendsContext';
+import defaultProfile from '../../assets/defaultProfile.webp' // Import the placeholder image
 
 const UserProfilesScreen = ({ navigation, route }) => {
   const { email } = route.params;
@@ -124,10 +125,13 @@ const UserProfilesScreen = ({ navigation, route }) => {
           {friends.map((friend) => (
             <TouchableOpacity
               key={friend.id}
-              style={styles.profileCard}
+              style={[styles.profileCard, friends.length === 1 && styles.singleProfileCard]}
               onPress={() => handleProfilePress(friend)}
             >
-              <Image style={styles.profileImage} source={{ uri: friend.image }} />
+              <Image
+                style={styles.profileImage}
+                source={friend.image ? { uri: friend.image } : defaultProfile}
+              />
               <Text style={styles.profileName}>{friend.name}</Text>
               <Text style={styles.profileStatus}>{friend.status}</Text>
             </TouchableOpacity>
@@ -261,6 +265,9 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.green500,
     borderRadius: 10,
     alignItems: 'center',
+  },
+  singleProfileCard: {
+    width: '100%', // Full width for a single profile card
   },
   profileImage: {
     width: 140,
