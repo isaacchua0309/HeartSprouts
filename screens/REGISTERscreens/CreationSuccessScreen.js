@@ -5,7 +5,7 @@ import Colors from '../../constants/colors';
 function CreationSuccessScreen({navigation,route}){
     const {email} = route.params;
     function handlePress() {
-        navigation.navigate('Home',{email}); // Replace 'Home' with the name of the screen you want to navigate to
+        navigation.navigate('Login',{email}); // Replace 'Home' with the name of the screen you want to navigate to
       }
     
       return (

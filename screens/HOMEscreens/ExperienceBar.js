@@ -4,10 +4,9 @@ import { firestore } from '../../utils/firebaseHelper';
 import { doc, getDoc, updateDoc } from 'firebase/firestore';
 import Colors from '../../constants/colors';
 
-const ExperienceBar = ({ email, onUpdatePetImage }) => {
+const ExperienceBar = ({ email, onUpdatePetImage, setLoading }) => {
   const [xp, setXp] = useState(0);
   const [level, setLevel] = useState(1);
-  const [loading, setLoading] = useState(true);
 
   const fetchUserData = useCallback(async () => {
     try {
@@ -29,7 +28,7 @@ const ExperienceBar = ({ email, onUpdatePetImage }) => {
     } finally {
       setLoading(false);
     }
-  }, [email, onUpdatePetImage]);
+  }, [email, onUpdatePetImage, setLoading]);
 
   useEffect(() => {
     fetchUserData();
@@ -57,10 +56,6 @@ const ExperienceBar = ({ email, onUpdatePetImage }) => {
       handleLevelUp();
     }
   }, [xp, handleLevelUp]);
-
-  if (loading) {
-    return <ActivityIndicator size="large" color={Colors.white500} />;
-  }
 
   const xpForNextLevel = 200;
   const progress = (xp / xpForNextLevel) * 100;
