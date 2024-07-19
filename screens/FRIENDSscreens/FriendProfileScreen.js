@@ -342,9 +342,7 @@ const FriendProfileScreen = ({ navigation, route }) => {
             {newImage ? (
               <Image style={styles.profileImage} source={{ uri: newImage }} />
             ) : (
-              <View style={styles.placeholderImage}>
-                <Icon name="user" size={50} color={Colors.white500} />
-              </View>
+              <Image style={styles.profileImage} source={require('../../assets/emptyprofileimage.png')} />
             )}
           </TouchableOpacity>
           {isEditing ? (
@@ -465,6 +463,7 @@ const styles = StyleSheet.create({
     width: 150,
     height: 150,
     borderRadius: 75,
+    // marginBottom: 10,
   },
   placeholderImage: {
     width: 100,
@@ -561,3 +560,4 @@ const styles = StyleSheet.create({
 });
 
 export default FriendProfileScreen;
+

@@ -9,7 +9,7 @@ import { requestPermissions, scheduleNotification, getAllScheduledNotifications 
 import fetchEventsForFriend from '../../utils/actions/fetchEventsForFriend';
 import { Ionicons } from '@expo/vector-icons';
 import { FriendsContext } from '../../utils/FriendsContext';
-import defaultProfile from '../../assets/defaultProfile.webp' // Import the placeholder image
+import emptyProfile from '../../assets/emptyprofileimage.png' // Import the placeholder image
 
 const UserProfilesScreen = ({ navigation, route }) => {
   const { email } = route.params;
@@ -130,7 +130,7 @@ const UserProfilesScreen = ({ navigation, route }) => {
             >
               <Image
                 style={styles.profileImage}
-                source={friend.image ? { uri: friend.image } : defaultProfile}
+                source={friend.image ? { uri: friend.image } : emptyProfile}
               />
               <Text style={styles.profileName}>{friend.name}</Text>
               <Text style={styles.profileStatus}>{friend.status}</Text>
