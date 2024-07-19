@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, SafeAreaView, Alert, ImageBackground, ActivityIndicator } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Colors from '../../constants/colors';
@@ -6,6 +6,8 @@ import { getAuth, signInWithEmailAndPassword } from '@firebase/auth';
 import { getFirebaseApp } from '../../utils/firebaseHelper';
 import { FriendsContext } from '../../utils/FriendsContext';
 import { JournalContext } from '../../utils/JournalContext';
+import { requestNotificationPermissions, scheduleNotification } from '../../utils/actions/notificationsHelper';
+import fetchEventsForFriend from '../../utils/actions/fetchEventsForFriend';
 
 const LoginScreen = ({ navigation }) => {
   const [passwordVisible, setPasswordVisible] = useState(false);
@@ -36,12 +38,25 @@ const LoginScreen = ({ navigation }) => {
       setFriendsLoading(true);
       setJournalLoading(true);
 
-      await Promise.all([fetchFriends(email), fetchJournalData(email)]);
+      const [friends, journalData] = await Promise.all([fetchFriends(email), fetchJournalData(email)]);
 
       setFriendsLoading(false);
       setJournalLoading(false);
-      setLoading(false);
 
+      // Schedule notifications for upcoming events
+      const permissionGranted = await requestNotificationPermissions();
+      if (permissionGranted) {
+        for (const friend of friends) {
+          const events = await fetchEventsForFriend(email, friend.name);
+          for (const event of events) {
+            const notificationTime = new Date(event.date.seconds * 1000);
+            notificationTime.setHours(notificationTime.getHours() - 1); // Notify 1 hour before the event
+            await scheduleNotification(`Event Reminder`, `Don't forget about ${event.eventName}!`, notificationTime);
+          }
+        }
+      }
+
+      setLoading(false);
       Alert.alert('Log In Successful', 'Glad to have you back!');
       navigation.navigate('Home', { email });
     } catch (error) {
@@ -109,7 +124,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: Colors.green500,
-    // justifyContent: 'center',
     alignItems: 'center',
   },
   mainText: {
@@ -129,8 +143,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   contentContainer: {
-  justifyContent: 'center',
-  alignItems: 'center',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   firstimage: {
     width: 300,
@@ -174,11 +188,11 @@ const styles = StyleSheet.create({
   },
   forgotPassword: {
     fontWeight: 'bold',
-    color: Colors.black300
+    color: Colors.black300,
   },
   resetPassword: {
     fontWeight: 'bold',
-    color: Colors.white700
+    color: Colors.white700,
   },
   signInButton: {
     backgroundColor: Colors.white500,
