@@ -4,13 +4,30 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import Colors from '../../constants/colors';
 import FAQModal from './FAQModal'; // Adjust the import path as necessary
 import ContactUsModal from './ContactUsModal'; // Adjust the import path as necessary
+import * as Notifications from 'expo-notifications';
+
+// Function to cancel all scheduled notifications
+const cancelAllNotifications = async () => {
+  try {
+    const scheduledNotifications = await Notifications.getAllScheduledNotificationsAsync();
+    for (const notification of scheduledNotifications) {
+      await Notifications.cancelScheduledNotificationAsync(notification.identifier);
+    }
+    console.log('All notifications canceled successfully.');
+  } catch (error) {
+    console.error('Error canceling notifications: ', error);
+  }
+};
 
 const ProfileModal = ({ isVisible, onClose, navigation }) => {
   const [isLogoutModalVisible, setLogoutModalVisible] = useState(false);
   const [isFAQModalVisible, setFAQModalVisible] = useState(false);
   const [isContactModalVisible, setContactModalVisible] = useState(false);
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    // Cancel all notifications before logging out
+    await cancelAllNotifications();
+    
     // Add your logout logic here
     setLogoutModalVisible(false);
     navigation.navigate('Getting Started');
