@@ -99,7 +99,7 @@ const PromptScreen = ({ navigation, route }) => {
       <TouchableOpacity
         style={styles.modalButton}
         onPress={() => setModalVisible(true)}
-      >
+        >
         <Text style={styles.promptButtonText}>View Journal Entries</Text>
       </TouchableOpacity>
       <LineChart
@@ -164,7 +164,7 @@ const PromptScreen = ({ navigation, route }) => {
       >
         <View style={styles.modalOverlay}>
           <View style={styles.modalContainer}>
-            <Text style={styles.modalTitle}>Journal Entries</Text>
+            <Text style={styles.modalTitle}>Your Journal Entries</Text>
             <FlatList
               data={journalEntries}
               renderItem={renderItem}
@@ -240,7 +240,7 @@ const styles = StyleSheet.create({
   modalButton: {
     backgroundColor: Colors.green300,
     padding: 12,
-    margin: 20,
+    marginBottom: 20,
     borderRadius: 10,
     alignItems: 'center',
     width: '100%'
@@ -257,10 +257,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 0,
   },
   itemContainer: {
-    backgroundColor: Colors.green700,
+    backgroundColor: Colors.green500,
     padding: 20,
     borderRadius: 10,
-    marginBottom: 15,
+    marginBottom: 14,
   },
   itemDate: {
     color: Colors.white700,
@@ -332,10 +332,12 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0,0,0,0.5)',
   },
   modalContainer: {
-    width: '80%',
-    backgroundColor: Colors.white500,
+    width: '85%',
+    height: '85%',
+    backgroundColor: Colors.green300,
     borderRadius: 10,
     padding: 20,
+    paddingVertical: '5%',
     alignItems: 'center',
   },
   modalTitle: {
