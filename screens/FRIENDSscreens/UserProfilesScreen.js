@@ -206,7 +206,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    padding: 0,
+    paddingTop: '3%',
     backgroundColor: Colors.green500,
   },
   headerText: {
@@ -247,10 +247,12 @@ const styles = StyleSheet.create({
   addButton: {
     marginLeft: 10,
     alignItems: 'center',
+    justifyContent: 'center',
     backgroundColor: Colors.pink500,
     padding: 10,
-    width: 50,
-    borderRadius: 25,
+    height: 42,
+    width: 42,
+    borderRadius: 21,
     elevation: 2,
   },
   profileContainer: {
