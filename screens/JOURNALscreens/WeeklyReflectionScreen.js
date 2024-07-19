@@ -1,5 +1,5 @@
-import React, { useEffect, useContext } from 'react';
-import { View, Text, StyleSheet, FlatList, TouchableOpacity, Alert, ActivityIndicator } from 'react-native';
+import React, { useEffect, useContext, useState } from 'react';
+import { View, Text, StyleSheet, FlatList, TouchableOpacity, Alert, ActivityIndicator, Modal } from 'react-native';
 import { LineChart } from 'react-native-chart-kit';
 import { Dimensions } from 'react-native';
 import { startOfWeek, subWeeks, format } from 'date-fns';
@@ -20,10 +20,13 @@ const PromptScreen = ({ navigation, route }) => {
     loading,
     setLoading,
     expandedEntries,
+    setExpandedEntries,
     shouldRefresh,
     setShouldRefresh,
     fetchJournalData,
   } = useContext(JournalContext);
+
+  const [isModalVisible, setModalVisible] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -93,6 +96,12 @@ const PromptScreen = ({ navigation, route }) => {
           {hasAddedJournalEntryThisWeek ? "Weekly Prompt Answered" : "Answer Weekly Prompt"}
         </Text>
       </TouchableOpacity>
+      <TouchableOpacity
+        style={styles.modalButton}
+        onPress={() => setModalVisible(true)}
+      >
+        <Text style={styles.promptButtonText}>View Journal Entries</Text>
+      </TouchableOpacity>
       <LineChart
         data={{
           labels: Array.from({ length: 5 }, (_, i) => getMonthName(subWeeks(new Date(), 4 - i))),
@@ -147,12 +156,27 @@ const PromptScreen = ({ navigation, route }) => {
           <Text style={styles.noFriendsText}>No friends selected in the past month.</Text>
         )}
       </View>
-      <FlatList
-        data={journalEntries}
-        renderItem={renderItem}
-        keyExtractor={item => item.id}
-        contentContainerStyle={styles.list}
-      />
+      <Modal
+        visible={isModalVisible}
+        animationType="slide"
+        transparent={true}
+        onRequestClose={() => setModalVisible(false)}
+      >
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContainer}>
+            <Text style={styles.modalTitle}>Journal Entries</Text>
+            <FlatList
+              data={journalEntries}
+              renderItem={renderItem}
+              keyExtractor={item => item.id}
+              contentContainerStyle={styles.list}
+            />
+            <TouchableOpacity style={styles.closeButton} onPress={() => setModalVisible(false)}>
+              <Text style={styles.closeButtonText}>Close</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
       <View style={styles.navBar}>
         <TouchableOpacity style={styles.navButton} onPress={() => navigation.navigate('Journal', { email })}>
           <Ionicons name="book" size={24} color={Colors.green300} />
@@ -206,6 +230,14 @@ const styles = StyleSheet.create({
     marginLeft: 10,
   },
   promptButton: {
+    backgroundColor: Colors.green300,
+    padding: 12,
+    margin: 20,
+    borderRadius: 10,
+    alignItems: 'center',
+    width: '100%'
+  },
+  modalButton: {
     backgroundColor: Colors.green300,
     padding: 12,
     margin: 20,
@@ -292,7 +324,36 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginTop: 5,
     color: Colors.white500,
-  }
+  },
+  modalOverlay: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0,0,0,0.5)',
+  },
+  modalContainer: {
+    width: '80%',
+    backgroundColor: Colors.white500,
+    borderRadius: 10,
+    padding: 20,
+    alignItems: 'center',
+  },
+  modalTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginBottom: 20,
+  },
+  closeButton: {
+    marginTop: 20,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    backgroundColor: Colors.green500,
+    borderRadius: 5,
+  },
+  closeButtonText: {
+    color: Colors.white500,
+    fontSize: 16,
+  },
 });
 
 export default PromptScreen;

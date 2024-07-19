@@ -18,6 +18,7 @@ import { firestore, storage } from '../../utils/firebaseHelper';
 import {
   collection,
   getDocs,
+  getDoc,
   addDoc,
   deleteDoc,
   doc,
@@ -57,7 +58,7 @@ const FriendProfileScreen = ({ navigation, route }) => {
 
   useEffect(() => {
     fetchEvents();
-    requestNotificationPermissions(); // Request notification permissions on component mount
+    requestNotificationPermissions();
   }, [friend]);
 
   useEffect(() => {
@@ -65,6 +66,17 @@ const FriendProfileScreen = ({ navigation, route }) => {
       scrollToClosestEvent();
     }
   }, [events]);
+
+  const cancelNotification = async (notificationId) => {
+    try {
+      // Assuming you have a function to cancel notification by ID
+      await someNotificationLibrary.cancel(notificationId);
+      console.log(`Notification with ID ${notificationId} canceled successfully.`);
+    } catch (error) {
+      console.error(`Error canceling notification with ID ${notificationId}: `, error);
+    }
+  };
+  
 
   const fetchEvents = async () => {
     try {
@@ -98,7 +110,7 @@ const FriendProfileScreen = ({ navigation, route }) => {
           {
             title: eventName,
             date: Timestamp.fromDate(eventDate),
-            description: '', // Add a description field if needed
+            description: '',
           }
         );
         const notificationId = await scheduleNotification(eventName, 'Event is coming up!', eventDate);
@@ -108,7 +120,7 @@ const FriendProfileScreen = ({ navigation, route }) => {
         setEventName('');
         setEventDate(new Date());
         setShowPicker(false);
-        fetchEvents(); // Refresh events list
+        fetchEvents();
       } catch (error) {
         console.error('Error adding event: ', error);
         Alert.alert('Error', 'There was an error adding the event. Please try again.');
@@ -123,17 +135,23 @@ const FriendProfileScreen = ({ navigation, route }) => {
   const handleDeleteEvent = async (eventId) => {
     try {
       const eventDocRef = doc(firestore, `Users/${email}/Friends/${friend.name}/Events`, eventId);
+      
+      // Correctly fetch the single document
       const eventDoc = await getDoc(eventDocRef);
-      if (eventDoc.exists) {
+  
+      if (eventDoc.exists()) {
         const { notificationId } = eventDoc.data();
         if (notificationId) {
           await cancelNotification(notificationId);
         }
+  
+        await deleteDoc(eventDocRef);
+        Alert.alert('Success', 'Event deleted successfully');
+        fetchEvents();
+      } else {
+        console.error('Event does not exist');
+        Alert.alert('Error', 'Event does not exist.');
       }
-
-      await deleteDoc(eventDocRef);
-      Alert.alert('Success', 'Event deleted successfully');
-      fetchEvents(); // Refresh events list
     } catch (error) {
       console.error('Error deleting event: ', error);
       Alert.alert('Error', 'There was an error deleting the event. Please try again.');
@@ -206,7 +224,6 @@ const FriendProfileScreen = ({ navigation, route }) => {
       });
 
       if (newName !== friend.name) {
-        // Update the collection name
         const oldEventsCollectionRef = collection(firestore, `Users/${email}/Friends/${friend.name}/Events`);
         const newEventsCollectionRef = collection(firestore, `Users/${email}/Friends/${newName}/Events`);
         
@@ -228,7 +245,6 @@ const FriendProfileScreen = ({ navigation, route }) => {
 
         await deleteBatch.commit();
 
-        // Update the friend document
         const newFriendDocRef = doc(firestore, `Users/${email}/Friends`, newName);
         await setDoc(newFriendDocRef, { ...friend, name: newName });
 
@@ -261,7 +277,6 @@ const FriendProfileScreen = ({ navigation, route }) => {
             try {
               setIsLoading(true);
 
-              // Delete all events associated with the friend
               const eventsCollectionRef = collection(
                 firestore,
                 `Users/${email}/Friends/${friend.name}/Events`
@@ -272,7 +287,6 @@ const FriendProfileScreen = ({ navigation, route }) => {
               );
               await Promise.all(deletePromises);
 
-              // Delete friend profile
               const friendDocRef = doc(firestore, `Users/${email}/Friends`, friend.name);
               await deleteDoc(friendDocRef);
 
@@ -451,7 +465,6 @@ const styles = StyleSheet.create({
     width: 150,
     height: 150,
     borderRadius: 75,
-    // marginBottom: 10,
   },
   placeholderImage: {
     width: 100,
