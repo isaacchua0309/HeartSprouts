@@ -1,5 +1,15 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Modal, Linking } from 'react-native';
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  StyleSheet,
+  Modal,
+  Linking,
+  TouchableWithoutFeedback,
+  Keyboard
+} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Colors from '../../constants/colors';
 
@@ -35,43 +45,45 @@ const ContactUsModal = ({ isVisible, onClose }) => {
       transparent={true}
       onRequestClose={onClose}
     >
-      <View style={styles.contactModalContainer}>
-        <View style={styles.contactModalContent}>
-          <View style={styles.modalHeader}>
-            <Text style={styles.contactTitle}>Contact Us / Send Feedback</Text>
-            <TouchableOpacity onPress={onClose}>
-              <Icon name="close" size={24} color="#fff" />
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <View style={styles.contactModalContainer}>
+          <View style={styles.contactModalContent}>
+            <View style={styles.modalHeader}>
+              <Text style={styles.contactTitle}>Contact Us / Send Feedback</Text>
+              <TouchableOpacity onPress={onClose}>
+                <Icon name="close" size={24} color="#fff" />
+              </TouchableOpacity>
+            </View>
+            <TextInput
+              style={styles.input}
+              placeholder="Your Name"
+              placeholderTextColor={Colors.white500}
+              value={name}
+              onChangeText={setName}
+            />
+            <TextInput
+              style={styles.input}
+              placeholder="Your Email"
+              placeholderTextColor={Colors.white500}
+              value={email}
+              onChangeText={setEmail}
+              keyboardType="email-address"
+            />
+            <TextInput
+              style={[styles.input, styles.textArea]}
+              placeholder="Your Message"
+              placeholderTextColor={Colors.white500}
+              value={message}
+              onChangeText={setMessage}
+              multiline={true}
+              numberOfLines={4}
+            />
+            <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
+              <Text style={styles.submitButtonText}>Submit</Text>
             </TouchableOpacity>
           </View>
-          <TextInput
-            style={styles.input}
-            placeholder="Your Name"
-            placeholderTextColor={Colors.white500}
-            value={name}
-            onChangeText={setName}
-          />
-          <TextInput
-            style={styles.input}
-            placeholder="Your Email"
-            placeholderTextColor={Colors.white500}
-            value={email}
-            onChangeText={setEmail}
-            keyboardType="email-address"
-          />
-          <TextInput
-            style={[styles.input, styles.textArea]}
-            placeholder="Your Message"
-            placeholderTextColor={Colors.white500}
-            value={message}
-            onChangeText={setMessage}
-            multiline={true}
-            numberOfLines={4}
-          />
-          <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
-            <Text style={styles.submitButtonText}>Submit</Text>
-          </TouchableOpacity>
         </View>
-      </View>
+      </TouchableWithoutFeedback>
     </Modal>
   );
 };
