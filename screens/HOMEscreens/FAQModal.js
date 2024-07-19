@@ -230,7 +230,7 @@ const styles = StyleSheet.create({
   },
   faqModalContent: {
     width: '90%',
-    height: '90%',
+    height: '85%',
     backgroundColor: Colors.green700,
     borderRadius: 10,
     padding: 20,
