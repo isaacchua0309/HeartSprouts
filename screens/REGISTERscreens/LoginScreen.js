@@ -37,19 +37,19 @@ const fetchFriends = async (email) => {
     try {
       setLoading(true);
       await signInWithEmailAndPassword(auth, email, password);
-      
+  
       setJournalLoading(true);
-      
+  
       const friends = await fetchFriends(email);
       await fetchJournalData(email);
-      
+  
       setJournalLoading(false);
-      
+  
       console.log("Scheduling notifications for user:", email);
       await scheduleUpcomingEventNotifications(email, friends);
-      
+  
       setLoading(false);
-      
+  
       Alert.alert('Log In Successful', 'Glad to have you back!');
       navigation.navigate('Home', { email });
     } catch (error) {
@@ -61,31 +61,39 @@ const fetchFriends = async (email) => {
   
   const scheduleUpcomingEventNotifications = async (email, friends) => {
     try {
+      const scheduledNotifications = await Notifications.getAllScheduledNotificationsAsync();
+      const scheduledNotificationIds = scheduledNotifications.map(notification => notification.identifier);
+      
+      console.log("Currently scheduled notifications:", scheduledNotifications.length);
   
       for (const friend of friends) {
         const eventsCollectionRef = collection(firestore, `Users/${email}/Friends/${friend.id}/Events`);
         const querySnapshot = await getDocs(eventsCollectionRef);
   
-        querySnapshot.forEach(async (doc) => {
+        for (const doc of querySnapshot.docs) {
           const event = doc.data();
           if (event.date && event.date.seconds) {
             const eventDate = new Date(event.date.seconds * 1000);
             if (eventDate > new Date() && event.id !== 'EventsInit') {
-              console.log(`Scheduling notification for event: ${event.title} with ${friend.id}`);
+              if (!scheduledNotificationIds.includes(event.id)) {
+                console.log(`Scheduling notification for event: ${event.title} with ${friend.id}`);
   
-              await Notifications.scheduleNotificationAsync({
-                identifier: event.id, // Use the event ID as the notification ID
-                content: {
-                  title: `${event.title} with ${friend.id}`,
-                  body: `Don't forget ${event.title}!`,
-                },
-                trigger: {
-                  date: eventDate,
-                },
-              });
+                await Notifications.scheduleNotificationAsync({
+                  identifier: event.id, // Use the event ID as the notification ID
+                  content: {
+                    title: `${event.title} with ${friend.id}`,
+                    body: `Don't forget ${event.title}!`,
+                  },
+                  trigger: {
+                    date: eventDate,
+                  },
+                });
+              } else {
+                console.log(`Notification already scheduled for event: ${event.title} with ${friend.id}`);
+              }
             }
           }
-        });
+        }
       }
   
       const updatedNotifications = await Notifications.getAllScheduledNotificationsAsync();
@@ -96,6 +104,7 @@ const fetchFriends = async (email) => {
       Alert.alert('Error', 'There was an error scheduling event notifications. Please try again.');
     }
   };
+  
   
   const togglePasswordVisibility = () => {
     setPasswordVisible(!passwordVisible);
