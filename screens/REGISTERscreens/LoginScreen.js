@@ -1,13 +1,13 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useContext } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, SafeAreaView, Alert, ImageBackground, ActivityIndicator } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Colors from '../../constants/colors';
 import { getAuth, signInWithEmailAndPassword } from '@firebase/auth';
 import { getFirebaseApp } from '../../utils/firebaseHelper';
-import { FriendsContext } from '../../utils/FriendsContext';
 import { JournalContext } from '../../utils/JournalContext';
-import { requestNotificationPermissions, scheduleNotification } from '../../utils/actions/notificationsHelper';
-import fetchEventsForFriend from '../../utils/actions/fetchEventsForFriend';
+import { collection, getDocs } from 'firebase/firestore';
+import * as Notifications from 'expo-notifications';
+import { firestore } from '../../utils/firebaseHelper';
 
 const LoginScreen = ({ navigation }) => {
   const [passwordVisible, setPasswordVisible] = useState(false);
@@ -16,9 +16,96 @@ const LoginScreen = ({ navigation }) => {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const { fetchFriends, setLoading: setFriendsLoading } = useContext(FriendsContext);
+const fetchFriends = async (email) => {
+  try {
+    const friendsCollectionRef = collection(firestore, `Users/${email}/Friends`);
+    const querySnapshot = await getDocs(friendsCollectionRef);
+    const friendsList = querySnapshot.docs
+      .filter(doc => doc.id !== 'Friends Init')
+      .map(doc => ({ id: doc.id, ...doc.data() }));
+    return friendsList;
+  } catch (error) {
+    console.error('Error fetching friends: ', error);
+    throw new Error('There was an error fetching friends. Please try again later.');
+  }
+};
+
+
   const { fetchJournalData, setLoading: setJournalLoading } = useContext(JournalContext);
 
+  const handleSignIn = async () => {
+    try {
+      setLoading(true);
+      await signInWithEmailAndPassword(auth, email, password);
+      
+      setJournalLoading(true);
+      
+      const friends = await fetchFriends(email);
+      await fetchJournalData(email);
+      
+      setJournalLoading(false);
+      
+      console.log("Scheduling notifications for user:", email);
+      await scheduleUpcomingEventNotifications(email, friends);
+      
+      setLoading(false);
+      
+      Alert.alert('Log In Successful', 'Glad to have you back!');
+      navigation.navigate('Home', { email });
+    } catch (error) {
+      setLoading(false);
+      setError(error.message);
+      Alert.alert('Log In Failed', 'Please Check Email and Password');
+    }
+  };
+  
+  const scheduleUpcomingEventNotifications = async (email, friends) => {
+    try {
+      const scheduledNotifications = await Notifications.getAllScheduledNotificationsAsync();
+      const scheduledNotificationIds = scheduledNotifications.map(notification => notification.identifier);
+      
+      console.log("Currently scheduled notifications:", scheduledNotifications.length);
+  
+      for (const friend of friends) {
+        const eventsCollectionRef = collection(firestore, `Users/${email}/Friends/${friend.id}/Events`);
+        const querySnapshot = await getDocs(eventsCollectionRef);
+  
+        querySnapshot.forEach(async (doc) => {
+          const event = doc.data();
+          if (event.date && event.date.seconds) {
+            const eventDate = new Date(event.date.seconds * 1000);
+            if (eventDate > new Date() && event.id !== 'EventsInit') {
+              if (!scheduledNotificationIds.includes(event.id)) {
+                console.log(`Scheduling notification for event: ${event.title} with ${friend.id}`);
+  
+                await Notifications.scheduleNotificationAsync({
+                  identifier: event.id, // Use the event ID as the notification ID
+                  content: {
+                    title: `${event.title} with ${friend.id}`,
+                    body: `Don't forget ${event.title}!`,
+                  },
+                  trigger: {
+                    date: eventDate,
+                  },
+                });
+              } else {
+                console.log(`Notification already scheduled for event: ${event.title} with ${friend.id}`);
+              }
+            }
+          }
+        });
+      }
+  
+      const updatedNotifications = await Notifications.getAllScheduledNotificationsAsync();
+      console.log("Updated scheduled notifications:", updatedNotifications.length);
+  
+    } catch (error) {
+      console.error('Error scheduling notifications: ', error);
+      Alert.alert('Error', 'There was an error scheduling event notifications. Please try again.');
+    }
+  };
+  
+  
   const togglePasswordVisibility = () => {
     setPasswordVisible(!passwordVisible);
   };
@@ -29,42 +116,6 @@ const LoginScreen = ({ navigation }) => {
 
   const app = getFirebaseApp();
   const auth = getAuth(app);
-
-  const handleSignIn = async () => {
-    try {
-      setLoading(true);
-      await signInWithEmailAndPassword(auth, email, password);
-
-      setFriendsLoading(true);
-      setJournalLoading(true);
-
-      const [friends, journalData] = await Promise.all([fetchFriends(email), fetchJournalData(email)]);
-
-      setFriendsLoading(false);
-      setJournalLoading(false);
-
-      // Schedule notifications for upcoming events
-      const permissionGranted = await requestNotificationPermissions();
-      if (permissionGranted) {
-        for (const friend of friends) {
-          const events = await fetchEventsForFriend(email, friend.name);
-          for (const event of events) {
-            const notificationTime = new Date(event.date.seconds * 1000);
-            notificationTime.setHours(notificationTime.getHours() - 1); // Notify 1 hour before the event
-            await scheduleNotification(`Event Reminder`, `Don't forget about ${event.eventName}!`, notificationTime);
-          }
-        }
-      }
-
-      setLoading(false);
-      Alert.alert('Log In Successful', 'Glad to have you back!');
-      navigation.navigate('Home', { email });
-    } catch (error) {
-      setLoading(false);
-      setError(error.message);
-      Alert.alert('Log In Failed', 'Please Check Email and Password');
-    }
-  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -103,7 +154,7 @@ const LoginScreen = ({ navigation }) => {
 
         <View style={styles.forgotPasswordContainer}>
           <Text style={styles.forgotPassword}>Forgot Password?</Text>
-          <TouchableOpacity  onPress={() => navigation.navigate('ResetPassword')}>
+          <TouchableOpacity onPress={() => navigation.navigate('ResetPassword')}>
             <Text style={styles.resetPassword}> Reset Password</Text>
           </TouchableOpacity>
         </View>
@@ -118,20 +169,13 @@ const LoginScreen = ({ navigation }) => {
       </View>
     </SafeAreaView>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: Colors.green500,
     alignItems: 'center',
-  },
-  mainText: {
-    color: Colors.white500,
-    fontSize: 24,
-    textAlign: 'center',
-    marginBottom: 36,
-    fontWeight: 'bold'
   },
   backButton: {
     position: 'absolute',
@@ -188,11 +232,11 @@ const styles = StyleSheet.create({
   },
   forgotPassword: {
     fontWeight: 'bold',
-    color: Colors.black300,
+    color: Colors.black300
   },
   resetPassword: {
     fontWeight: 'bold',
-    color: Colors.white700,
+    color: Colors.white700
   },
   signInButton: {
     backgroundColor: Colors.white500,

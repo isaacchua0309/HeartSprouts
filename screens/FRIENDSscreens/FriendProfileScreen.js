@@ -14,6 +14,7 @@ import {
 import Icon from 'react-native-vector-icons/FontAwesome';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import * as ImagePicker from 'expo-image-picker';
+import * as Notifications from 'expo-notifications';
 import { firestore, storage } from '../../utils/firebaseHelper';
 import {
   collection,
@@ -31,12 +32,14 @@ import {
 } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import Colors from '../../constants/colors';
-import {
-  requestNotificationPermissions,
-  scheduleNotification,
-  cancelNotification,
-  getAllScheduledNotifications,
-} from '../../utils/actions/notificationsHelper';
+
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowAlert: true,
+    shouldPlaySound: false,
+    shouldSetBadge: false,
+  }),
+});
 
 const FriendProfileScreen = ({ navigation, route }) => {
   const { friend, email } = route.params;
@@ -58,7 +61,6 @@ const FriendProfileScreen = ({ navigation, route }) => {
 
   useEffect(() => {
     fetchEvents();
-    requestNotificationPermissions();
   }, [friend]);
 
   useEffect(() => {
@@ -66,17 +68,6 @@ const FriendProfileScreen = ({ navigation, route }) => {
       scrollToClosestEvent();
     }
   }, [events]);
-
-  const cancelNotification = async (notificationId) => {
-    try {
-      // Assuming you have a function to cancel notification by ID
-      await someNotificationLibrary.cancel(notificationId);
-      console.log(`Notification with ID ${notificationId} canceled successfully.`);
-    } catch (error) {
-      console.error(`Error canceling notification with ID ${notificationId}: `, error);
-    }
-  };
-  
 
   const fetchEvents = async () => {
     try {
@@ -102,59 +93,56 @@ const FriendProfileScreen = ({ navigation, route }) => {
   };
 
   const handleAddEvent = async () => {
-    if (eventName.trim()) {
+    try {
       setIsLoading(true);
-      try {
-        const eventDocRef = await addDoc(
-          collection(firestore, `Users/${email}/Friends/${friend.name}/Events`),
-          {
-            title: eventName,
-            date: Timestamp.fromDate(eventDate),
-            description: '',
-          }
-        );
-        const notificationId = await scheduleNotification(eventName, 'Event is coming up!', eventDate);
-        await updateDoc(eventDocRef, { notificationId });
 
-        Alert.alert('Success', 'Event added successfully');
-        setEventName('');
-        setEventDate(new Date());
-        setShowPicker(false);
-        fetchEvents();
-      } catch (error) {
-        console.error('Error adding event: ', error);
-        Alert.alert('Error', 'There was an error adding the event. Please try again.');
-      } finally {
-        setIsLoading(false);
-      }
-    } else {
-      Alert.alert('Error', 'Please enter an event name');
+      const newEventRef = await addDoc(collection(firestore, `Users/${email}/Friends/${friend.name}/Events`), {
+        title: eventName,
+        date: Timestamp.fromDate(eventDate),
+        description: '',
+      });
+
+      await Notifications.scheduleNotificationAsync({
+        identifier: newEventRef.id,
+        content: {
+          title: `${eventName}`,
+          body: `Don't forget ${eventName}!`,
+        },
+        trigger: {
+          date: eventDate,
+        },
+      });
+
+      setEventName('');
+      setEventDate(new Date());
+
+      fetchEvents();
+
+      Alert.alert('Success', 'Event added successfully');
+    } catch (error) {
+      console.error('Error adding event: ', error);
+      Alert.alert('Error', 'There was an error adding the event. Please try again.');
+    } finally {
+      setIsLoading(false);
     }
   };
 
   const handleDeleteEvent = async (eventId) => {
     try {
-      const eventDocRef = doc(firestore, `Users/${email}/Friends/${friend.name}/Events`, eventId);
-      
-      // Correctly fetch the single document
-      const eventDoc = await getDoc(eventDocRef);
-  
-      if (eventDoc.exists()) {
-        const { notificationId } = eventDoc.data();
-        if (notificationId) {
-          await cancelNotification(notificationId);
-        }
-  
-        await deleteDoc(eventDocRef);
-        Alert.alert('Success', 'Event deleted successfully');
-        fetchEvents();
-      } else {
-        console.error('Event does not exist');
-        Alert.alert('Error', 'Event does not exist.');
-      }
+      setIsLoading(true);
+
+      await deleteDoc(doc(firestore, `Users/${email}/Friends/${friend.name}/Events`, eventId));
+
+      await Notifications.cancelScheduledNotificationAsync(eventId);
+
+      fetchEvents();
+
+      Alert.alert('Success', 'Event deleted successfully');
     } catch (error) {
       console.error('Error deleting event: ', error);
       Alert.alert('Error', 'There was an error deleting the event. Please try again.');
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -304,10 +292,22 @@ const FriendProfileScreen = ({ navigation, route }) => {
     );
   };
 
+  const getAllScheduledNotifications = async () => {
+    try {
+      const notifications = await Notifications.getAllScheduledNotificationsAsync();
+      return notifications;
+    } catch (error) {
+      console.error('Error fetching scheduled notifications: ', error);
+      throw error;
+    }
+  };
+
   const handleCheckNotifications = async () => {
     try {
       const scheduledNotifications = await getAllScheduledNotifications();
       console.log('Scheduled Notifications:', scheduledNotifications);
+      const updatedNotifications = await Notifications.getAllScheduledNotificationsAsync();
+      console.log("Updated scheduled notifications:", updatedNotifications.length);
       Alert.alert('Scheduled Notifications', JSON.stringify(scheduledNotifications));
     } catch (error) {
       console.error('Error fetching scheduled notifications: ', error);
