@@ -166,16 +166,21 @@ const FriendProfileScreen = ({ navigation, route }) => {
           }
         );
 
-        await Notifications.scheduleNotificationAsync({
-          identifier: eventDocRef.id,
-          content: {
-            title: `${eventName}`,
-            body: `Don't forget ${eventName}!`,
-          },
-          trigger: {
-            date: eventDate,
-          },
-        });
+        const existingNotifications = await Notifications.getAllScheduledNotificationsAsync();
+        const existingNotificationIds = existingNotifications.map(notification => notification.identifier);
+
+        if (!existingNotificationIds.includes(eventDocRef.id)) {
+          await Notifications.scheduleNotificationAsync({
+            identifier: eventDocRef.id,
+            content: {
+              title: `${eventName}`,
+              body: `Don't forget ${eventName}!`,
+            },
+            trigger: {
+              date: eventDate,
+            },
+          });
+        }
 
         Alert.alert('Success', 'Event added successfully');
         fetchEvents();
