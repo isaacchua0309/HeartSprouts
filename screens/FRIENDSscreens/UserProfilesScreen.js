@@ -9,7 +9,7 @@ import { requestPermissions, scheduleNotification, getAllScheduledNotifications 
 import fetchEventsForFriend from '../../utils/actions/fetchEventsForFriend';
 import { Ionicons } from '@expo/vector-icons';
 import { FriendsContext } from '../../utils/FriendsContext';
-import defaultProfile from '../../assets/defaultProfile.webp' // Import the placeholder image
+import emptyProfile from '../../assets/emptyprofileimage.png' // Import the placeholder image
 
 const UserProfilesScreen = ({ navigation, route }) => {
   const { email } = route.params;
@@ -130,7 +130,7 @@ const UserProfilesScreen = ({ navigation, route }) => {
             >
               <Image
                 style={styles.profileImage}
-                source={friend.image ? { uri: friend.image } : defaultProfile}
+                source={friend.image ? { uri: friend.image } : emptyProfile}
               />
               <Text style={styles.profileName}>{friend.name}</Text>
               <Text style={styles.profileStatus}>{friend.status}</Text>
@@ -206,7 +206,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    padding: 0,
+    paddingTop: '3%',
     backgroundColor: Colors.green500,
   },
   headerText: {
@@ -247,10 +247,12 @@ const styles = StyleSheet.create({
   addButton: {
     marginLeft: 10,
     alignItems: 'center',
+    justifyContent: 'center',
     backgroundColor: Colors.pink500,
     padding: 10,
-    width: 50,
-    borderRadius: 25,
+    height: 42,
+    width: 42,
+    borderRadius: 21,
     elevation: 2,
   },
   profileContainer: {

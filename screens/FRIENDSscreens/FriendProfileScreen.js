@@ -10,6 +10,7 @@ import {
   TextInput,
   Button,
   ActivityIndicator,
+  Modal,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import DateTimePicker from '@react-native-community/datetimepicker';
@@ -41,14 +42,71 @@ Notifications.setNotificationHandler({
   }),
 });
 
-const FriendProfileScreen = ({ navigation, route }) => {
-  const { friend, email } = route.params;
-  const [events, setEvents] = useState([]);
+const AddEventModal = ({ isVisible, onClose, onAddEvent }) => {
   const [eventName, setEventName] = useState('');
   const [eventDate, setEventDate] = useState(new Date());
   const [showPicker, setShowPicker] = useState(false);
   const [isDatePicker, setIsDatePicker] = useState(true);
-  const [isLoading, setIsLoading] = useState(false);
+
+  const handleDateChange = (event, selectedDate) => {
+    const currentDate = selectedDate || eventDate;
+    setShowPicker(false);
+    setEventDate(currentDate);
+    if (isDatePicker) {
+      setShowPicker(true);
+      setIsDatePicker(false);
+    } else {
+      setIsDatePicker(true);
+    }
+  };
+
+  const handleAddEvent = () => {
+    if (eventName.trim()) {
+      onAddEvent(eventName, eventDate);
+      setEventName('');
+      setEventDate(new Date());
+      onClose();
+    } else {
+      Alert.alert('Error', 'Please enter an event name');
+    }
+  };
+
+  return (
+    <Modal visible={isVisible} transparent={true} animationType="slide">
+      <View style={styles.overlayContainer}>
+        <View style={styles.overlayContent}>
+          <Text style={styles.overlayTitle}>Add Event</Text>
+          <TextInput
+            style={styles.input}
+            value={eventName}
+            onChangeText={setEventName}
+            placeholder="Enter event name"
+          />
+          <TouchableOpacity style={styles.dateInput} onPress={() => { setIsDatePicker(true); setShowPicker(true); }}>
+            <Text>{eventDate.toDateString()}</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.dateInput} onPress={() => { setIsDatePicker(false); setShowPicker(true); }}>
+            <Text>{eventDate.toLocaleTimeString()}</Text>
+          </TouchableOpacity>
+          {showPicker && (
+            <DateTimePicker
+              value={eventDate}
+              mode={isDatePicker ? 'date' : 'time'}
+              display="default"
+              onChange={handleDateChange}
+            />
+          )}
+          <Button title="Add Event" onPress={handleAddEvent} />
+          <Button title="Cancel" onPress={onClose} color="#ff0000" />
+        </View>
+      </View>
+    </Modal>
+  );
+};
+
+const FriendProfileScreen = ({ navigation, route }) => {
+  const { friend, email } = route.params;
+  const [events, setEvents] = useState([]);
   const [isFetching, setIsFetching] = useState(true);
   const [isEditing, setIsEditing] = useState(false);
   const [newName, setNewName] = useState(friend.name);
@@ -57,6 +115,9 @@ const FriendProfileScreen = ({ navigation, route }) => {
   );
   const [newImage, setNewImage] = useState(friend.image);
   const [imageUploading, setImageUploading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isModalVisible, setModalVisible] = useState(false);
+  const [showPicker, setShowPicker] = useState(false); // Added showPicker state
   const scrollViewRef = useRef(null);
 
   useEffect(() => {
@@ -68,6 +129,17 @@ const FriendProfileScreen = ({ navigation, route }) => {
       scrollToClosestEvent();
     }
   }, [events]);
+
+  const cancelNotification = async (notificationId) => {
+    try {
+      // Assuming you have a function to cancel notification by ID
+      await someNotificationLibrary.cancel(notificationId);
+      console.log(`Notification with ID ${notificationId} canceled successfully.`);
+    } catch (error) {
+      console.error(`Error canceling notification with ID ${notificationId}: `, error);
+    }
+  };
+  
 
   const fetchEvents = async () => {
     try {
@@ -93,68 +165,61 @@ const FriendProfileScreen = ({ navigation, route }) => {
   };
 
   const handleAddEvent = async () => {
-    try {
+    if (eventName.trim()) {
       setIsLoading(true);
+      try {
+        const eventDocRef = await addDoc(
+          collection(firestore, `Users/${email}/Friends/${friend.name}/Events`),
+          {
+            title: eventName,
+            date: Timestamp.fromDate(eventDate),
+            description: '',
+          }
+        );
+        const notificationId = await scheduleNotification(eventName, 'Event is coming up!', eventDate);
+        await updateDoc(eventDocRef, { notificationId });
 
-      const newEventRef = await addDoc(collection(firestore, `Users/${email}/Friends/${friend.name}/Events`), {
-        title: eventName,
-        date: Timestamp.fromDate(eventDate),
-        description: '',
-      });
-
-      await Notifications.scheduleNotificationAsync({
-        identifier: newEventRef.id,
-        content: {
-          title: `${eventName}`,
-          body: `Don't forget ${eventName}!`,
-        },
-        trigger: {
-          date: eventDate,
-        },
-      });
-
-      setEventName('');
-      setEventDate(new Date());
-
-      fetchEvents();
-
-      Alert.alert('Success', 'Event added successfully');
-    } catch (error) {
-      console.error('Error adding event: ', error);
-      Alert.alert('Error', 'There was an error adding the event. Please try again.');
-    } finally {
-      setIsLoading(false);
+        Alert.alert('Success', 'Event added successfully');
+        setEventName('');
+        setEventDate(new Date());
+        setShowPicker(false);
+        fetchEvents();
+      } catch (error) {
+        console.error('Error adding event: ', error);
+        Alert.alert('Error', 'There was an error adding the event. Please try again.');
+      } finally {
+        setIsLoading(false);
+      }
+    } else {
+      Alert.alert('Error', 'Please enter an event name');
     }
   };
 
   const handleDeleteEvent = async (eventId) => {
     try {
-      setIsLoading(true);
-
-      await deleteDoc(doc(firestore, `Users/${email}/Friends/${friend.name}/Events`, eventId));
-
-      await Notifications.cancelScheduledNotificationAsync(eventId);
-
-      fetchEvents();
-
-      Alert.alert('Success', 'Event deleted successfully');
+      const eventDocRef = doc(firestore, `Users/${email}/Friends/${friend.name}/Events`, eventId);
+      
+      // Correctly fetch the single document
+      const eventDoc = await getDoc(eventDocRef);
+  
+      if (eventDoc.exists()) {
+        const { notificationId } = eventDoc.data();
+        if (notificationId) {
+          await cancelNotification(notificationId);
+        }
+  
+        await deleteDoc(eventDocRef);
+        Alert.alert('Success', 'Event deleted successfully');
+        fetchEvents();
+      } else {
+        console.error('Event does not exist');
+        Alert.alert('Error', 'Event does not exist.');
+      }
     } catch (error) {
       console.error('Error deleting event: ', error);
       Alert.alert('Error', 'There was an error deleting the event. Please try again.');
     } finally {
       setIsLoading(false);
-    }
-  };
-
-  const handleDateChange = (event, selectedDate) => {
-    const currentDate = selectedDate || eventDate;
-    setShowPicker(false);
-    setEventDate(currentDate);
-    if (isDatePicker) {
-      setShowPicker(true);
-      setIsDatePicker(false);
-    } else {
-      setIsDatePicker(true);
     }
   };
 
@@ -342,9 +407,7 @@ const FriendProfileScreen = ({ navigation, route }) => {
             {newImage ? (
               <Image style={styles.profileImage} source={{ uri: newImage }} />
             ) : (
-              <View style={styles.placeholderImage}>
-                <Icon name="user" size={50} color={Colors.white500} />
-              </View>
+              <Image style={styles.profileImage} source={require('../../assets/emptyprofileimage.png')} />
             )}
           </TouchableOpacity>
           {isEditing ? (
@@ -384,28 +447,7 @@ const FriendProfileScreen = ({ navigation, route }) => {
             </>
           )}
         </View>
-        <Text style={styles.label}>Receive Timely Notifications Before Events!</Text>
-        <TextInput
-          style={styles.input}
-          value={eventName}
-          onChangeText={setEventName}
-          placeholder="Enter event name"
-        />
-        <TouchableOpacity style={styles.dateInput} onPress={() => { setIsDatePicker(true); setShowPicker(true); }}>
-          <Text>{eventDate.toDateString()}</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.dateInput} onPress={() => { setIsDatePicker(false); setShowPicker(true); }}>
-          <Text>{eventDate.toLocaleTimeString()}</Text>
-        </TouchableOpacity>
-        {showPicker && (
-          <DateTimePicker
-            value={eventDate}
-            mode={isDatePicker ? "date" : "time"}
-            display="default"
-            onChange={handleDateChange}
-          />
-        )}
-        <Button title="Add Event" onPress={handleAddEvent} disabled={isLoading} color={Colors.white500} />
+        <Button title="Add Event" onPress={() => setModalVisible(true)} color={Colors.white500} />
         {isFetching ? (
           <ActivityIndicator size="large" color={Colors.white500} />
         ) : (
@@ -428,6 +470,11 @@ const FriendProfileScreen = ({ navigation, route }) => {
         )}
         <Button title="Check Notifications" onPress={handleCheckNotifications} color={Colors.blue500} />
       </View>
+      <AddEventModal
+        isVisible={isModalVisible}
+        onClose={() => setModalVisible(false)}
+        onAddEvent={handleAddEvent}
+      />
     </View>
   );
 };
@@ -558,6 +605,27 @@ const styles = StyleSheet.create({
     color: 'red',
     textAlign: 'center',
   },
+  overlayContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  overlayContent: {
+    width: '90%',
+    backgroundColor: Colors.green700,
+    borderRadius: 10,
+    padding: 20,
+  },
+  overlayTitle: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 20,
+    color: Colors.white500,
+    textAlign: 'center',
+  },
 });
 
 export default FriendProfileScreen;
+
+
