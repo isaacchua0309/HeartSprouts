@@ -61,10 +61,6 @@ const fetchFriends = async (email) => {
   
   const scheduleUpcomingEventNotifications = async (email, friends) => {
     try {
-      const scheduledNotifications = await Notifications.getAllScheduledNotificationsAsync();
-      const scheduledNotificationIds = scheduledNotifications.map(notification => notification.identifier);
-      
-      console.log("Currently scheduled notifications:", scheduledNotifications.length);
   
       for (const friend of friends) {
         const eventsCollectionRef = collection(firestore, `Users/${email}/Friends/${friend.id}/Events`);
@@ -75,22 +71,18 @@ const fetchFriends = async (email) => {
           if (event.date && event.date.seconds) {
             const eventDate = new Date(event.date.seconds * 1000);
             if (eventDate > new Date() && event.id !== 'EventsInit') {
-              if (!scheduledNotificationIds.includes(event.id)) {
-                console.log(`Scheduling notification for event: ${event.title} with ${friend.id}`);
+              console.log(`Scheduling notification for event: ${event.title} with ${friend.id}`);
   
-                await Notifications.scheduleNotificationAsync({
-                  identifier: event.id, // Use the event ID as the notification ID
-                  content: {
-                    title: `${event.title} with ${friend.id}`,
-                    body: `Don't forget ${event.title}!`,
-                  },
-                  trigger: {
-                    date: eventDate,
-                  },
-                });
-              } else {
-                console.log(`Notification already scheduled for event: ${event.title} with ${friend.id}`);
-              }
+              await Notifications.scheduleNotificationAsync({
+                identifier: event.id, // Use the event ID as the notification ID
+                content: {
+                  title: `${event.title} with ${friend.id}`,
+                  body: `Don't forget ${event.title}!`,
+                },
+                trigger: {
+                  date: eventDate,
+                },
+              });
             }
           }
         });
@@ -104,7 +96,6 @@ const fetchFriends = async (email) => {
       Alert.alert('Error', 'There was an error scheduling event notifications. Please try again.');
     }
   };
-  
   
   const togglePasswordVisibility = () => {
     setPasswordVisible(!passwordVisible);
