@@ -15,6 +15,7 @@ import {
 import Icon from 'react-native-vector-icons/FontAwesome';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import * as ImagePicker from 'expo-image-picker';
+import * as Notifications from 'expo-notifications';
 import { firestore, storage } from '../../utils/firebaseHelper';
 import {
   collection,
@@ -32,29 +33,34 @@ import {
 } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import Colors from '../../constants/colors';
-import {
-  requestNotificationPermissions,
-  scheduleNotification,
-  cancelNotification,
-  getAllScheduledNotifications,
-} from '../../utils/actions/notificationsHelper';
+
+
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowAlert: true,
+    shouldPlaySound: false,
+    shouldSetBadge: false,
+  }),
+});
 
 const AddEventModal = ({ isVisible, onClose, onAddEvent }) => {
   const [eventName, setEventName] = useState('');
   const [eventDate, setEventDate] = useState(new Date());
   const [showPicker, setShowPicker] = useState(false);
-  const [isDatePicker, setIsDatePicker] = useState(true);
 
   const handleDateChange = (event, selectedDate) => {
     const currentDate = selectedDate || eventDate;
+    const now = new Date();
+    const minDate = new Date(now.getTime() + 1 * 60 * 60 * 999); // Set min date to 24 hours from now
+
+    if (currentDate < minDate) {
+      Alert.alert('Invalid Date', 'Please select a date and time at least 1 hour in the future.');
+      setShowPicker(false);
+      return;
+    }
+
     setShowPicker(false);
     setEventDate(currentDate);
-    if (isDatePicker) {
-      setShowPicker(true);
-      setIsDatePicker(false);
-    } else {
-      setIsDatePicker(true);
-    }
   };
 
   const handleAddEvent = () => {
@@ -79,16 +85,13 @@ const AddEventModal = ({ isVisible, onClose, onAddEvent }) => {
             onChangeText={setEventName}
             placeholder="Enter event name"
           />
-          <TouchableOpacity style={styles.dateInput} onPress={() => { setIsDatePicker(true); setShowPicker(true); }}>
-            <Text>{eventDate.toDateString()}</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.dateInput} onPress={() => { setIsDatePicker(false); setShowPicker(true); }}>
-            <Text>{eventDate.toLocaleTimeString()}</Text>
+          <TouchableOpacity style={styles.dateInput} onPress={() => setShowPicker(true)}>
+            <Text>{eventDate.toDateString()} {eventDate.toLocaleTimeString()}</Text>
           </TouchableOpacity>
           {showPicker && (
             <DateTimePicker
               value={eventDate}
-              mode={isDatePicker ? 'date' : 'time'}
+              mode="datetime"
               display="default"
               onChange={handleDateChange}
             />
@@ -119,7 +122,6 @@ const FriendProfileScreen = ({ navigation, route }) => {
 
   useEffect(() => {
     fetchEvents();
-    requestNotificationPermissions();
   }, [friend]);
 
   useEffect(() => {
@@ -127,15 +129,6 @@ const FriendProfileScreen = ({ navigation, route }) => {
       scrollToClosestEvent();
     }
   }, [events]);
-
-  const cancelNotification = async (notificationId) => {
-    try {
-      await someNotificationLibrary.cancel(notificationId);
-      console.log(`Notification with ID ${notificationId} canceled successfully.`);
-    } catch (error) {
-      console.error(`Error canceling notification with ID ${notificationId}: `, error);
-    }
-  };
 
   const fetchEvents = async () => {
     try {
@@ -172,8 +165,22 @@ const FriendProfileScreen = ({ navigation, route }) => {
             description: '',
           }
         );
-        const notificationId = await scheduleNotification(eventName, 'Event is coming up!', eventDate);
-        await updateDoc(eventDocRef, { notificationId });
+
+        const existingNotifications = await Notifications.getAllScheduledNotificationsAsync();
+        const existingNotificationIds = existingNotifications.map(notification => notification.identifier);
+
+        if (!existingNotificationIds.includes(eventDocRef.id)) {
+          await Notifications.scheduleNotificationAsync({
+            identifier: eventDocRef.id,
+            content: {
+              title: `${eventName}`,
+              body: `Don't forget ${eventName}!`,
+            },
+            trigger: {
+              date: eventDate,
+            },
+          });
+        }
 
         Alert.alert('Success', 'Event added successfully');
         fetchEvents();
@@ -188,25 +195,41 @@ const FriendProfileScreen = ({ navigation, route }) => {
     }
   };
 
+  const deleteNotificationByEventId = async (eventId) => {
+    try {
+      const scheduledNotifications = await Notifications.getAllScheduledNotificationsAsync();
+      for (const notification of scheduledNotifications) {
+        if (notification.identifier === eventId) {
+          await Notifications.cancelScheduledNotificationAsync(notification.identifier);
+          console.log(`Canceled notification with ID ${notification.identifier}`);
+        }
+      }
+    } catch (error) {
+      console.error('Error canceling notification:', error);
+    }
+  };
+
   const handleDeleteEvent = async (eventId) => {
     try {
+      setIsLoading(true);
       const eventDocRef = doc(firestore, `Users/${email}/Friends/${friend.name}/Events`, eventId);
+
       const eventDoc = await getDoc(eventDocRef);
       if (eventDoc.exists()) {
-        const { notificationId } = eventDoc.data();
-        if (notificationId) {
-          await cancelNotification(notificationId);
-        }
         await deleteDoc(eventDocRef);
+
+        await deleteNotificationByEventId(eventId);
+
         Alert.alert('Success', 'Event deleted successfully');
         fetchEvents();
       } else {
-        console.error('Event does not exist');
-        Alert.alert('Error', 'Event does not exist.');
+        Alert.alert('Error', 'Event not found');
       }
     } catch (error) {
       console.error('Error deleting event: ', error);
       Alert.alert('Error', 'There was an error deleting the event. Please try again.');
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -363,11 +386,22 @@ const FriendProfileScreen = ({ navigation, route }) => {
     );
   };
 
+  const getAllScheduledNotifications = async () => {
+    try {
+      const notifications = await Notifications.getAllScheduledNotificationsAsync();
+      return notifications;
+    } catch (error) {
+      console.error('Error fetching scheduled notifications: ', error);
+      throw error;
+    }
+  };
+
   const handleCheckNotifications = async () => {
     try {
       const scheduledNotifications = await getAllScheduledNotifications();
       console.log('Scheduled Notifications:', scheduledNotifications);
       Alert.alert('Scheduled Notifications', JSON.stringify(scheduledNotifications));
+      console.log("Updated scheduled notifications:", scheduledNotifications.length);
     } catch (error) {
       console.error('Error fetching scheduled notifications: ', error);
       Alert.alert('Error', 'There was an error fetching scheduled notifications. Please try again.');
@@ -617,6 +651,25 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     color: Colors.white500,
     textAlign: 'center',
+  },
+  input: {
+    height: 44,
+    borderColor: Colors.white700,
+    borderWidth: 2,
+    marginBottom: '4%',
+    paddingHorizontal: 10,
+    borderRadius: 8,
+    backgroundColor: Colors.white700,
+  },
+  dateInput: {
+    height: 44,
+    borderColor: Colors.white700,
+    borderWidth: 2,
+    marginBottom: 20,
+    paddingHorizontal: 10,
+    borderRadius: 8,
+    justifyContent: 'center',
+    backgroundColor: Colors.white700,
   },
 });
 

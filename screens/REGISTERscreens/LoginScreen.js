@@ -4,8 +4,10 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import Colors from '../../constants/colors';
 import { getAuth, signInWithEmailAndPassword } from '@firebase/auth';
 import { getFirebaseApp } from '../../utils/firebaseHelper';
-import { FriendsContext } from '../../utils/FriendsContext';
 import { JournalContext } from '../../utils/JournalContext';
+import { collection, getDocs } from 'firebase/firestore';
+import * as Notifications from 'expo-notifications';
+import { firestore } from '../../utils/firebaseHelper';
 
 const LoginScreen = ({ navigation }) => {
   const [passwordVisible, setPasswordVisible] = useState(false);
@@ -14,8 +16,80 @@ const LoginScreen = ({ navigation }) => {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const { fetchFriends, setLoading: setFriendsLoading } = useContext(FriendsContext);
   const { fetchJournalData, setLoading: setJournalLoading } = useContext(JournalContext);
+
+  const fetchFriends = async (email) => {
+    try {
+      const friendsCollectionRef = collection(firestore, `Users/${email}/Friends`);
+      const querySnapshot = await getDocs(friendsCollectionRef);
+      const friendsList = querySnapshot.docs
+        .filter(doc => doc.id !== 'Friends Init')
+        .map(doc => ({ id: doc.id, ...doc.data() }));
+      return friendsList;
+    } catch (error) {
+      console.error('Error fetching friends: ', error);
+      throw new Error('There was an error fetching friends. Please try again later.');
+    }
+  };
+
+  const handleSignIn = async () => {
+    try {
+      setLoading(true);
+      await signInWithEmailAndPassword(auth, email, password);
+  
+      setJournalLoading(true);
+  
+      const friends = await fetchFriends(email);
+      await fetchJournalData(email);
+  
+      setJournalLoading(false);
+  
+      console.log("Scheduling notifications for user:", email);
+      await scheduleUpcomingEventNotifications(email, friends);
+  
+      setLoading(false);
+  
+      Alert.alert('Log In Successful', 'Glad to have you back!');
+      navigation.navigate('Home', { email });
+    } catch (error) {
+      setLoading(false);
+      setError(error.message);
+      Alert.alert('Log In Failed', 'Please Check Email and Password');
+    }
+  };
+
+  const scheduleUpcomingEventNotifications = async (email, friends) => {
+    try { 
+      for (const friend of friends) {
+        const eventsCollectionRef = collection(firestore, `Users/${email}/Friends/${friend.id}/Events`);
+        const querySnapshot = await getDocs(eventsCollectionRef);
+  
+        for (const doc of querySnapshot.docs) {
+          const event = doc.data();
+          if (event.date && event.date.seconds) {
+            const eventDate = new Date(event.date.seconds * 1000);
+            if (eventDate > new Date() && event.id !== 'EventsInit') {
+                console.log(`Scheduling notification for event: ${event.title} with ${friend.id}`);
+                await Notifications.scheduleNotificationAsync({
+                  identifier: event.id, // Use the event ID as the notification ID
+                  content: {
+                    title: `${event.title} with ${friend.id}`,
+                    body: `Don't forget ${event.title}!`,
+                  },
+                  trigger: {
+                    date: eventDate,
+                  },
+                });
+            }
+          }
+        }
+      }
+  
+    } catch (error) {
+      console.error('Error scheduling notifications: ', error);
+      Alert.alert('Error', 'There was an error scheduling event notifications. Please try again.');
+    }
+  };
 
   const togglePasswordVisibility = () => {
     setPasswordVisible(!passwordVisible);
@@ -27,29 +101,6 @@ const LoginScreen = ({ navigation }) => {
 
   const app = getFirebaseApp();
   const auth = getAuth(app);
-
-  const handleSignIn = async () => {
-    try {
-      setLoading(true);
-      await signInWithEmailAndPassword(auth, email, password);
-
-      setFriendsLoading(true);
-      setJournalLoading(true);
-
-      await Promise.all([fetchFriends(email), fetchJournalData(email)]);
-
-      setFriendsLoading(false);
-      setJournalLoading(false);
-      setLoading(false);
-
-      Alert.alert('Log In Successful', 'Glad to have you back!');
-      navigation.navigate('Home', { email });
-    } catch (error) {
-      setLoading(false);
-      setError(error.message);
-      Alert.alert('Log In Failed', 'Please Check Email and Password');
-    }
-  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -88,7 +139,7 @@ const LoginScreen = ({ navigation }) => {
 
         <View style={styles.forgotPasswordContainer}>
           <Text style={styles.forgotPassword}>Forgot Password?</Text>
-          <TouchableOpacity  onPress={() => navigation.navigate('ResetPassword')}>
+          <TouchableOpacity onPress={() => navigation.navigate('ResetPassword')}>
             <Text style={styles.resetPassword}> Reset Password</Text>
           </TouchableOpacity>
         </View>
@@ -103,21 +154,13 @@ const LoginScreen = ({ navigation }) => {
       </View>
     </SafeAreaView>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: Colors.green500,
-    // justifyContent: 'center',
     alignItems: 'center',
-  },
-  mainText: {
-    color: Colors.white500,
-    fontSize: 24,
-    textAlign: 'center',
-    marginBottom: 36,
-    fontWeight: 'bold'
   },
   backButton: {
     position: 'absolute',
@@ -129,8 +172,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   contentContainer: {
-  justifyContent: 'center',
-  alignItems: 'center',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   firstimage: {
     width: 300,

@@ -14,6 +14,8 @@ const cancelAllNotifications = async () => {
       await Notifications.cancelScheduledNotificationAsync(notification.identifier);
     }
     console.log('All notifications canceled successfully.');
+    const updatedNotifications = await Notifications.getAllScheduledNotificationsAsync();
+    console.log("Updated scheduled notifications:", updatedNotifications.length);
   } catch (error) {
     console.error('Error canceling notifications: ', error);
   }
