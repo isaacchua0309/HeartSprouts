@@ -9,6 +9,8 @@ import ProfileModal from './ProfileModal'; // Adjust the path as needed
 import SettingsModal from './SettingsModal'; // Adjust the path as needed
 import quotes from '../../constants/quotes';
 import emotions from '../../constants/emotions';
+import { doc, getDoc } from 'firebase/firestore';
+import { firestore } from '../../utils/firebaseHelper'; // Adjust the path as needed
 
 const HomeScreen = ({ navigation, route }) => {
   const [currentText, setCurrentText] = useState('');
@@ -16,10 +18,32 @@ const HomeScreen = ({ navigation, route }) => {
   const [isModalVisible, setModalVisible] = useState(false);
   const [isProfileModalVisible, setProfileModalVisible] = useState(false);
   const [isSettingsModalVisible, setSettingsModalVisible] = useState(false);
-  const [petImage, setPetImage] = useState(require('../../assets/characterimages/lvl1.jpg'));
+  const [petImage, setPetImage] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [userLevel, setUserLevel] = useState(null);
 
   const { email } = route.params;
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const userDoc = await getDoc(doc(firestore, 'Users', email));
+        if (userDoc.exists()) {
+          const userData = userDoc.data();
+          setUserLevel(userData.level);
+          handleUpdatePetImage(userData.level);
+        } else {
+          console.log('No such user!');
+        }
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchUserData();
+  }, [email, handleUpdatePetImage]);
 
   useEffect(() => {
     if (selectedEmotion) {
@@ -49,7 +73,7 @@ const HomeScreen = ({ navigation, route }) => {
         setPetImage(require('../../assets/characterimages/lvl2.jpg'));
         break;
       case 3:
-          setPetImage(require('../../assets/characterimages/lvl3.jpg'));
+        setPetImage(require('../../assets/characterimages/lvl3.jpg'));
         break;
       case 4:
         setPetImage(require('../../assets/characterimages/lvl4.jpg'));
@@ -58,7 +82,8 @@ const HomeScreen = ({ navigation, route }) => {
         setPetImage(require('../../assets/characterimages/lvl5.jpg'));
         break;
       case 6:
-          setPetImage(require('../../assets/characterimages/lvl6.jpg'));
+        setPetImage(require('../../assets/characterimages/lvl6.jpg'));
+        break;
       case 7:
         setPetImage(require('../../assets/characterimages/lvl7.jpg'));
         break;
@@ -66,7 +91,7 @@ const HomeScreen = ({ navigation, route }) => {
         setPetImage(require('../../assets/characterimages/lvl8.jpg'));
         break;
       case 9:
-          setPetImage(require('../../assets/characterimages/lvl9.jpg'));
+        setPetImage(require('../../assets/characterimages/lvl9.jpg'));
         break;
       case 10:
         setPetImage(require('../../assets/characterimages/lvl10.jpg'));
@@ -75,7 +100,7 @@ const HomeScreen = ({ navigation, route }) => {
         setPetImage(require('../../assets/characterimages/lvl11.jpg'));
         break;
       case 12:
-          setPetImage(require('../../assets/characterimages/lvl12.jpg'));
+        setPetImage(require('../../assets/characterimages/lvl12.jpg'));
         break;
       case 13:
         setPetImage(require('../../assets/characterimages/lvl13.jpg'));
@@ -91,11 +116,7 @@ const HomeScreen = ({ navigation, route }) => {
     }
   }, []);
 
-  useEffect(() => {
-    setLoading(false);
-  }, []);
-
-  if (loading) {
+  if (loading || userLevel === null || petImage === null) {
     return (
       <View style={styles.loadingContainer}>
         <ActivityIndicator size="large" color={Colors.white500} />
@@ -128,7 +149,7 @@ const HomeScreen = ({ navigation, route }) => {
       />
 
       <ProfileModal
-        navigation = {navigation}
+        navigation={navigation}
         isVisible={isProfileModalVisible}
         onClose={() => setProfileModalVisible(false)}
         onSettingsPress={() => {
@@ -280,3 +301,5 @@ const styles = StyleSheet.create({
 });
 
 export default HomeScreen;
+
+

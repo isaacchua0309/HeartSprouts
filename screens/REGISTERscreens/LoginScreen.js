@@ -5,7 +5,7 @@ import Colors from '../../constants/colors';
 import { getAuth, signInWithEmailAndPassword } from '@firebase/auth';
 import { getFirebaseApp } from '../../utils/firebaseHelper';
 import { JournalContext } from '../../utils/JournalContext';
-import { collection, getDocs } from 'firebase/firestore';
+import { collection, getDocs, updateDoc } from 'firebase/firestore';
 import * as Notifications from 'expo-notifications';
 import { firestore } from '../../utils/firebaseHelper';
 
@@ -32,46 +32,28 @@ const LoginScreen = ({ navigation }) => {
     }
   };
 
-  const handleSignIn = async () => {
-    try {
-      setLoading(true);
-      await signInWithEmailAndPassword(auth, email, password);
-  
-      setJournalLoading(true);
-  
-      const friends = await fetchFriends(email);
-      await fetchJournalData(email);
-  
-      setJournalLoading(false);
-  
-      console.log("Scheduling notifications for user:", email);
-      await scheduleUpcomingEventNotifications(email, friends);
-  
-      setLoading(false);
-  
-      Alert.alert('Log In Successful', 'Glad to have you back!');
-      navigation.navigate('Home', { email });
-    } catch (error) {
-      setLoading(false);
-      setError(error.message);
-      Alert.alert('Log In Failed', 'Please Check Email and Password');
-    }
-  };
-
   const scheduleUpcomingEventNotifications = async (email, friends) => {
-    try { 
+    try {
+      const scheduledNotifications = await Notifications.getAllScheduledNotificationsAsync();
+      const existingNotificationIds = new Set(scheduledNotifications.map(notification => notification.identifier));
+
       for (const friend of friends) {
         const eventsCollectionRef = collection(firestore, `Users/${email}/Friends/${friend.id}/Events`);
         const querySnapshot = await getDocs(eventsCollectionRef);
-  
-        for (const doc of querySnapshot.docs) {
-          const event = doc.data();
+
+        for (const eventDoc of querySnapshot.docs) {
+          const event = eventDoc.data();
           if (event.date && event.date.seconds) {
             const eventDate = new Date(event.date.seconds * 1000);
-            if (eventDate > new Date() && event.id !== 'EventsInit') {
-                console.log(`Scheduling notification for event: ${event.title} with ${friend.id}`);
-                await Notifications.scheduleNotificationAsync({
-                  identifier: event.id, // Use the event ID as the notification ID
+            if (eventDate > new Date() && eventDoc.id !== 'EventsInit') {
+              let notificationId = event.notificationId;
+
+              if (!notificationId || !existingNotificationIds.has(notificationId)) {
+                if (notificationId) {
+                  await Notifications.cancelScheduledNotificationAsync(notificationId);
+                }
+
+                notificationId = await Notifications.scheduleNotificationAsync({
                   content: {
                     title: `${event.title} with ${friend.id}`,
                     body: `Don't forget ${event.title}!`,
@@ -80,14 +62,59 @@ const LoginScreen = ({ navigation }) => {
                     date: eventDate,
                   },
                 });
+
+                // Save the notification ID in Firestore
+                await updateDoc(eventDoc.ref, { notificationId });
+              } else {
+                // Reschedule the notification with the same ID
+                await Notifications.scheduleNotificationAsync({
+                  identifier: notificationId,
+                  content: {
+                    title: `${event.title} with ${friend.id}`,
+                    body: `Don't forget ${event.title}!`,
+                  },
+                  trigger: {
+                    date: eventDate,
+                  },
+                });
+              }
             }
           }
         }
       }
-  
     } catch (error) {
       console.error('Error scheduling notifications: ', error);
       Alert.alert('Error', 'There was an error scheduling event notifications. Please try again.');
+    }
+  };
+
+  const handleSignIn = async () => {
+    try {
+      setLoading(true);
+      await signInWithEmailAndPassword(auth, email, password);
+
+      setJournalLoading(true);
+
+      const friends = await fetchFriends(email);
+      await fetchJournalData(email);
+
+      // Clear all scheduled notifications
+      await Notifications.cancelAllScheduledNotificationsAsync();
+
+      console.log("Scheduling notifications for user:", email);
+      await scheduleUpcomingEventNotifications(email, friends);
+
+      setLoading(false);
+
+      Alert.alert('Log In Successful', 'Glad to have you back!');
+      navigation.navigate('Home', { email });
+    } catch (error) {
+      setLoading(false);
+      setError(error.message);
+      Alert.alert('Log In Failed', 'Please Check Email and Password');
+    } finally {
+      setLoading(false);
+      setJournalLoading(false);
     }
   };
 
@@ -243,3 +270,10 @@ const styles = StyleSheet.create({
 });
 
 export default LoginScreen;
+
+
+
+
+
+
+

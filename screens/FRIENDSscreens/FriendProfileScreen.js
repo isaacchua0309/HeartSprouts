@@ -34,7 +34,6 @@ import {
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import Colors from '../../constants/colors';
 
-
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
     shouldShowAlert: true,
@@ -50,15 +49,6 @@ const AddEventModal = ({ isVisible, onClose, onAddEvent }) => {
 
   const handleDateChange = (event, selectedDate) => {
     const currentDate = selectedDate || eventDate;
-    const now = new Date();
-    const minDate = new Date(now.getTime() + 1 * 60 * 60 * 999); // Set min date to 24 hours from now
-
-    if (currentDate < minDate) {
-      Alert.alert('Invalid Date', 'Please select a date and time at least 1 hour in the future.');
-      setShowPicker(false);
-      return;
-    }
-
     setShowPicker(false);
     setEventDate(currentDate);
   };
@@ -117,7 +107,7 @@ const FriendProfileScreen = ({ navigation, route }) => {
   const [imageUploading, setImageUploading] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isModalVisible, setModalVisible] = useState(false);
-  const [showPicker, setShowPicker] = useState(false); // Added showPicker state
+  const [showPicker, setShowPicker] = useState(false);
   const scrollViewRef = useRef(null);
 
   useEffect(() => {
@@ -166,21 +156,8 @@ const FriendProfileScreen = ({ navigation, route }) => {
           }
         );
 
-        const existingNotifications = await Notifications.getAllScheduledNotificationsAsync();
-        const existingNotificationIds = existingNotifications.map(notification => notification.identifier);
-
-        if (!existingNotificationIds.includes(eventDocRef.id)) {
-          await Notifications.scheduleNotificationAsync({
-            identifier: eventDocRef.id,
-            content: {
-              title: `${eventName}`,
-              body: `Don't forget ${eventName}!`,
-            },
-            trigger: {
-              date: eventDate,
-            },
-          });
-        }
+        const notificationId = await scheduleNotification(eventName, eventDate);
+        await updateDoc(eventDocRef, { notificationId });
 
         Alert.alert('Success', 'Event added successfully');
         fetchEvents();
@@ -195,15 +172,28 @@ const FriendProfileScreen = ({ navigation, route }) => {
     }
   };
 
-  const deleteNotificationByEventId = async (eventId) => {
+  const scheduleNotification = async (title, date) => {
     try {
-      const scheduledNotifications = await Notifications.getAllScheduledNotificationsAsync();
-      for (const notification of scheduledNotifications) {
-        if (notification.identifier === eventId) {
-          await Notifications.cancelScheduledNotificationAsync(notification.identifier);
-          console.log(`Canceled notification with ID ${notification.identifier}`);
-        }
-      }
+      const notificationId = await Notifications.scheduleNotificationAsync({
+        content: {
+          title: `${title}`,
+          body: `Don't forget ${title}!`,
+        },
+        trigger: {
+          date,
+        },
+      });
+      return notificationId;
+    } catch (error) {
+      console.error('Error scheduling notification: ', error);
+      return null;
+    }
+  };
+
+  const deleteNotificationById = async (notificationId) => {
+    try {
+      await Notifications.cancelScheduledNotificationAsync(notificationId);
+      console.log(`Canceled notification with ID ${notificationId}`);
     } catch (error) {
       console.error('Error canceling notification:', error);
     }
@@ -216,9 +206,12 @@ const FriendProfileScreen = ({ navigation, route }) => {
 
       const eventDoc = await getDoc(eventDocRef);
       if (eventDoc.exists()) {
+        const { notificationId } = eventDoc.data();
         await deleteDoc(eventDocRef);
 
-        await deleteNotificationByEventId(eventId);
+        if (notificationId) {
+          await deleteNotificationById(notificationId);
+        }
 
         Alert.alert('Success', 'Event deleted successfully');
         fetchEvents();
@@ -364,9 +357,11 @@ const FriendProfileScreen = ({ navigation, route }) => {
                 `Users/${email}/Friends/${friend.name}/Events`
               );
               const querySnapshot = await getDocs(eventsCollectionRef);
-              const deletePromises = querySnapshot.docs.map((doc) =>
-                deleteDoc(doc.ref)
-              );
+              const deletePromises = querySnapshot.docs.map(async (doc) => {
+                const event = doc.data();
+                await deleteNotificationById(event.notificationId);
+                return deleteDoc(doc.ref);
+              });
               await Promise.all(deletePromises);
 
               const friendDocRef = doc(firestore, `Users/${email}/Friends`, friend.name);
@@ -652,28 +647,12 @@ const styles = StyleSheet.create({
     color: Colors.white500,
     textAlign: 'center',
   },
-  input: {
-    height: 44,
-    borderColor: Colors.white700,
-    borderWidth: 2,
-    marginBottom: '4%',
-    paddingHorizontal: 10,
-    borderRadius: 8,
-    backgroundColor: Colors.white700,
-  },
-  dateInput: {
-    height: 44,
-    borderColor: Colors.white700,
-    borderWidth: 2,
-    marginBottom: 20,
-    paddingHorizontal: 10,
-    borderRadius: 8,
-    justifyContent: 'center',
-    backgroundColor: Colors.white700,
-  },
 });
 
 export default FriendProfileScreen;
+
+
+
 
 
 
