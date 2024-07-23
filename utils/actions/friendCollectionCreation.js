@@ -15,8 +15,7 @@ export const createFriendDocumentWithEvents = async (email, name, birthday, imag
     if (imageUri) {
       const response = await fetch(imageUri);
       const blob = await response.blob();
-      const filename = imageUri.substring(imageUri.lastIndexOf('/') + 1);
-      const storageRef = ref(storage, `profileImages/${filename}`);
+      const storageRef = ref(storage, `Users/${email}/Friends/${name}.jpg`);
       await uploadBytes(storageRef, blob);
       imageUrl = await getDownloadURL(storageRef);
     }
@@ -28,6 +27,7 @@ export const createFriendDocumentWithEvents = async (email, name, birthday, imag
     });
 
     const eventsCollectionRef = collection(friendDocRef, 'Events');
+
     const tempDocRef = doc(eventsCollectionRef, 'EventsInit');
     await setDoc(tempDocRef, {
       tempField: 'tempValue',
@@ -39,4 +39,5 @@ export const createFriendDocumentWithEvents = async (email, name, birthday, imag
     throw error;
   }
 };
+
 

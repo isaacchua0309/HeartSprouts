@@ -1,5 +1,5 @@
 import React, { useEffect, useContext, useState } from 'react';
-import { View, Text, StyleSheet, FlatList, TouchableOpacity, Alert, ActivityIndicator, Modal } from 'react-native';
+import { View, Text, StyleSheet, FlatList, TouchableOpacity, Alert, ActivityIndicator, Modal, Image } from 'react-native';
 import { LineChart } from 'react-native-chart-kit';
 import { Dimensions } from 'react-native';
 import { startOfWeek, subWeeks, format } from 'date-fns';
@@ -7,6 +7,8 @@ import { Ionicons } from '@expo/vector-icons';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Colors from '../../constants/colors';
 import { JournalContext } from '../../utils/JournalContext';
+import { firestore } from '../../utils/firebaseHelper';
+import { doc, getDoc } from 'firebase/firestore';
 
 const screenWidth = Dimensions.get('window').width;
 
@@ -27,20 +29,36 @@ const PromptScreen = ({ navigation, route }) => {
   } = useContext(JournalContext);
 
   const [isModalVisible, setModalVisible] = useState(false);
+  const [friendImages, setFriendImages] = useState({});
 
   useEffect(() => {
     const fetchData = async () => {
       await fetchJournalData(email);
       setLoading(false);
       setShouldRefresh(false); // Reset shouldRefresh state
+      await fetchFriendImages();
     };
 
     if (shouldRefresh) {
       fetchData();
     } else {
       setLoading(false);
+      fetchFriendImages();
     }
   }, [email, shouldRefresh]);
+
+  const fetchFriendImages = async () => {
+    const images = {};
+    for (const friend of topFriends) {
+      const friendDocRef = doc(firestore, `Users/${email}/Friends`, friend);
+      const friendDoc = await getDoc(friendDocRef);
+      if (friendDoc.exists()) {
+        const friendData = friendDoc.data();
+        images[friend] = friendData.image || null;
+      }
+    }
+    setFriendImages(images);
+  };
 
   const getMonthName = (date) => {
     const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
@@ -99,7 +117,7 @@ const PromptScreen = ({ navigation, route }) => {
       <TouchableOpacity
         style={styles.modalButton}
         onPress={() => setModalVisible(true)}
-        >
+      >
         <Text style={styles.promptButtonText}>View Journal Entries</Text>
       </TouchableOpacity>
       <LineChart
@@ -150,7 +168,14 @@ const PromptScreen = ({ navigation, route }) => {
         <Text style={styles.topFriendsTitle}>Top Friends Selected:</Text>
         {topFriends.length > 0 ? (
           topFriends.map((friend, index) => (
-            <Text key={index} style={styles.friendName}>{friend}</Text>
+            <View key={index} style={styles.friendContainer}>
+              {friendImages[friend] ? (
+                <Image source={{ uri: friendImages[friend] }} style={styles.friendImage} />
+              ) : (
+                <Image source={require('../../assets/emptyprofileimage.png')} style={styles.friendImage} />
+              )}
+              <Text style={styles.friendName}>{friend}</Text>
+            </View>
           ))
         ) : (
           <Text style={styles.noFriendsText}>No friends selected in the past month.</Text>
@@ -164,7 +189,7 @@ const PromptScreen = ({ navigation, route }) => {
       >
         <View style={styles.modalOverlay}>
           <View style={styles.modalContainer}>
-            <Text style={styles.modalTitle}>Your Journal Entries</Text>
+            <Text style={styles.modalTitle}>Journal Entries</Text>
             <FlatList
               data={journalEntries}
               renderItem={renderItem}
@@ -296,10 +321,20 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 10,
   },
+  friendContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 10,
+  },
+  friendImage: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    marginRight: 10,
+  },
   friendName: {
     color: Colors.white500,
     fontSize: 16,
-    marginBottom: 5,
   },
   noFriendsText: {
     color: Colors.white700,
@@ -330,23 +365,24 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: 'rgba(0,0,0,0.5)',
+    padding: '8%'
   },
   modalContainer: {
-    width: '85%',
-    height: '85%',
+    width: '100%',
+    height: '90%',
     backgroundColor: Colors.green300,
     borderRadius: 10,
     padding: 20,
-    paddingVertical: '5%',
+    paddingVertical: '0%',
     alignItems: 'center',
   },
   modalTitle: {
     fontSize: 20,
     fontWeight: 'bold',
-    marginBottom: 20,
+    marginVertical: 20,
   },
   closeButton: {
-    marginTop: 20,
+    marginVertical: 20,
     paddingVertical: 10,
     paddingHorizontal: 20,
     backgroundColor: Colors.green500,
@@ -359,3 +395,5 @@ const styles = StyleSheet.create({
 });
 
 export default PromptScreen;
+
+
