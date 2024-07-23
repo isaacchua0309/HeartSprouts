@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, Alert, TouchableOpacity, ActivityIndicator, Image } from 'react-native';
+import { View, Text, TextInput, StyleSheet, Alert, TouchableOpacity, ActivityIndicator, Image } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import * as ImagePicker from 'expo-image-picker';
@@ -116,7 +116,11 @@ function AddFriendScreen({ navigation, route }) {
         {loading ? (
           <ActivityIndicator size="large" color={Colors.white500} />
         ) : (
-          <Button title="Add Friend" onPress={handleAddFriend} color={Colors.white500} />
+          <View style={styles.buttonContainer}>
+            <TouchableOpacity style={styles.button} onPress={handleAddFriend}>
+              <Text style={styles.buttonText}>Add Friend</Text>
+            </TouchableOpacity>
+          </View>
         )}
       </View>
     </View>
@@ -126,7 +130,7 @@ function AddFriendScreen({ navigation, route }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.green300,
+    backgroundColor: Colors.green500,
   },
   header: {
     flexDirection: 'row-reverse',
@@ -148,10 +152,10 @@ const styles = StyleSheet.create({
   imageContainer: {
     alignItems: 'center',
     justifyContent: 'center',
-    width: 200,
-    height: 200,
-    borderRadius: 50,
-    backgroundColor: Colors.white500,
+    width: 160,
+    height: 160,
+    borderRadius: 40,
+    backgroundColor: Colors.green300,
     marginBottom: 20,
     overflow: 'hidden',
   },
@@ -183,27 +187,43 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 16,
     marginBottom: 10,
-    color: Colors.pink700,
+    color: Colors.white500,
     fontWeight: 'bold',
   },
   input: {
-    backgroundColor: Colors.white500,
+    backgroundColor: Colors.green300,
     color: Colors.black500,
-    width: '100%',
+    width: '90%',
     height: 40,
     borderRadius: 8,
     paddingHorizontal: 20,
     marginBottom: 20,
   },
   dateInput: {
-    backgroundColor: Colors.white500,
+    backgroundColor: Colors.green300,
     color: '#FFFFFF',
-    width: '100%',
+    width: '90%',
     height: 40,
     borderRadius: 8,
     paddingHorizontal: 20,
     marginBottom: 20,
     justifyContent: 'center',
+  },
+  buttonContainer: {
+    width: '30%',
+    marginTop: 8,
+  },
+  button: {
+    backgroundColor: Colors.white500,
+    paddingVertical: 8,
+    borderRadius: 8,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  buttonText: {
+    color: Colors.green500,
+    fontSize: 16,
+    fontWeight: 'bold',
   },
   navBar: {
     flexDirection: 'row',
@@ -219,4 +239,5 @@ const styles = StyleSheet.create({
 });
 
 export default AddFriendScreen;
+
 
