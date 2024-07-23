@@ -231,8 +231,27 @@ const FriendProfileScreen = ({ navigation, route }) => {
     });
 
     if (!result.canceled && result.assets && result.assets.length > 0) {
-      setNewImage(result.assets[0].uri);
+      uploadImage(result.assets[0].uri);
     }
+  };
+
+  const uploadImage = async (uri) => {
+    setImageUploading(true);
+    const response = await fetch(uri);
+    const blob = await response.blob();
+    const filename = uri.substring(uri.lastIndexOf('/') + 1);
+    const storageRef = ref(storage, `profileImages/${filename}`);
+    uploadBytes(storageRef, blob)
+      .then(async (snapshot) => {
+        const downloadURL = await getDownloadURL(snapshot.ref);
+        setNewImage(downloadURL);
+        setImageUploading(false);
+      })
+      .catch((error) => {
+        console.error('Error uploading image: ', error);
+        Alert.alert('Error', 'There was an error uploading the image. Please try again.');
+        setImageUploading(false);
+      });
   };
 
   const checkNameClash = async (name) => {
@@ -541,7 +560,7 @@ const styles = StyleSheet.create({
   },
   eventsContainer: {
     flex: 1,
-    marginTop: 20,
+    marginTop: 15,
   },
   eventCard: {
     backgroundColor: Colors.green300,
@@ -602,5 +621,6 @@ const styles = StyleSheet.create({
 });
 
 export default FriendProfileScreen;
+
 
 
