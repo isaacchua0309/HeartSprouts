@@ -1,28 +1,33 @@
-import { firestore } from '../firebaseHelper';
+import { firestore, storage } from '../firebaseHelper';
 import { collection, doc, setDoc, getDoc, Timestamp } from 'firebase/firestore';
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 
-export const createFriendDocumentWithEvents = async (email, name, birthday, image) => {
+export const createFriendDocumentWithEvents = async (email, name, birthday, imageUri) => {
   try {
-    // Reference to the 'Friends' subcollection
     const friendDocRef = doc(firestore, `Users/${email}/Friends`, name);
 
-    // Check if a friend with the same name already exists
     const friendDoc = await getDoc(friendDocRef);
     if (friendDoc.exists()) {
       throw new Error('A friend with this name already exists.');
     }
 
-    // Set the document data with the birthday as a Firebase Timestamp
+    let imageUrl = null;
+    if (imageUri) {
+      const response = await fetch(imageUri);
+      const blob = await response.blob();
+      const filename = imageUri.substring(imageUri.lastIndexOf('/') + 1);
+      const storageRef = ref(storage, `profileImages/${filename}`);
+      await uploadBytes(storageRef, blob);
+      imageUrl = await getDownloadURL(storageRef);
+    }
+
     await setDoc(friendDocRef, {
       name: name,
       birthday: Timestamp.fromDate(birthday),
-      image: image || null, // Save the image URL if provided, else save as null
+      image: imageUrl,
     });
 
-    // Reference to the 'Events' subcollection in the 'Friends' document
     const eventsCollectionRef = collection(friendDocRef, 'Events');
-
-    // Add a temporary document to the 'Events' subcollection
     const tempDocRef = doc(eventsCollectionRef, 'EventsInit');
     await setDoc(tempDocRef, {
       tempField: 'tempValue',
@@ -31,6 +36,7 @@ export const createFriendDocumentWithEvents = async (email, name, birthday, imag
     console.log('User document created with Friends subcollection');
   } catch (error) {
     console.error('Error creating user document: ', error);
-    throw error; // Rethrow error for higher-level error handling
+    throw error;
   }
 };
+
