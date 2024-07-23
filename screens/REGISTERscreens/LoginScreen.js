@@ -16,22 +16,21 @@ const LoginScreen = ({ navigation }) => {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
-const fetchFriends = async (email) => {
-  try {
-    const friendsCollectionRef = collection(firestore, `Users/${email}/Friends`);
-    const querySnapshot = await getDocs(friendsCollectionRef);
-    const friendsList = querySnapshot.docs
-      .filter(doc => doc.id !== 'Friends Init')
-      .map(doc => ({ id: doc.id, ...doc.data() }));
-    return friendsList;
-  } catch (error) {
-    console.error('Error fetching friends: ', error);
-    throw new Error('There was an error fetching friends. Please try again later.');
-  }
-};
-
-
   const { fetchJournalData, setLoading: setJournalLoading } = useContext(JournalContext);
+
+  const fetchFriends = async (email) => {
+    try {
+      const friendsCollectionRef = collection(firestore, `Users/${email}/Friends`);
+      const querySnapshot = await getDocs(friendsCollectionRef);
+      const friendsList = querySnapshot.docs
+        .filter(doc => doc.id !== 'Friends Init')
+        .map(doc => ({ id: doc.id, ...doc.data() }));
+      return friendsList;
+    } catch (error) {
+      console.error('Error fetching friends: ', error);
+      throw new Error('There was an error fetching friends. Please try again later.');
+    }
+  };
 
   const handleSignIn = async () => {
     try {
@@ -58,14 +57,9 @@ const fetchFriends = async (email) => {
       Alert.alert('Log In Failed', 'Please Check Email and Password');
     }
   };
-  
+
   const scheduleUpcomingEventNotifications = async (email, friends) => {
-    try {
-      const scheduledNotifications = await Notifications.getAllScheduledNotificationsAsync();
-      const scheduledNotificationIds = scheduledNotifications.map(notification => notification.identifier);
-      
-      console.log("Currently scheduled notifications:", scheduledNotifications.length);
-  
+    try { 
       for (const friend of friends) {
         const eventsCollectionRef = collection(firestore, `Users/${email}/Friends/${friend.id}/Events`);
         const querySnapshot = await getDocs(eventsCollectionRef);
@@ -75,9 +69,7 @@ const fetchFriends = async (email) => {
           if (event.date && event.date.seconds) {
             const eventDate = new Date(event.date.seconds * 1000);
             if (eventDate > new Date() && event.id !== 'EventsInit') {
-              if (!scheduledNotificationIds.includes(event.id)) {
                 console.log(`Scheduling notification for event: ${event.title} with ${friend.id}`);
-  
                 await Notifications.scheduleNotificationAsync({
                   identifier: event.id, // Use the event ID as the notification ID
                   content: {
@@ -88,24 +80,17 @@ const fetchFriends = async (email) => {
                     date: eventDate,
                   },
                 });
-              } else {
-                console.log(`Notification already scheduled for event: ${event.title} with ${friend.id}`);
-              }
             }
           }
         }
       }
-  
-      const updatedNotifications = await Notifications.getAllScheduledNotificationsAsync();
-      console.log("Updated scheduled notifications:", updatedNotifications.length);
   
     } catch (error) {
       console.error('Error scheduling notifications: ', error);
       Alert.alert('Error', 'There was an error scheduling event notifications. Please try again.');
     }
   };
-  
-  
+
   const togglePasswordVisibility = () => {
     setPasswordVisible(!passwordVisible);
   };

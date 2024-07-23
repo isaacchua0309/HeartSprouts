@@ -34,6 +34,7 @@ import {
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import Colors from '../../constants/colors';
 
+
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
     shouldShowAlert: true,
@@ -46,18 +47,20 @@ const AddEventModal = ({ isVisible, onClose, onAddEvent }) => {
   const [eventName, setEventName] = useState('');
   const [eventDate, setEventDate] = useState(new Date());
   const [showPicker, setShowPicker] = useState(false);
-  const [isDatePicker, setIsDatePicker] = useState(true);
 
   const handleDateChange = (event, selectedDate) => {
     const currentDate = selectedDate || eventDate;
+    const now = new Date();
+    const minDate = new Date(now.getTime() + 1 * 60 * 60 * 999); // Set min date to 24 hours from now
+
+    if (currentDate < minDate) {
+      Alert.alert('Invalid Date', 'Please select a date and time at least 1 hour in the future.');
+      setShowPicker(false);
+      return;
+    }
+
     setShowPicker(false);
     setEventDate(currentDate);
-    if (isDatePicker) {
-      setShowPicker(true);
-      setIsDatePicker(false);
-    } else {
-      setIsDatePicker(true);
-    }
   };
 
   const handleAddEvent = () => {
@@ -82,16 +85,13 @@ const AddEventModal = ({ isVisible, onClose, onAddEvent }) => {
             onChangeText={setEventName}
             placeholder="Enter event name"
           />
-          <TouchableOpacity style={styles.dateInput} onPress={() => { setIsDatePicker(true); setShowPicker(true); }}>
-            <Text>{eventDate.toDateString()}</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.dateInput} onPress={() => { setIsDatePicker(false); setShowPicker(true); }}>
-            <Text>{eventDate.toLocaleTimeString()}</Text>
+          <TouchableOpacity style={styles.dateInput} onPress={() => setShowPicker(true)}>
+            <Text>{eventDate.toDateString()} {eventDate.toLocaleTimeString()}</Text>
           </TouchableOpacity>
           {showPicker && (
             <DateTimePicker
               value={eventDate}
-              mode={isDatePicker ? 'date' : 'time'}
+              mode="datetime"
               display="default"
               onChange={handleDateChange}
             />
@@ -195,6 +195,20 @@ const FriendProfileScreen = ({ navigation, route }) => {
     }
   };
 
+  const deleteNotificationByEventId = async (eventId) => {
+    try {
+      const scheduledNotifications = await Notifications.getAllScheduledNotificationsAsync();
+      for (const notification of scheduledNotifications) {
+        if (notification.identifier === eventId) {
+          await Notifications.cancelScheduledNotificationAsync(notification.identifier);
+          console.log(`Canceled notification with ID ${notification.identifier}`);
+        }
+      }
+    } catch (error) {
+      console.error('Error canceling notification:', error);
+    }
+  };
+
   const handleDeleteEvent = async (eventId) => {
     try {
       setIsLoading(true);
@@ -204,7 +218,7 @@ const FriendProfileScreen = ({ navigation, route }) => {
       if (eventDoc.exists()) {
         await deleteDoc(eventDocRef);
 
-        await Notifications.cancelScheduledNotificationAsync(eventId);
+        await deleteNotificationByEventId(eventId);
 
         Alert.alert('Success', 'Event deleted successfully');
         fetchEvents();
@@ -618,6 +632,25 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     color: Colors.white500,
     textAlign: 'center',
+  },
+  input: {
+    height: 44,
+    borderColor: Colors.white700,
+    borderWidth: 2,
+    marginBottom: '4%',
+    paddingHorizontal: 10,
+    borderRadius: 8,
+    backgroundColor: Colors.white700,
+  },
+  dateInput: {
+    height: 44,
+    borderColor: Colors.white700,
+    borderWidth: 2,
+    marginBottom: 20,
+    paddingHorizontal: 10,
+    borderRadius: 8,
+    justifyContent: 'center',
+    backgroundColor: Colors.white700,
   },
 });
 
