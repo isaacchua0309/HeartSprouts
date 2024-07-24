@@ -13,7 +13,7 @@ HeartSprouts is an emotional well-being and relationship management application 
 - [Installation](#installation)
 - [Usage](#usage)
 - [Testing](#testing)
-- [User Research Samples and Examples](#Research)
+- [User Research Samples and Examples](#user-research-samples-and-examples)
 - [Version Control](#version-control)
 - [Design Principles and Patterns](#design-principles-and-patterns)
 - [Contribution](#contribution)
@@ -21,12 +21,15 @@ HeartSprouts is an emotional well-being and relationship management application 
 - [Acknowledgements](#acknowledgements)
 
 ## Motivation
+
 In today’s fast-paced world, maintaining close, intentional, and loving relationships can be challenging, especially for young adults juggling various life changes and digital distractions. As two 21-year-old students, we have experienced firsthand how difficult it can be to stay connected with those who matter most. We believe that fostering and maintaining genuine relationships is crucial for personal growth, combating mental health issues, and empowering individuals to take control of their social lives. HeartSprouts was born out of this realization, aiming to bridge the gap between digital convenience and meaningful human connections.
 
 ## Aim
+
 Our aim is to create a mobile application that serves as a personal relationship companion for young adults. HeartSprouts empowers users to nurture and sustain genuine connections with friends and family amidst the demands of modern life. By providing timely reminders, insightful prompts, and a platform for intentional interactions, we hope to make maintaining relationships easier and more fulfilling.
 
 ## User Stories
+
 - **Create Profiles**: As a young adult who wants to stay connected with my friends and family, I want to create profiles for each of my close relationships, including details like hobbies, birthdays, and important milestones. This helps me remember key details about my loved ones and makes interactions more personal.
 - **Regular Communication**: As a young adult who values regular communication, I want to receive reminders to check in on my friends and family members. These reminders help me stay in touch and maintain regular contact.
 - **Remember Important Dates**: As a young adult who tends to forget important dates, I want to receive reminders for birthdays, outings, and other significant events. This ensures that I never miss an important occasion.
@@ -145,7 +148,9 @@ HeartSprouts follows a modular architecture, separating concerns into distinct c
 3. User is directed to the FriendProfileScreen.
 4. User clicks the "Add Event" button on the FriendProfileScreen.
 5. User is directed to the CreateEvent modal.
-6. User fills in the event details (e.g., name, date, location, description) in the CreateEvent modal.
+6. User fills in the event details (e.g., name, date, location, description) in the CreateEvent
+
+ modal.
 7. User reviews and confirms the event details.
 8. Event details are stored in Firestore.
 9. A confirmation message and event details are displayed to the user.
@@ -195,16 +200,9 @@ HeartSprouts follows a modular architecture, separating concerns into distinct c
 
 ![Journal and Weekly Reflection Flow](diagrams/journal_weekly_reflection_flow.png)
 
-These diagrams and steps outline the main flows and interactions in the HeartSprouts application, providing a clear view of how different features are implemented and integrated. If you need any further details or modifications, feel free to let me know!
-
 ### Entity-Relationship Diagram
 
-### Sequence Diagram for Adding a Friend
-1. User navigates to the AddFriendScreen.
-2. User inputs friend details and submits the form.
-3. The app stores the friend details in Firestore.
-4. User is redirected to the UserProfilesScreen where the new friend is displayed.
-
+![Entity-Relationship Diagram](diagrams/entity_relationship_diagram.png)
 
 ## Installation
 
@@ -250,12 +248,6 @@ To run HeartSprouts locally, follow these steps:
    - **Journal:** Answer weekly prompts and track relationship satisfaction.
    - **Friends:** Add and manage friend profiles and events.
 
-### Screenshots
-
-![Home Screen](screenshots/home_screen.png)
-![Mood Overlay](screenshots/mood_overlay.png)
-![Weekly Reflection](screenshots/weekly_reflection.png)
-
 ## Testing
 
 ### Testing Strategy
@@ -266,8 +258,6 @@ HeartSprouts uses a comprehensive testing strategy to ensure robustness and reli
 
 1. **Unit Testing:**
    - **Framework:** Jest
-
-
    - **Description:** Tests individual functions and components.
    - **Example:**
      ```jsx
@@ -361,14 +351,14 @@ HeartSprouts uses continuous integration (CI) to automate testing and deployment
 
 ## User Research Samples and Examples
 
-#### Sample 1: Initial Usability Testing
+### Sample 1: Initial Usability Testing
 
 **Objective**: To assess the overall usability of the HeartSprouts app and identify any immediate issues with navigation and key features.
 
 **Participants**: 10 young adults aged 18-25.
 
 **Methodology**:
-- Participants were asked to perform a series of tasks, including creating a profile, adding a friend and setting a reminder
+- Participants were asked to perform a series of tasks, including creating a profile, adding a friend, and setting a reminder.
 - Screen recordings and user input logs were collected.
 - Post-test surveys and interviews were conducted to gather qualitative feedback.
 
@@ -377,12 +367,12 @@ HeartSprouts uses continuous integration (CI) to automate testing and deployment
    - **Conclusion**: The navigation bar needs clearer icons and labels. We should consider adding a tutorial or onboarding guide for first-time users.
 
 2. **Profile Creation Confusion**: Some users were confused about the steps required to complete the profile creation process.
-   - **Conclusion**: Simplify the profile creation process and providing clearer instructions at each step.
+   - **Conclusion**: Simplify the profile creation process and provide clearer instructions at each step.
 
 3. **Reminder Settings**: Users appreciated the reminder feature but wanted more customization options (e.g., setting specific times for reminders).
    - **Conclusion**: Enhance the reminder feature by allowing users to set specific times and customize reminder messages.
 
-#### Sample 2: Focus Group Discussions
+### Sample 2: Focus Group Discussions
 
 **Objective**: To gain deeper insights into user motivations and preferences for features related to maintaining relationships.
 
@@ -400,12 +390,12 @@ HeartSprouts uses continuous integration (CI) to automate testing and deployment
    - **Conclusion**: Add customization options for themes, notification sounds, and display preferences to enhance user experience.
 
 3. **Integration with Other Apps**: Users expressed interest in integrating HeartSprouts with other apps like calendars and social media platforms.
-   - **Conclusion**: Explore possibilities for integrating with popular calendar apps and social media platforms to provide a seamless experience for users.
+   - **Conclusion**: Explore possibilities for integrating with popular calendar apps and social media platforms to provide a seamless experience for users
+
+.
 
 4. **Privacy Concerns**: Some participants were concerned about the privacy of their data, particularly personal details of their friends.
    - **Conclusion**: Strengthen privacy policies and provide transparent information on data usage. Implement robust security measures to protect user data.
-
----
 
 By conducting these user research activities, HeartSprouts can continuously refine and improve its features, ensuring that the app meets the needs and preferences of its target audience.
 
