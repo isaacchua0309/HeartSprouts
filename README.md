@@ -140,12 +140,51 @@ HeartSprouts follows a modular architecture, separating concerns into distinct c
 ![User Authentication Flow](diagrams/user_authentication_flow.png)
 
 #### New Friend Event Creation Flow
+1. User opens the app and navigates to the UserProfilesScreen.
+2. User selects a friend from the UserProfilesScreen.
+3. User is directed to the FriendProfileScreen.
+4. User clicks the "Add Event" button on the FriendProfileScreen.
+5. User is directed to the CreateEvent modal.
+6. User fills in the event details (e.g., name, date, location, description) in the CreateEvent modal.
+7. User reviews and confirms the event details.
+8. Event details are stored in Firestore.
+9. A confirmation message and event details are displayed to the user.
+
+![New Friend Event Creation Flow](diagrams/new_friend_event_creation_flow.png)
 
 #### New Friend Creation Flow
+1. User opens the app and navigates to the UserProfilesScreen.
+2. User clicks the "Add Friend" button.
+3. User is directed to the AddFriendScreen.
+4. User fills in the friend's details (e.g., name, contact information) in the AddFriendScreen.
+5. User reviews and confirms the friend's details.
+6. New friend's data is stored in Firestore.
+7. A confirmation message is displayed to the user.
+
+![New Friend Creation Flow](diagrams/new_friend_creation_flow.png)
 
 #### Edit Friend Details Flow
+1. User opens the app and navigates to the UserProfilesScreen.
+2. User selects a friend from the UserProfilesScreen.
+3. User is directed to the FriendProfileScreen.
+4. User clicks the "Edit Details" button on the FriendProfileScreen.
+5. User is directed to the EditFriendDetails modal.
+6. User edits the friend's details (e.g., name, contact information) in the EditFriendDetails modal.
+7. User reviews and confirms the updated details.
+8. Updated friend's data is stored in Firestore.
+9. A confirmation message is displayed to the user.
+
+![Edit Friend Details Flow](diagrams/edit_friend_details_flow.png)
 
 #### Log Out Flow
+1. User opens the app and navigates to the HomeScreen.
+2. User opens the profile modal from the HomeScreen.
+3. User presses the "Log Out" button in the profile modal.
+4. User confirms the log out action via a confirmation dialog.
+5. The application logs the user out and clears the session data.
+6. User is redirected to the LoginScreen.
+
+![Log Out Flow](diagrams/log_out_flow.png)
 
 #### Journal and Weekly Reflection Flow
 1. User receives a weekly prompt on the WeeklyReflectionScreen.
@@ -155,6 +194,8 @@ HeartSprouts follows a modular architecture, separating concerns into distinct c
 5. Journal entries and ratings are stored in Firestore and displayed in the WeeklyReflectionScreen.
 
 ![Journal and Weekly Reflection Flow](diagrams/journal_weekly_reflection_flow.png)
+
+These diagrams and steps outline the main flows and interactions in the HeartSprouts application, providing a clear view of how different features are implemented and integrated. If you need any further details or modifications, feel free to let me know!
 
 ### Entity-Relationship Diagram
 
