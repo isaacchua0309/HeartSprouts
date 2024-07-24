@@ -139,12 +139,13 @@ HeartSprouts follows a modular architecture, separating concerns into distinct c
 
 ![User Authentication Flow](diagrams/user_authentication_flow.png)
 
-#### Mood Tracking Flow
-1. User selects their current mood from the MoodOverlay.
-2. The selected mood is stored in Firestore.
-3. The HomeScreen displays a motivational quote based on the selected mood and updates the pet image accordingly.
+#### New Friend Event Creation Flow
 
-![Mood Tracking Flow](diagrams/mood_tracking_flow.png)
+#### New Friend Creation Flow
+
+#### Edit Friend Details Flow
+
+#### Log Out Flow
 
 #### Journal and Weekly Reflection Flow
 1. User receives a weekly prompt on the WeeklyReflectionScreen.
