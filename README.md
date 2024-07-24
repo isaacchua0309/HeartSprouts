@@ -157,7 +157,36 @@ HeartSprouts follows a modular architecture, separating concerns into distinct c
 
 ### Entity-Relationship Diagram
 
-![Entity-Relationship Diagram](diagrams/er_diagram.png)
++------------------+      +------------------+      +------------------+
+|      User        |      |     Profile      |      |      Friend      |
++------------------+      +------------------+      +------------------+
+| PK user_id       |<---->| FK user_id       |      | PK friend_id     |
+|    name          |      | PK profile_id    |      | FK user_id       |
+|    email         |      | notification_prefs|      |    name          |
+|    password      |      | settings         |      |    birthday      |
+|    birthday      |      +------------------+      |    image         |
+|    XP            |                                |    hobbies       |
++------------------+                                |    important_ms  |
+                                                    +------------------+
++------------------+      +------------------+      +------------------+
+|  JournalEntry    |      |      Event       |      |  Notification    |
++------------------+      +------------------+      +------------------+
+| PK journal_entry_id|<-->| FK user_id       |<---->| FK user_id       |
+| FK user_id       |      | FK friend_id     |      | FK event_id      |
+|    date          |      | PK event_id      |      | PK notification_id|
+|    content       |      |    date          |      |    date          |
+|    rel_satisfaction|    |    description   |      |    type          |
+|    friends_selected|    +------------------+      +------------------+
++------------------+
++------------------+      +------------------+
+|   Experience     |
++------------------+
+| PK experience_id |
+| FK user_id       |
+|    xp            |
+|    level         |
++------------------+
+
 
 ### Sequence Diagram for Adding a Friend
 1. User navigates to the AddFriendScreen.
@@ -165,7 +194,26 @@ HeartSprouts follows a modular architecture, separating concerns into distinct c
 3. The app stores the friend details in Firestore.
 4. User is redirected to the UserProfilesScreen where the new friend is displayed.
 
-![Sequence Diagram](diagrams/sequence_diagram_add_friend.png)
+User                    AddFriendScreen               Firestore                     UserProfilesScreen
+ |                             |                            |                                  |
+ |   Navigate to AddFriendScreen  |                            |                                  |
+ |----------------------------->|                            |                                  |
+ |                             |                            |                                  |
+ |   Input friend details and submit form   |                 |                                  |
+ |----------------------------->|                            |                                  |
+ |                             |   Store friend details in Firestore  |                          |
+ |                             |----------------------------->|                                  |
+ |                             |                            |                                  |
+ |                             |   Confirmation of stored details    |                          |
+ |<-----------------------------|                            |                                  |
+ |                             |                            |                                  |
+ |   Redirect to UserProfilesScreen  |                            |                                  |
+ |----------------------------->|                            |                                  |
+ |                             |                            |                                  |
+ |                             |                            |   Display new friend              |
+ |                             |----------------------------->|                                  |
+ |                             |                            |                                  |
+
 
 ## Installation
 
