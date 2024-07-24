@@ -1,0 +1,169 @@
+0cddb3a149215dd03f4febf8114ae5ad4e789c79 Isaac Chua 2024-07-24 Isaac
+860c20a00216c901bdbd394ada6aa24b88d5712a Isaac Chua 2024-07-24 Isaac
+5a30368f0522b65390efe4820e71fe2376b9495b Isaac Chua 2024-07-24 Isaac
+96f56c1f0aa46bf60b68544d46295d83dd3a266e Isaac Chua 2024-07-24 Isaac
+c6f5c1041922e7948df7680c1ebf3503b8e210c4 Isaac Chua 2024-07-24 Isaac
+f346f5c5d76c48194e89d9ac61c13e97ddcffb5f Isaac Chua 2024-07-24 Isaac
+328664eabf6265ba9d4f63b301dcf75803a12c54 Isaac Chua 2024-07-24 Isaac
+8f8e727e5c9d806e536991e2b2488d8250fbd3c3 Darren Teo 2024-07-23 top friends update
+4d8ee85d2bca2dbbd4dd39df1c71116d08122a6f Darren Teo 2024-07-23 UI CHANGES
+dfaba8399feb96b1caf6085591f93bda6bbb7096 Darren Teo 2024-07-23 ADD FRIEND UI
+032ff14739f8a4b25cc0567f14f6b34404e82c5f Darren Teo 2024-07-23 IMAGE UPDATE
+26411bfe0daa431324c69888788a686f2e13363a Darren Teo 2024-07-23 FIXED NOTIF
+c4ed31dfdd8acbe6eac66a977c4e7bafe123da86 Darren Teo 2024-07-23 test
+541392a72cc1fe9cd26c30b05475b2898c862617 Darren Teo 2024-07-23 commit
+af4d66c1c06ab4091e3b922dc6cae987f9865a5e Isaac Chua 2024-07-23 Isaac
+525e3e1b9af32490449b08db9e9ef6d47aaaa39d Isaac Chua 2024-07-20 Isaac
+00405c4c3dbf8cbb9b7a8f5263e45b2e24167f76 Isaac Chua 2024-07-20 Isaac
+7a69348a4a6744bd9f8a61784cc98976ac4721ea Isaac Chua 2024-07-20 Isaac
+dee512f794d31b71d8a351b5947b728a31112e9e Isaac Chua 2024-07-20 Merge branch 'main' of https://github.com/isaacchua0309/HeartSprouts
+d390c71601a05330850ca4bb217b069906963fc1 Isaac Chua 2024-07-20 Isaac
+8fe1a433c2176d7986b71748e0af1dc4637ee8d2 Darren Teo 2024-07-19 overlay for add event
+cf0e22c52ab7b38036427f33b39bb9494078afc7 Darren Teo 2024-07-19 empty profile
+120a2de3501f50ef390be0055e5be930defde3a4 Isaac Chua 2024-07-19 Merge branch 'main' of https://github.com/isaacchua0309/HeartSprouts
+0a9b7cb473c89d13ed50a581d3b6c2ffd4dc1962 Darren Teo 2024-07-19 keyboard
+46628034bc90ee089d81c442609eb77a4b02337a Isaac Chua 2024-07-19 Merge branch 'main' of https://github.com/isaacchua0309/HeartSprouts
+ae9d5194466aaf38152d47bea8fc4981cace8af0 Isaac Chua 2024-07-19 Isaac
+6baa7f8dfd6b592f1c5b4ba040da26d84a7b298f Darren Teo 2024-07-19 logout noti
+e3b826ae030d6bef912a229d91e661419e945129 Darren Teo 2024-07-19 overlay
+90afe67cd6ee6ddd69f1b85862bb7b844a32d5a0 Darren Teo 2024-07-19 Merge branch 'main' of https://github.com/isaacchua0309/HeartSprouts
+134869ce366a7930e0165c06f017f369830c8d11 Isaac Chua 2024-07-19 Isaac
+1d67df1f0494d4511b83b4e55b37c378b756d08a Darren Teo 2024-07-18 Merge branch 'main' of https://github.com/isaacchua0309/HeartSprouts sd  the commit.
+018719f01e7b0005cff0bfc28ca4c86927dd8621 Darren Teo 2024-07-18 FAQ
+9a62c595316872ee85c21f8126cbbfa2be17614a Isaac Chua 2024-07-18 Merge branch 'main' of https://github.com/isaacchua0309/HeartSprouts
+9d8fd43728bc95c733fd691140cc0fd47c0a9f11 Isaac Chua 2024-07-18 Isaac
+5d88619f28fedd39323ca3983c8b3b1c722ece00 Darren Teo 2024-07-18 Merge branch 'main' of https://github.com/isaacchua0309/HeartSprouts s
+f99407b2f4d63a07eebf32b6b2c086c9b4c0968c Darren Teo 2024-07-18 email
+784189fb217f053067f496f8a3c5c274c3710a45 Isaac Chua 2024-07-18 Isaac
+5ad8d970df3b0d3427740bacc5401bd74afcf66d Isaac Chua 2024-07-18 Isaac:
+72fc9d737c757749eecc55f0cf9b3cafff295147 Isaac Chua 2024-07-16 Isaac
+e8a4f2c6f3d46caa03262745cf5b3b83604edb88 Isaac Chua 2024-07-16 Isaac
+226fec1bd5fb1b00f7b5fa3ed0ee72721183e1f5 Isaac Chua 2024-07-16 Merge branch 'main' of https://github.com/isaacchua0309/HeartSprouts
+9d6c8be5d59fa4dcdc3c06c0aeeab02b059920d9 Isaac Chua 2024-07-16 Isaac
+898b3293c64e4db03f504d922a5937d6388c6b4b Darren Teo 2024-07-16 Merge branch 'main' of https://github.com/isaacchua0309/HeartSprouts
+e08d64b1dd200ae6d17c88629d6313ab791cd1ec Darren Teo 2024-07-16 resetpassword
+7c9130e3bc6213f8dc2c98ee7aadd73338ae1568 Isaac Chua 2024-07-16 Merge branch 'main' of https://github.com/isaacchua0309/HeartSprouts
+28e9272c3bbef90a5eedf3b3b8e4f00715489654 Isaac Chua 2024-07-16 Isaac
+ed67cb5865db48f234314ec587de0d9175ee785e Darren Teo 2024-07-16 Merge branch 'main' of https://github.com/isaacchua0309/HeartSprouts ada the commit.
+e08bdd4d5cf6cd19b285a2a68c3c0adb8849e6f3 Darren Teo 2024-07-16 test
+21f3cf7f2a663df2134dacedd612affb124d1f8b Isaac Chua 2024-07-16 Isaac
+ec5ac43292ca22ca224dbf6f6d827d7ddd0d8cb1 Isaac Chua 2024-07-16 Isaac
+8ce1805db1bbd7e62a034697795a7d985fe6c7ac Darren Teo 2024-07-16 fix
+962d58886cc498f0277b530cc26f2911f786780d Isaac Chua 2024-07-16 Isaac
+31ced3d21f948ee95965e13f7576748d53a70279 Isaac Chua 2024-07-16 Isaac
+bb9804e146d02630719d361ea414ecf24f769b1e Isaac Chua 2024-07-16 Isaac
+6052101170c8f29ea6f6802ed8b6ab267bb1b531 Darren Teo 2024-07-16 confetti
+b1dfca52240eab57d44e25941bc7bcb32f91235a Darren Teo 2024-07-16 test
+c4014472a931b6b19c35c66074b1072a75715cba Isaac Chua 2024-07-16 Isaac
+f0845dc45813a1c044de766f0b8737c749c26144 Darren Teo 2024-07-16 bar
+9e514773ed92d3d4cfeab2144e190a43fe55ac23 Isaac Chua 2024-07-16 Isaac
+08a7637c14b8d9fe8b6d83363be4ac2359fcf2c4 Isaac Chua 2024-07-16 Merge branch 'main' of https://github.com/isaacchua0309/HeartSprouts
+293e38ef5f4968385bd43a454ff68d4491a9bf61 Isaac Chua 2024-07-16 Isaac
+4e2c4722e2a637f403f8db5795c88e185078250f Darren Teo 2024-07-16 Merge branch 'main' of https://github.com/isaacchua0309/HeartSprouts
+15f3c4ea204bb026df8eeb5675c8cf6cf8a7a691 Darren Teo 2024-07-16 xp
+c6d129fddcb03e3ecc678869dae88653f486f39e Isaac Chua 2024-07-16 Isaac
+42691b2be65400c5b8e7ab24f9a5b482415fcef0 Isaac Chua 2024-07-15 Isaac
+bc40f28f493610668951b4c461d5adda337b982c Isaac Chua 2024-07-15 Isaac
+8294da623610b8888144504835a1759fd8886e03 Isaac Chua 2024-07-15 Isaac
+386383a17a0f1e06325c32232c1d08aa1c561a04 Isaac Chua 2024-07-15 Merge branch 'main' of https://github.com/isaacchua0309/HeartSprouts
+41df612513f9c2111cc69e0c47b76573532943e7 Isaac Chua 2024-07-15 Isaac
+d970e591d476cadd04206d8276fba5b10b9aac96 Darren Teo 2024-07-15 new
+a8ebf3346a74bbba9d304c08717c435045f2bc99 Darren Teo 2024-07-15 cleanup
+292225de7d2759907639bb701d172691a32adc7f Isaac Chua 2024-07-14 14 jul 2.22
+d51181ec947d24c45bf0e9a26f3329b1daaf13c2 Isaac Chua 2024-07-14 Isaac
+a9777c35ddd32304c101490577a6d1b7f69d5123 Isaac Chua 2024-07-14 Isaac
+68b3b74c9bb9764bca2ff42c70c00b0ed610f9ac Isaac Chua 2024-07-14 Isaac
+bbe90b324e1f8a97878d6b5e25a1eac00adf1bbb Isaac Chua 2024-07-14 Isaac
+9d283dfc8dcf4bf010905643313ea1fd1e33b14d Isaac Chua 2024-07-13 Isaac
+bc2fa5dbdcbe9b3d51bb0e90d3e8e8f6f4af8abf Isaac Chua 2024-07-13 Isaac
+a2cd91c88622b1320f6defb472a48376e24be7fd Isaac Chua 2024-07-13 Isaac
+7a012e34fceebbb12a4d962b43d1e8739e18715e Isaac Chua 2024-07-13 Isaac
+d9b99ce3b91e2ee29fa3a179004a0e5916571e24 Isaac Chua 2024-07-13 Isaac
+bce0d12e2090cf46e2e62e90e1efee316487d51c Isaac Chua 2024-07-13 Isaac
+342a1511b08e3e5d42433365688510210d643cfc Isaac Chua 2024-07-12 Isaac
+927899f714dcb0ca6f5458653f299372771ecdab Isaac Chua 2024-07-12 Isaac
+6f16a0d39ffeb0e8ecd5372a5926f1c9b5931244 Isaac Chua 2024-07-12 Hello
+f02f5cb6e9e6e00b4275c30840fc8a36d5bb6f49 Isaac Chua 2024-07-12 Isaac
+38b3f389ee7bcf0d79c1fdb35f2b4868064a8983 Isaac Chua 2024-07-12 Isaac
+fc034d50021c30dd2e40148f9a67aff3672e7586 Darren Teo 2024-07-12 mood tracker
+b9b0db6c6c784027bf249d8b6202c2274748051d Isaac Chua 2024-07-10 hello
+68a30994f34071b3cfb20e95685d3a3247bfc826 Isaac Chua 2024-07-10 Hello
+f7b41b4e4d5c628dc9e66440e7da2a128830110d Isaac Chua 2024-07-10 Merge branch 'main' of https://github.com/isaacchua0309/HeartSprouts hello this is
+56c422bd424fc8dea3419b62677a5597aeb113c7 Isaac Chua 2024-07-10 Hello
+537761e98bc006eccfe5263cd1a9fa432796120a Darren Teo 2024-07-10 Merge branch 'main' of https://github.com/isaacchua0309/HeartSprouts
+a946b6b5bdbf0e91963394b14f90880409987dce Darren Teo 2024-07-10 organized
+a8907f1725cce6380ffa8762f948ef2dfc48e2f6 Isaac Chua 2024-07-10 Hello
+19598395491cfdf18192d39e30fbaab605243645 Isaac Chua 2024-07-10 Hello
+f16efefb8c0f8985d7c5b660d49019ce86344c29 Isaac Chua 2024-07-10 hello
+1b5388f969c43c46d4c42cbe33bc29b3c926bc96 Isaac Chua 2024-07-09 Isaac
+4b3f8dc88a6ea6fc3b9b22ffc89751f1d0a70fb0 Isaac Chua 2024-07-09 Isaac
+a6609cbbec59aee31699f89abce10233979a2f23 Darren Teo 2024-07-01 make nicer abit
+91cf7fb2816ddad0a634832d4f6e0fc3af6011a5 Isaac Chua 2024-07-01 Isaac
+ee9b4198a730e9d4436ac5ce4d0153f12b68184d Isaac Chua 2024-07-01 Isaac
+20d9a62022ff6cbe6e4452cedba5a91bb6f46163 Isaac Chua 2024-07-01 isaac
+0748f503af2c9defe4640ad581ae7578be46606b Isaac Chua 2024-07-01 Isaac
+76dbef69c5ca7c1aeceb9a73b093281427a730dc Isaac Chua 2024-07-01 isaac
+e3a34bc95e21eb9b4cad619c5353f742c0cb0527 Isaac Chua 2024-07-01 Isaac
+4c2fba4ce8a80bec4d59be98fe01bb0793fe166a Isaac Chua 2024-07-01 Isaac
+ac61706d9cfe29a120e36f8341089cbeaded9903 Isaac Chua 2024-07-01 Isaac
+0b03bca9d3503395b9257754fe1f35ba5358711d Isaac Chua 2024-07-01 Isaac
+9bc3f7f532a5d1cb5c9b782f5c3bc58bd34e1f62 Isaac Chua 2024-07-01 Isaac
+4bc3cb9064163c6996c26112f8a2ca41e051958f Isaac Chua 2024-07-01 isaac
+98318f889f61c468c02e192305d5f218e15bdcc6 Isaac Chua 2024-07-01 Isac
+d83bc4d6e903a00026a757ea949ddbedbf32dfdb Isaac Chua 2024-06-30 hello
+81d3040cb2a01cd6f25ce1b6973096fe60c03c7f Isaac Chua 2024-06-30 Hello
+30a2d864b43b5be8d279328a6e5f8a50f029620e Isaac Chua 2024-06-30 Isaac
+4c7cb77c2881ce3572bd6f8a715f225a15e568d5 Darren Teo 2024-06-29 notifications setup
+5914a42ad692d89b4acf58b14c8e0b3674f98136 Darren Teo 2024-06-29 minor ui changes
+311cb13514d406d06342f37c8d60771efb245dba Darren Teo 2024-06-29 test
+ccc259b03236b764b8a8a45ec8bd7a52c028d642 Darren Teo 2024-06-29 improved ui
+be82598241f973aa2e1a088d2b828b8ad32caf08 Darren Teo 2024-06-28 Merge branch 'main' of https://github.com/isaacchua0309/HeartSprouts test
+6c5521fd3542014fd661e2aed0ac6bab3a3d3e20 Darren Teo 2024-06-28 homescreen ui
+80dbd7fffdae7478bae362d3689a16642e19f4fd Isaac Chua 2024-06-28 Isaac
+2c8648b4b8c2bfd9d238ddb0f3ebf42a053fd65f Isaac Chua 2024-06-28 isaac
+bc10eb407515d2387aad090ed046e395b943b83e Isaac Chua 2024-06-28 isac
+ab56c44743fdf6175cf379123f9fe3e1f5024f0b Isaac Chua 2024-06-28 isaaac
+1ee02e116bd1a64a1bbec9acd7d4ef685f9da662 Isaac Chua 2024-06-28 Merge branch 'main' of https://github.com/isaacchua0309/HeartSprouts
+0bda4f501e3b7d44a9ba58ed18daeef2694ccb39 Isaac Chua 2024-06-28 Isaac
+785cba4b127a783b17bbd302bf3c599b5666d37e Darren Teo 2024-06-28 test
+2af39d62ba79037c5da5dab6ce15535e7d5b47ec Darren Teo 2024-06-28 improved add friends
+21772892ba8099eacaf37de31f0b0e303ea45fb7 Isaac Chua 2024-06-28 Isaac
+6988b1fbf122db846c694fad7e2a278fd351787c Isaac Chua 2024-06-28 Merge branch 'main' of https://github.com/isaacchua0309/HeartSprouts
+d056faa4f93529b70ce38a5cf7851c1820644cc0 Isaac Chua 2024-06-28 Isaac
+2e1ff8b207b7a302b132783420b164be3858a7e2 Darren Teo 2024-06-28 darren 28june
+27030a97ae0ba0ce190b4bf8891c7491c95793a3 Isaac Chua 2024-06-28 isaac
+604b0c5a4fc98e5c576710439132ebfa777ed95f Isaac Chua 2024-06-28 Isaac cooked
+e02876f1c064687c1527dc9d1aa7f2bf1b3c7ab4 Isaac Chua 2024-06-28 Isaac
+0122df4c4443116cfd33f85fbae3bc9e77d46753 Isaac Chua 2024-06-28 Isaac cooked
+ba0870f084d1d86e9b02b94d841717659f2e2f48 Isaac Chua 2024-06-28 Isaac
+073f747086809c67a56bfb5d3449f9dbfa18cee3 Darren Teo 2024-06-27 Merge branch 'main' of https://github.com/isaacchua0309/HeartSprouts
+63a242a70b3b872d69fcefc196fc6a1c781e9296 Darren Teo 2024-06-27 log in done
+0217d242ad6cc0b153480542b192db7ae0e4e7f7 Isaac Chua 2024-06-27 Isaac cooked
+e3118a8fab05b1bb9318a48fc4857ccae1104a33 Isaac Chua 2024-06-27 This
+8a342e9c2c68926bfa398236b2214a6e3b9fefa6 Darren Teo 2024-06-27 Updated
+5236e83dc85a5ac358a99856612ea63742c11087 Darren Teo 2024-06-27 27JUNE FINAL
+cf1a417ff2e5bc08a8c84fd00dc43b4ec6f03811 Darren Teo 2024-06-27 Darren
+4c755ecd9bc78179c5f64d8f97225da56196c765 Darren Teo 2024-06-27 Darren
+17d43002db7e244cc2df7480dacc9c30bc27b8f6 Isaac Chua 2024-06-27 Isaac
+3a41282ee2609912650314fd44c694f70770c42e Darren Teo 2024-06-27 test
+0ad7b4cba336cf69164c7e3433e9410074a8048b Darren Teo 2024-06-27 test
+b2aa0733611503288332b389256a7a39c80b35a7 Darren Teo 2024-06-27 test
+18a3aa9eb778751d80e2851add11c5e3f627dfe6 Isaac Chua 2024-06-27 Isaac
+e32a6a3dc260e101053de053f36d0c4c4fd25993 Isaac Chua 2024-06-27 Isaac
+df8bb6404b276b396e6b3c6a58a10c0732a735ad Darren Teo 2024-06-27 Darren
+cddc9189e1eafcd6f477184c4d9298dc30eb1764 Darren Teo 2024-06-27 Darren
+44e89e17ab4c1b4a10e5947a432ba3f40ffb5fb3 Isaac Chua 2024-06-27 Isaac
+2ee52e134ef6e4d9a1fa38dc1a392757a015905d Darren Teo 2024-06-26 test
+24f23fbdbd70234f848ff2ce76d3290b9553b493 Darren Teo 2024-06-26 test
+21ea476fe4226138d2b21a3864d70e2ed11901f4 Darren Teo 2024-06-26 Update packages for compatibility
+c7994ffabe1df0d559b06f23de9715ddfa6b07cc Isaac Chua 2024-06-26 parsingfunction
+982c30d851d1fce3087b77a0cc9c6a8f08bc8850 Darren Teo 2024-06-25 test
+c9e95b5fb91d7e1664dcf8d7bbe7c5b56fadda48 Isaac Chua 2024-06-25 isaac commit
+35dd813755076295fc25c4a001996a142a3be0d0 Darren Teo 2024-06-25 Resolved merge conflicts
+af75b45521bd8479ebd5913e484c4e0c96751b45 Darren Teo 2024-06-25 testing
+a1e926fcdc08e0c372e1c5f45ff0e089242b08a2 Isaac Chua 2024-06-25 Initial commit with HomeScreen and navigation setup
+598b4f9840f510f9b1ab31b11d8d95f8428cac8b Isaac Chua 2024-06-25 commit
+2d2474f717314677b3712985e3793275b15bfee2 Isaac Chua 2024-06-25 commit
+9509436a542f35aec01a21b603f9ecd5c5ef0bc6 Isaac Chua 2024-06-24 Merge branch 'main' of https://github.com/isaacchua0309/HeartSprouts
+78afb662ded3fe66d81958c44d46c756bf1e8c40 Isaac Chua 2024-06-24 Initial commit
+acf5de826f28ec45f88b671ab6772dd20a8aa059 Isaac Chua 2024-06-24 Initial commit
