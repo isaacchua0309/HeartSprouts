@@ -1,5 +1,5 @@
 import React, { useEffect, useContext, useState } from 'react';
-import { View, Text, StyleSheet, FlatList, TouchableOpacity, Alert, ActivityIndicator, Modal, Image } from 'react-native';
+import { View, Text, StyleSheet, FlatList, TouchableOpacity, Alert, ActivityIndicator, Modal, Image, ScrollView } from 'react-native';
 import { LineChart } from 'react-native-chart-kit';
 import { Dimensions } from 'react-native';
 import { startOfWeek, subWeeks, format } from 'date-fns';
@@ -96,7 +96,7 @@ const PromptScreen = ({ navigation, route }) => {
   }
 
   return (
-    <View style={styles.container}>
+    <ScrollView contentContainerStyle={styles.container}>
       <View style={styles.header}>
         <Text style={styles.headerTitle}>WEEKLY</Text>
         <Text style={styles.headerSubtitle}>journal prompts.</Text>
@@ -216,13 +216,13 @@ const PromptScreen = ({ navigation, route }) => {
           <Text style={styles.navText}>Friends</Text>
         </TouchableOpacity>
       </View>
-    </View>
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flexGrow: 1,
     alignItems: 'center',
     backgroundColor: Colors.green500,
     padding: 20,
@@ -395,5 +395,6 @@ const styles = StyleSheet.create({
 });
 
 export default PromptScreen;
+
 
 

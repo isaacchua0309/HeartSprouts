@@ -62,12 +62,15 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   header: {
-    marginTop: 20,
+    marginTop: 8,
+    marginLeft: 20,
+    marginRight: '10%',
     flexDirection: 'row',
     alignItems: 'center',
   },
   backButton: {
-    marginRight: 10,
+    // marginRight: 0,
+   
   },
   headerText: {
     color: Colors.white500,

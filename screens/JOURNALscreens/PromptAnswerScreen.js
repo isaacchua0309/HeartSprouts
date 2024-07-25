@@ -183,10 +183,10 @@ const styles = StyleSheet.create({
   header: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 20,
+    marginVertical: 8,
   },
   backButton: {
-    marginRight: 10,
+    padding: 10,
   },
   headerText: {
     color: Colors.white500,
@@ -196,17 +196,17 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   refreshButton: {
-    marginLeft: 10,
+    padding: 10,
   },
   textInput: {
     flex: 1,
     color: Colors.white500,
     fontSize: 16,
-    marginTop: 20,
+    marginVertical: 8,
     padding: 10,
     backgroundColor: Colors.green700,
     borderRadius: 10,
-    marginHorizontal: 10,
+    marginHorizontal: 20,
   },
   footer: {
     flexDirection: 'row',
@@ -242,3 +242,4 @@ const styles = StyleSheet.create({
 });
 
 export default PromptAnswerScreen;
+

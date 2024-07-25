@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, SafeAreaView, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { View, Text, StyleSheet, SafeAreaView, TouchableOpacity, ActivityIndicator, ScrollView } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { firestore } from '../../utils/firebaseHelper'; // Adjust the import based on your project structure
 import { collection, getDocs } from 'firebase/firestore';
@@ -83,9 +83,9 @@ const RelationshipSatisfiedScreen = ({ navigation, route }) => {
         <Text style={styles.headerText}>Which relationships were the highlights of your week?</Text>
         <Text style={styles.subText}>Pick up to 3.</Text>
       </View>
-      <View style={styles.listContainer}>
+      <ScrollView style={styles.listContainer} contentContainerStyle={styles.scrollViewContent}>
         {renderFriendPairs()}
-      </View>
+      </ScrollView>
       <TouchableOpacity style={styles.nextButton} onPress={() => navigation.navigate('Prompt Answer', { email, rsQuality, selectedFriends })}>
         <Icon name="chevron-right" size={30} color={Colors.white500} />
       </TouchableOpacity>
@@ -100,12 +100,12 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   header: {
-    marginBottom: 20,
+    marginVertical: 8,
     alignItems: 'center',
   },
   backButton: {
     position: 'absolute',
-    left: 0,
+    left: 20,
   },
   headerText: {
     color: Colors.white500,
@@ -122,13 +122,17 @@ const styles = StyleSheet.create({
   },
   listContainer: {
     flex: 1,
+    marginTop: 8,
+  },
+  scrollViewContent: {
     alignItems: 'center',
-    justifyContent: 'center',
+    paddingBottom: 0,
   },
   pairContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    width: '100%',
+    width: '90%',
+  
   },
   item: {
     alignItems: 'center',
@@ -154,7 +158,7 @@ const styles = StyleSheet.create({
   nextButton: {
     alignSelf: 'center',
     marginTop: 20,
-    marginBottom:20,
+    marginBottom: 20,
     backgroundColor: Colors.green700,
     borderRadius: 25,
     padding: 10,
@@ -173,3 +177,4 @@ const styles = StyleSheet.create({
 });
 
 export default RelationshipSatisfiedScreen;
+
