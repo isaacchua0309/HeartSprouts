@@ -5,7 +5,7 @@ import Colors from '../../constants/colors';
 import { getAuth, signInWithEmailAndPassword } from '@firebase/auth';
 import { getFirebaseApp } from '../../utils/firebaseHelper';
 import { JournalContext } from '../../utils/JournalContext';
-import { collection, getDocs, updateDoc } from 'firebase/firestore';
+import { collection, getDocs, updateDoc, doc, getDoc } from 'firebase/firestore';
 import * as Notifications from 'expo-notifications';
 import { firestore } from '../../utils/firebaseHelper';
 
@@ -17,6 +17,20 @@ const LoginScreen = ({ navigation }) => {
   const [loading, setLoading] = useState(false);
 
   const { fetchJournalData, setLoading: setJournalLoading } = useContext(JournalContext);
+
+  const fetchUserData = async (email) => {
+    try {
+      const userDoc = await getDoc(doc(firestore, 'Users', email));
+      if (userDoc.exists()) {
+        return userDoc.data();
+      } else {
+        throw new Error('User document does not exist.');
+      }
+    } catch (error) {
+      console.error('Error fetching user data: ', error);
+      throw new Error('There was an error fetching user data. Please try again later.');
+    }
+  };
 
   const fetchFriends = async (email) => {
     try {
@@ -98,6 +112,9 @@ const LoginScreen = ({ navigation }) => {
       const friends = await fetchFriends(email);
       await fetchJournalData(email);
 
+      // Fetch user data including the level
+      const userData = await fetchUserData(email);
+
       // Clear all scheduled notifications
       await Notifications.cancelAllScheduledNotificationsAsync();
 
@@ -107,7 +124,7 @@ const LoginScreen = ({ navigation }) => {
       setLoading(false);
 
       Alert.alert('Log In Successful', 'Glad to have you back!');
-      navigation.navigate('Home', { email });
+      navigation.navigate('Home', { email, level: userData.level });
     } catch (error) {
       setLoading(false);
       setError(error.message);
@@ -270,6 +287,7 @@ const styles = StyleSheet.create({
 });
 
 export default LoginScreen;
+
 
 
 

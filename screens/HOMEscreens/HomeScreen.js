@@ -3,47 +3,25 @@ import { View, Text, TouchableOpacity, StyleSheet, Image, ActivityIndicator } fr
 import { Ionicons } from '@expo/vector-icons';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Colors from '../../constants/colors';
-import ExperienceBar from './ExperienceBar'; // Adjust the path as needed
-import MoodOverlay from './MoodOverlay'; // Adjust the path as needed
-import ProfileModal from './ProfileModal'; // Adjust the path as needed
-import SettingsModal from './SettingsModal'; // Adjust the path as needed
+import ExperienceBar from './ExperienceBar';
+import MoodOverlay from './MoodOverlay';
+import ProfileModal from './ProfileModal';
+import SettingsModal from './SettingsModal';
 import quotes from '../../constants/quotes';
 import emotions from '../../constants/emotions';
-import { doc, getDoc } from 'firebase/firestore';
-import { firestore } from '../../utils/firebaseHelper'; // Adjust the path as needed
 
 const HomeScreen = ({ navigation, route }) => {
+  const { email, level } = route.params; // Get the level from route params
   const [currentText, setCurrentText] = useState('');
   const [selectedEmotion, setSelectedEmotion] = useState(null);
   const [isModalVisible, setModalVisible] = useState(false);
   const [isProfileModalVisible, setProfileModalVisible] = useState(false);
   const [isSettingsModalVisible, setSettingsModalVisible] = useState(false);
   const [petImage, setPetImage] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [userLevel, setUserLevel] = useState(null);
-
-  const { email } = route.params;
 
   useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        const userDoc = await getDoc(doc(firestore, 'Users', email));
-        if (userDoc.exists()) {
-          const userData = userDoc.data();
-          setUserLevel(userData.level);
-          handleUpdatePetImage(userData.level);
-        } else {
-          console.log('No such user!');
-        }
-      } catch (error) {
-        console.error('Error fetching user data:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchUserData();
-  }, [email, handleUpdatePetImage]);
+    handleUpdatePetImage(level); // Use the passed level to set the initial pet image
+  }, [level]);
 
   useEffect(() => {
     if (selectedEmotion) {
@@ -116,7 +94,7 @@ const HomeScreen = ({ navigation, route }) => {
     }
   }, []);
 
-  if (loading || userLevel === null || petImage === null) {
+  if (!petImage) {
     return (
       <View style={styles.loadingContainer}>
         <ActivityIndicator size="large" color={Colors.white500} />
@@ -234,13 +212,11 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   speechBubbleWrapper: {
-    marginBottom: 30, // Adjust this value to move the bubble upwards
-    // Shadows for iOS
+    marginBottom: 30,
     shadowColor: Colors.black300,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.30,
     shadowRadius: 3.84,
-    // Shadow for Android
     elevation: 5,
   },
   speechBubble: {
@@ -301,5 +277,6 @@ const styles = StyleSheet.create({
 });
 
 export default HomeScreen;
+
 
 

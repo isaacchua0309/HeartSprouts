@@ -8,14 +8,16 @@ import {
   TouchableOpacity,
   KeyboardAvoidingView,
   ActivityIndicator,
-  Alert
+  Alert,
+  TouchableWithoutFeedback,
+  Keyboard,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { doc, getDoc, updateDoc, collection, setDoc } from 'firebase/firestore';
 import { firestore } from '../../utils/firebaseHelper';
-import { format, startOfWeek, isSameWeek } from 'date-fns'; // Import necessary date-fns functions
+import { format, startOfWeek, isSameWeek } from 'date-fns';
 import Colors from '../../constants/colors';
-import { JournalContext } from '../../utils/JournalContext'; // Import JournalContext
+import { JournalContext } from '../../utils/JournalContext';
 
 const PromptAnswerScreen = ({ navigation, route }) => {
   const [text, setText] = useState('');
@@ -25,7 +27,7 @@ const PromptAnswerScreen = ({ navigation, route }) => {
   const [questionId, setQuestionId] = useState(null);
   const { email, rsQuality, selectedFriends } = route.params;
 
-  const { setShouldRefresh, setHasAddedJournalEntryThisWeek } = useContext(JournalContext); // Destructure necessary functions from context
+  const { setShouldRefresh, setHasAddedJournalEntryThisWeek } = useContext(JournalContext);
 
   const fetchUnansweredQuestions = async (email) => {
     try {
@@ -92,13 +94,12 @@ const PromptAnswerScreen = ({ navigation, route }) => {
         }
       }
 
-      // Check if the entry is for the current week
       const currentWeekStart = startOfWeek(new Date(), { weekStartsOn: 0 });
       if (isSameWeek(currentDate, currentWeekStart, { weekStartsOn: 0 })) {
-        setHasAddedJournalEntryThisWeek(true); // Set hasAddedJournalEntryThisWeek to true
+        setHasAddedJournalEntryThisWeek(true);
       }
 
-      setShouldRefresh(true); // Set shouldRefresh to true
+      setShouldRefresh(true);
 
       Alert.alert(
         "Success",
@@ -133,35 +134,37 @@ const PromptAnswerScreen = ({ navigation, route }) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <KeyboardAvoidingView behavior="padding" style={styles.avoidingView}>
-        <View style={styles.header}>
-          <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
-            <Icon name="arrow-left" size={30} color={Colors.white500} />
-          </TouchableOpacity>
-          <Text style={styles.headerText}>{question}</Text>
-          <TouchableOpacity onPress={() => fetchUnansweredQuestions(email)} style={styles.refreshButton}>
-            <Icon name="refresh" size={30} color={Colors.white500} />
-          </TouchableOpacity>
-        </View>
-        <TextInput
-          style={styles.textInput}
-          placeholder="Start writing..."
-          placeholderTextColor={Colors.white700}
-          multiline
-          value={text}
-          onChangeText={setText}
-        />
-        <View style={styles.footer}>
-          <TouchableOpacity style={styles.checkButton} onPress={addJournalEntry}>
-            <Icon name="check" size={30} color={Colors.white500} />
-          </TouchableOpacity>
-        </View>
-        {journalLoading && (
-          <View style={styles.loadingOverlay}>
-            <ActivityIndicator size="large" color={Colors.white500} />
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <KeyboardAvoidingView behavior="padding" style={styles.avoidingView}>
+          <View style={styles.header}>
+            <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
+              <Icon name="arrow-left" size={30} color={Colors.white500} />
+            </TouchableOpacity>
+            <Text style={styles.headerText}>{question}</Text>
+            <TouchableOpacity onPress={() => fetchUnansweredQuestions(email)} style={styles.refreshButton}>
+              <Icon name="refresh" size={30} color={Colors.white500} />
+            </TouchableOpacity>
           </View>
-        )}
-      </KeyboardAvoidingView>
+          <TextInput
+            style={styles.textInput}
+            placeholder="Start writing..."
+            placeholderTextColor={Colors.white700}
+            multiline
+            value={text}
+            onChangeText={setText}
+          />
+          <View style={styles.footer}>
+            <TouchableOpacity style={styles.checkButton} onPress={addJournalEntry}>
+              <Icon name="check" size={30} color={Colors.white500} />
+            </TouchableOpacity>
+          </View>
+          {journalLoading && (
+            <View style={styles.loadingOverlay}>
+              <ActivityIndicator size="large" color={Colors.white500} />
+            </View>
+          )}
+        </KeyboardAvoidingView>
+      </TouchableWithoutFeedback>
     </SafeAreaView>
   );
 };
@@ -242,4 +245,5 @@ const styles = StyleSheet.create({
 });
 
 export default PromptAnswerScreen;
+
 
