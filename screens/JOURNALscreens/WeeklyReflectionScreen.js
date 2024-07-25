@@ -30,6 +30,7 @@ const PromptScreen = ({ navigation, route }) => {
 
   const [isModalVisible, setModalVisible] = useState(false);
   const [friendImages, setFriendImages] = useState({});
+  const [validTopFriends, setValidTopFriends] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -49,15 +50,18 @@ const PromptScreen = ({ navigation, route }) => {
 
   const fetchFriendImages = async () => {
     const images = {};
+    const validFriends = [];
     for (const friend of topFriends) {
       const friendDocRef = doc(firestore, `Users/${email}/Friends`, friend);
       const friendDoc = await getDoc(friendDocRef);
       if (friendDoc.exists()) {
         const friendData = friendDoc.data();
         images[friend] = friendData.image || null;
+        validFriends.push(friend); // Add only valid friends
       }
     }
     setFriendImages(images);
+    setValidTopFriends(validFriends); // Set valid friends list
   };
 
   const getMonthName = (date) => {
@@ -96,7 +100,7 @@ const PromptScreen = ({ navigation, route }) => {
   }
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
+    <View style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.headerTitle}>WEEKLY</Text>
         <Text style={styles.headerSubtitle}>journal prompts.</Text>
@@ -166,8 +170,8 @@ const PromptScreen = ({ navigation, route }) => {
       />
       <View style={styles.topFriendsContainer}>
         <Text style={styles.topFriendsTitle}>Top Friends Selected:</Text>
-        {topFriends.length > 0 ? (
-          topFriends.map((friend, index) => (
+        {validTopFriends.length > 0 ? (
+          validTopFriends.map((friend, index) => (
             <View key={index} style={styles.friendContainer}>
               {friendImages[friend] ? (
                 <Image source={{ uri: friendImages[friend] }} style={styles.friendImage} />
@@ -216,7 +220,7 @@ const PromptScreen = ({ navigation, route }) => {
           <Text style={styles.navText}>Friends</Text>
         </TouchableOpacity>
       </View>
-    </ScrollView>
+    </View>
   );
 };
 

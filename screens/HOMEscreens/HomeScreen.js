@@ -9,6 +9,8 @@ import ProfileModal from './ProfileModal';
 import SettingsModal from './SettingsModal';
 import quotes from '../../constants/quotes';
 import emotions from '../../constants/emotions';
+import { firestore } from '../../utils/firebaseHelper'; // Adjust the path as needed
+import { doc, getDoc } from 'firebase/firestore';
 
 const HomeScreen = ({ navigation, route }) => {
   const { email, level } = route.params; // Get the level from route params
@@ -18,6 +20,7 @@ const HomeScreen = ({ navigation, route }) => {
   const [isProfileModalVisible, setProfileModalVisible] = useState(false);
   const [isSettingsModalVisible, setSettingsModalVisible] = useState(false);
   const [petImage, setPetImage] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     handleUpdatePetImage(level); // Use the passed level to set the initial pet image
@@ -94,7 +97,25 @@ const HomeScreen = ({ navigation, route }) => {
     }
   }, []);
 
-  if (!petImage) {
+  const fetchLatestLevel = async () => {
+    setLoading(true);
+    try {
+      const userDoc = await getDoc(doc(firestore, 'Users', email));
+      if (userDoc.exists()) {
+        const userData = userDoc.data();
+        const latestLevel = userData.level;
+        handleUpdatePetImage(latestLevel);
+      } else {
+        console.log('No such user!');
+      }
+    } catch (error) {
+      console.error('Error fetching user data:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (!petImage || loading) {
     return (
       <View style={styles.loadingContainer}>
         <ActivityIndicator size="large" color={Colors.white500} />
@@ -140,6 +161,13 @@ const HomeScreen = ({ navigation, route }) => {
         isVisible={isSettingsModalVisible}
         onClose={() => setSettingsModalVisible(false)}
       />
+
+      <TouchableOpacity
+        style={styles.refreshButton}
+        onPress={fetchLatestLevel}
+      >
+        <Ionicons name="refresh" size={24} color="#fff" />
+      </TouchableOpacity>
 
       {selectedEmotion && (
         <View style={styles.speechBubbleWrapper}>
@@ -211,6 +239,14 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
   },
+  refreshButton: {
+    position: 'absolute',
+    top: 20,
+    left: 80,
+    padding: 10,
+    backgroundColor: Colors.green700,
+    borderRadius: 8,
+  },
   speechBubbleWrapper: {
     marginBottom: 30,
     shadowColor: Colors.black300,
@@ -277,6 +313,7 @@ const styles = StyleSheet.create({
 });
 
 export default HomeScreen;
+
 
 
 
