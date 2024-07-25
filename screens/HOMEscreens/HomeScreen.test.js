@@ -1,8 +1,8 @@
 import React from 'react';
 import { render, fireEvent, waitFor } from '@testing-library/react-native';
 import HomeScreen from './HomeScreen';
-import { firestore } from '../utils/firebaseHelper'; // Adjust the path as needed
 import { doc, getDoc } from 'firebase/firestore';
+import { firestore } from '../../utils/firebaseHelper'; // Adjust the path as needed
 
 jest.mock('../../utils/firebaseHelper', () => ({
   firestore: jest.fn(),

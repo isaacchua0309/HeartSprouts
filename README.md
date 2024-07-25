@@ -48,28 +48,27 @@ HeartSprouts implements several complex features designed to enhance the user ex
   - **Firebase Authentication:** Handles user authentication and account management.
   - **Multi-step Form Validation:** Ensures data integrity during account creation.
 - **Screenshots:**
-  ![Login Screen](screenshots/login_screen.png)
+  ![Login Screen](assets/ReadMe/screenshots/LoginScreen.png)
+  ![Logout Modal](assets/ReadMe/screenshots/LogoutScreen.png)
   ![Account Creation](screenshots/account_creation.png)
 
 ### 2. User Profile and Settings Management
 - **Screens:** ProfileModal.js, SettingsModal.js
-- **Description:** Allows users to view and edit their profile information, manage account settings, and customize notification preferences.
+- **Description:** Allows users manage account settings, logout, answer FAQs and send feedback to developers
 - **Technical Implementation:**
-  - **Firestore:** Stores user profile information and settings.
   - **Modular Components:** Reusable components for profile and settings management.
 - **Screenshots:**
-  ![Profile Modal](screenshots/profile_modal.png)
-  ![Settings Modal](screenshots/settings_modal.png)
+  ![Profile Modal](assets/ReadMe/screenshots/ProfileSettingsScreen.png)
 
 ### 3. Mood Tracking and Emotional Insights
 - **Screens:** HomeScreen.js, MoodOverlay.js
 - **Description:** Enables users to track their mood by selecting from predefined emotions. The selected mood influences the display of motivational quotes and changes the appearance of the pet image based on the user's level.
 - **Technical Implementation:**
-  - **Firestore:** Stores mood tracking data.
   - **Mood Overlay Component:** Provides an interface for selecting and displaying mood-related information.
 - **Screenshots:**
-  ![Mood Overlay](screenshots/mood_overlay.png)
-  ![Home Screen](screenshots/home_screen.png)
+  ![Mood Overlay](assets/ReadMe/screenshots/HomeScreenLevel2.png)
+  ![Mood Overlay](assets/ReadMe/screenshots/HomeScreenLevel2.png)
+  ![Mood Picking Modal](assets/ReadMe//screenshots/MoodPickerScreen.png)
 
 ### 4. Journal and Weekly Reflection
 - **Screens:** WeeklyReflectionScreen.js, PromptAnswerScreen.js, SatisfactionRatingScreen.js, RelationshipSatisfiedScreen.js
@@ -78,8 +77,12 @@ HeartSprouts implements several complex features designed to enhance the user ex
   - **Firestore:** Stores journal entries and relationship satisfaction data.
   - **Weekly Prompt System:** Generates and manages weekly prompts for users.
 - **Screenshots:**
-  ![Weekly Reflection](screenshots/weekly_reflection.png)
-  ![Journal Entry](screenshots/journal_entry.png)
+  ![Main Journal Screen](assets/ReadMe/screenshots/MainJournalScreen.png)
+  ![Journal Entries View](assets/ReadMe/screenshots/ViewJournalEntriesScreen.png)
+  ![Satisfaction Inquiry Screen](assets/ReadMe/screenshots/HowSatisfiedScreen.png)
+  ![Friend Highlights Screen](assets/ReadMe/screenshots/PickTopFriendsScreen.png)
+  ![Journal Entry](assets/ReadMe/screenshots/WriteAnswerScreen.png)
+  ![Journal Prompt Success Screen](assets/ReadMe/screenshots/SuccessfulAddJournalEntry.png)
 
 ### 5. Event and Relationship Management
 - **Screens:** UserProfilesScreen.js, AddFriendScreen.js, FriendProfileScreen.js, RelationshipSatisfiedScreen.js
@@ -88,8 +91,14 @@ HeartSprouts implements several complex features designed to enhance the user ex
   - **Firestore:** Stores friend profiles and events.
   - **Event Scheduler:** Manages and schedules notifications for events.
 - **Screenshots:**
-  ![User Profiles](screenshots/user_profiles.png)
-  ![Add Friend](screenshots/add_friend.png)
+  ![Add Event Screen](assets/ReadMe/screenshots/AddEventScreen.png)
+  ![New Friend Screen](assets/ReadMe/screenshots/AddNewProfileScreen.png)
+  ![Delete friend Screen](assets/ReadMe/screenshots/DeleteFriendProfileScreen.png)
+  ![Edit friend Screen](assets/ReadMe/screenshots/FriendProfileScreen.png)
+  ![Relationship Manager Screen](assets/ReadMe/screenshots/RelationshipManagerScreen.png)
+  ![Upcoming Events Screen](assets/ReadMe/screenshots/UpcomingEventsScreen.png)
+  ![Journal Prompt Success Screen](assets/ReadMe/screenshots/SuccessfulAddJournalEntry.png)
+  ![Journal Prompt Success Screen](assets/ReadMe/screenshots/SuccessfulAddJournalEntry.png)
 
 ### 6. Notifications and Reminders
 - **Screens:** LoginScreen.js, HomeScreen.js, ProfileModal.js, SettingsModal.js
@@ -98,8 +107,6 @@ HeartSprouts implements several complex features designed to enhance the user ex
   - **Firebase Cloud Messaging:** Manages notifications.
   - **Notification Scheduler:** Ensures timely notifications for events and prompts.
 - **Screenshots:**
-  ![Notifications](screenshots/notifications.png)
-  ![Reminder](screenshots/reminder.png)
 
 ### 7. Experience Points and Leveling System
 - **Screens:** ExperienceBar.js, HomeScreen.js
@@ -108,8 +115,7 @@ HeartSprouts implements several complex features designed to enhance the user ex
   - **XP Tracking:** Manages and updates user XP.
   - **Level System:** Determines user level based on XP and updates visuals accordingly.
 - **Screenshots:**
-  ![Experience Bar](screenshots/experience_bar.png)
-  ![Level Up](screenshots/level_up.png)
+  ![Experience Bar](assets/ReadMe/screenshots/HomeScreenLevel2.png)
 
 ### 8. Help and Support Features
 - **Screens:** FAQModal.js, ContactUsModal.js
@@ -118,8 +124,9 @@ HeartSprouts implements several complex features designed to enhance the user ex
   - **FAQ Management:** Stores and displays FAQ content.
   - **Contact Form:** Manages user feedback and support requests.
 - **Screenshots:**
-  ![FAQ](screenshots/faq.png)
-  ![Contact Us](screenshots/contact_us.png)
+  ![FAQ Modal](assets/ReadMe/screenshots/FAQScreen1.png)
+  ![FAQ Modal](assets/ReadMe/screenshots/FAQScreen2.png)
+  ![Contact Us Modal](assets/ReadMe/screenshots/ContactUsScreen.png)
 
 ## Architecture
 
