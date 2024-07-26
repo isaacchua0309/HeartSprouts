@@ -148,7 +148,7 @@ HeartSprouts follows a modular architecture, separating concerns into distinct c
 2. If the user does not have an account, they navigate to the GettingStartedScreen and follow the steps to create an account.
 3. Upon successful account creation, the user is redirected to the HomeScreen.
 
-![User Authentication Flow](diagrams/user_authentication_flow.png)
+![User Authentication Flow](assets/ReadMe/FlowDiagrams/flowdiagrams/UserAuthenticationFlow.jpeg)
 
 #### New Friend Event Creation Flow
 1. User opens the app and navigates to the UserProfilesScreen.
@@ -163,7 +163,7 @@ HeartSprouts follows a modular architecture, separating concerns into distinct c
 8. Event details are stored in Firestore.
 9. A confirmation message and event details are displayed to the user.
 
-![New Friend Event Creation Flow](diagrams/new_friend_event_creation_flow.png)
+![New Friend Event Creation Flow](assets/ReadMe/FlowDiagrams/flowdiagrams/NewEventCreationFlow.jpeg)
 
 #### New Friend Creation Flow
 1. User opens the app and navigates to the UserProfilesScreen.
@@ -174,7 +174,7 @@ HeartSprouts follows a modular architecture, separating concerns into distinct c
 6. New friend's data is stored in Firestore.
 7. A confirmation message is displayed to the user.
 
-![New Friend Creation Flow](diagrams/new_friend_creation_flow.png)
+![New Friend Creation Flow](assets/ReadMe/FlowDiagrams/flowdiagrams/NewFriendCreationFlow.jpeg)
 
 #### Edit Friend Details Flow
 1. User opens the app and navigates to the UserProfilesScreen.
@@ -187,7 +187,7 @@ HeartSprouts follows a modular architecture, separating concerns into distinct c
 8. Updated friend's data is stored in Firestore.
 9. A confirmation message is displayed to the user.
 
-![Edit Friend Details Flow](diagrams/edit_friend_details_flow.png)
+![Edit Friend Details Flow](assets/ReadMe/FlowDiagrams/flowdiagrams/EditFriendDetailsFlow.jpeg)
 
 #### Log Out Flow
 1. User opens the app and navigates to the HomeScreen.
@@ -197,7 +197,7 @@ HeartSprouts follows a modular architecture, separating concerns into distinct c
 5. The application logs the user out and clears the session data.
 6. User is redirected to the LoginScreen.
 
-![Log Out Flow](diagrams/log_out_flow.png)
+![Log Out Flow](assets/ReadMe/FlowDiagrams/flowdiagrams/LogoutFlow.jpeg)
 
 #### Journal and Weekly Reflection Flow
 1. User receives a weekly prompt on the WeeklyReflectionScreen.
@@ -206,11 +206,11 @@ HeartSprouts follows a modular architecture, separating concerns into distinct c
 4. User answers the weekly prompt on the PromptAnswerScreen.
 5. Journal entries and ratings are stored in Firestore and displayed in the WeeklyReflectionScreen.
 
-![Journal and Weekly Reflection Flow](diagrams/journal_weekly_reflection_flow.png)
+![Journal and Weekly Reflection Flow](assets/ReadMe/FlowDiagrams/flowdiagrams/WeeklyJournalEntryFlow.jpeg)
 
 ### Entity-Relationship Diagram
 
-![Entity-Relationship Diagram](diagrams/entity_relationship_diagram.png)
+![Entity-Relationship Diagram](assets/ReadMe/FlowDiagrams/flowdiagrams/Entity.jpeg)
 
 ## Installation
 
@@ -433,11 +433,6 @@ HeartSprouts uses GitHub for version control, following best practices to ensure
   - Types: `feat`, `fix`, `docs`, `style`, `refactor`, `test`, `chore`
   - Example: `[feat] Add mood tracking feature (issue-123)`
 
-#### Screenshots of GitHub Workflow
-
-![Branching Strategy](screenshots/github_branching.png)
-![Pull Request Example](screenshots/pull_request.png)
-
 ## Design Principles and Patterns
 
 HeartSprouts follows several software design principles and patterns to ensure maintainability, scalability, and robustness.
@@ -508,7 +503,7 @@ HeartSprouts follows several software design principles and patterns to ensure m
 
 #### Activity Flow Diagram
 
-![Activity Flow Diagram](diagrams/activity_flow_diagram.png)
+![Activity Flow Diagram](assets/ReadMe/FlowDiagrams/flowdiagrams/ActivityFlowDiagram.jpeg)
 
 ## Contribution
 
