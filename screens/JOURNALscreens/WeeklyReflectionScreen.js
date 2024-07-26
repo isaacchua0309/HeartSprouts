@@ -93,11 +93,12 @@ const PromptScreen = ({ navigation, route }) => {
 
   if (loading) {
     return (
-      <View style={styles.loadingContainer}>
+      <View style={styles.loadingContainer} testID="loading-indicator">
         <ActivityIndicator size="large" color={Colors.green300} />
       </View>
     );
   }
+  
 
   return (
     <View style={styles.container}>

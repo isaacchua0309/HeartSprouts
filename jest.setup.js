@@ -14,3 +14,4 @@ jest.mock('expo-notifications', () => ({
 // Add this line to mock XMLHttpRequest
 import 'whatwg-fetch';
 
+

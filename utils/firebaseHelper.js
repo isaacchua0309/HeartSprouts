@@ -29,8 +29,11 @@ export const getFirebaseApp = () => {
   return firebaseApp;
 };
 
-export const firestore = getFirestore(getFirebaseApp());
-export const storage = getStorage(getFirebaseApp());
-export const auth = getAuth(getFirebaseApp());
+const app = getFirebaseApp(); // Ensure the app is initialized
+
+export const firestore = getFirestore(app);
+export const storage = getStorage(app);
+export const auth = getAuth(app);
+
 
 

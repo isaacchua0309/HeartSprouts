@@ -40,6 +40,7 @@ const RelationshipSatisfiedScreen = ({ navigation, route }) => {
 
   const renderItem = ({ item }) => (
     <TouchableOpacity
+    testID={`Friend ${item.id}`}
       style={[
         styles.item,
         selectedFriends.includes(item.id) && styles.selectedItem,
@@ -69,7 +70,7 @@ const RelationshipSatisfiedScreen = ({ navigation, route }) => {
   if (loading) {
     return (
       <SafeAreaView style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color={Colors.white500} />
+        <ActivityIndicator testID="loading-indicator" size="large" color={Colors.white500} />
       </SafeAreaView>
     );
   }
@@ -86,7 +87,7 @@ const RelationshipSatisfiedScreen = ({ navigation, route }) => {
       <ScrollView style={styles.listContainer} contentContainerStyle={styles.scrollViewContent}>
         {renderFriendPairs()}
       </ScrollView>
-      <TouchableOpacity style={styles.nextButton} onPress={() => navigation.navigate('Prompt Answer', { email, rsQuality, selectedFriends })}>
+      <TouchableOpacity testID="next-button" style={styles.nextButton} onPress={() => navigation.navigate('Prompt Answer', { email, rsQuality, selectedFriends })}>
         <Icon name="chevron-right" size={30} color={Colors.white500} />
       </TouchableOpacity>
     </SafeAreaView>

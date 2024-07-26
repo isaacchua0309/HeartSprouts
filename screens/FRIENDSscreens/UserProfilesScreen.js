@@ -103,7 +103,7 @@ const UserProfilesScreen = ({ navigation, route }) => {
         <View style={styles.header}>
           <Text style={styles.headerText}>Relationship Manager</Text>
           <View style={styles.headerButtons}>
-            <TouchableOpacity style={styles.bellButton} onPress={handleNotificationsPress}>
+            <TouchableOpacity testID="bell-button" style={styles.bellButton} onPress={handleNotificationsPress}>
               <Icon name="bell" size={20} color="#fff" />
             </TouchableOpacity>
           </View>
@@ -113,7 +113,7 @@ const UserProfilesScreen = ({ navigation, route }) => {
           <View style={styles.featuredTextContainer}>
             <Text style={styles.featuredText}>Your closest personal connections</Text>
           </View>
-          <TouchableOpacity style={styles.addButton} onPress={handleAddFriendPress}>
+          <TouchableOpacity testID="add-friend-button" style={styles.addButton} onPress={handleAddFriendPress}>
             <Icon name="plus" size={24} color="#fff" />
           </TouchableOpacity>
         </View>

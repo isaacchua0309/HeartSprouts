@@ -126,6 +126,7 @@ const HomeScreen = ({ navigation, route }) => {
   return (
     <View style={styles.container}>
       <TouchableOpacity
+        testID="profile-button"
         style={styles.profileButton}
         onPress={() => setProfileModalVisible(true)}
       >
@@ -133,6 +134,7 @@ const HomeScreen = ({ navigation, route }) => {
       </TouchableOpacity>
 
       <TouchableOpacity
+        testID="mood-button"
         style={[styles.chooseMoodButton, { backgroundColor: getButtonColor() }]}
         onPress={() => setModalVisible(true)}
       >
@@ -142,12 +144,14 @@ const HomeScreen = ({ navigation, route }) => {
       </TouchableOpacity>
 
       <MoodOverlay
+        testID="mood-overlay"
         isVisible={isModalVisible}
         onClose={() => setModalVisible(false)}
         onSelectEmotion={setSelectedEmotion}
       />
 
       <ProfileModal
+        testID="profile-modal"
         navigation={navigation}
         isVisible={isProfileModalVisible}
         onClose={() => setProfileModalVisible(false)}
@@ -163,6 +167,7 @@ const HomeScreen = ({ navigation, route }) => {
       />
 
       <TouchableOpacity
+        testID="refresh-button"
         style={styles.refreshButton}
         onPress={fetchLatestLevel}
       >
@@ -181,12 +186,13 @@ const HomeScreen = ({ navigation, route }) => {
       )}
 
       <View style={styles.circle}>
-        <Image source={petImage} style={styles.image} />
+  
+        <Image testID="pet-image" source={petImage} style={styles.image} />
       </View>
 
       <ExperienceBar email={email} onUpdatePetImage={handleUpdatePetImage} />
 
-      <View style={styles.navBar}>
+      <View testID="nav-bar" style={styles.navBar}>
         <TouchableOpacity style={styles.navButton} onPress={() => navigation.navigate('Journal', { email })}>
           <Ionicons name="book" size={24} color={Colors.green300} />
           <Text style={styles.navText}>Journal</Text>

@@ -5,13 +5,20 @@ module.exports = {
     './jest.setup.js'
   ],
   transformIgnorePatterns: [
-    'node_modules/(?!(react-native|@react-native|@react-navigation|@react-native-community|react-native-vector-icons|@firebase|firebase|expo-notifications)/)'
+    'node_modules/(?!(react-native|@react-native|@react-navigation|@react-native-community|react-native-vector-icons|@firebase|firebase|@expo|expo-font|expo-constants|expo-notifications)/)'
   ],
   moduleNameMapper: {
     '\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2)$': '<rootDir>/__mocks__/fileMock.js',
     '^@react-native-async-storage/async-storage$': '<rootDir>/__mocks__/async-storage.js'
-  }
+  },
+  transform: {
+    '^.+\\.[t|j]sx?$': 'babel-jest',
+  },
 };
+
+
+
+
 
 
 

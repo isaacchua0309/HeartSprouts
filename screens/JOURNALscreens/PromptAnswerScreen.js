@@ -126,7 +126,7 @@ const PromptAnswerScreen = ({ navigation, route }) => {
     return (
       <SafeAreaView style={styles.container}>
         <View style={styles.loadingContainer}>
-          <ActivityIndicator size="large" color={Colors.white500} />
+        <ActivityIndicator size="large" color={Colors.white500} testID="loading-indicator" />
         </View>
       </SafeAreaView>
     );
@@ -154,13 +154,13 @@ const PromptAnswerScreen = ({ navigation, route }) => {
             onChangeText={setText}
           />
           <View style={styles.footer}>
-            <TouchableOpacity style={styles.checkButton} onPress={addJournalEntry}>
+          <TouchableOpacity style={styles.checkButton} onPress={addJournalEntry} testID="check-button">
               <Icon name="check" size={30} color={Colors.white500} />
             </TouchableOpacity>
           </View>
           {journalLoading && (
             <View style={styles.loadingOverlay}>
-              <ActivityIndicator size="large" color={Colors.white500} />
+              <ActivityIndicator size="large" color={Colors.white500} testID="loading-indicator" />
             </View>
           )}
         </KeyboardAvoidingView>
