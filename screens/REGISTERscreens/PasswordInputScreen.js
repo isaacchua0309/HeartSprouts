@@ -6,28 +6,26 @@ import { getAuth, createUserWithEmailAndPassword } from '@firebase/auth';
 import { getFirebaseApp } from '../../utils/firebaseHelper';
 import { createUserDocumentWithFriends } from '../../utils/actions/userCollectionCreation';
 
-function PassWordInputScreen({ navigation,route }) {
+function PassWordInputScreen({ navigation, route }) {
   const [password, setPassword] = useState('');
-  const {name,birthday,email} = route.params;
+  const { name, birthday, email } = route.params;
   const [hasEightCharacters, setHasEightCharacters] = useState(false);
   const [hasCapitalLetter, setHasCapitalLetter] = useState(false);
   const [hasLowercaseLetter, setHasLowercaseLetter] = useState(false);
   const [hasNumber, setHasNumber] = useState(false);
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
-
   const [loading, setLoading] = useState(false);
+
   const app = getFirebaseApp();
   const auth = getAuth(app);
 
   function nextScreenHandler() {
     if (hasEightCharacters && hasCapitalLetter && hasLowercaseLetter && hasNumber) {
-      
-      navigation.navigate('Account Creation Successful',{email});
+      navigation.navigate('Account Creation Successful', { email });
     } else {
-      alert('Please ensure your password meets all the requirements.');
+      Alert.alert('Password Requirements', 'Please ensure your password meets all the requirements.');
     }
   }
-
 
   function handlePasswordChange(input) {
     setPassword(input);
@@ -38,24 +36,24 @@ function PassWordInputScreen({ navigation,route }) {
   }
 
   async function register() {
-    setLoading(true)
+    setLoading(true);
     try {
       const auth = getAuth(app);
       await createUserWithEmailAndPassword(auth, email, password);
-      await createUserDocumentWithFriends(name,birthday,email,password);
+      await createUserDocumentWithFriends(name, birthday, email, password);
       setLoading(false);
       nextScreenHandler();
       return;
     } catch (error) {
       setLoading(false);
-      Alert.alert('Registration Failed!', 'Email has already been registered')
+      Alert.alert('Registration Failed!', 'Email has already been registered');
     }
   }
 
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
+        <TouchableOpacity onPress={() => navigation.goBack()} testID="goBackButton">
           <Icon name="arrow-back" size={24} color="#fff" />
         </TouchableOpacity>
         <View style={styles.progressBar}>
@@ -83,10 +81,10 @@ function PassWordInputScreen({ navigation,route }) {
             onChangeText={handlePasswordChange}
             autoFocus
           />
-          <TouchableOpacity onPress={() => setIsPasswordVisible(!isPasswordVisible)}>
+          <TouchableOpacity onPress={() => setIsPasswordVisible(!isPasswordVisible)} testID="togglePasswordVisibilityButton">
             <Icon name={isPasswordVisible ? "eye-off" : "eye"} size={24} color="#fff" />
           </TouchableOpacity>
-          <TouchableOpacity style={styles.sendButton} onPress={register}>
+          <TouchableOpacity style={styles.sendButton} onPress={nextScreenHandler} testID="registerButton">
             <Icon name="send" size={24} color="#fff" />
           </TouchableOpacity>
         </View>
@@ -173,4 +171,7 @@ const styles = StyleSheet.create({
 });
 
 export default PassWordInputScreen;
+
+
+
 

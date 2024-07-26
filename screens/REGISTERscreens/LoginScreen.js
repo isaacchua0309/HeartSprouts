@@ -148,7 +148,7 @@ const LoginScreen = ({ navigation }) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <TouchableOpacity onPress={goBack} style={styles.backButton}>
+      <TouchableOpacity onPress={goBack} style={styles.backButton} testID="goBackButton">
         <Icon name="arrow-back" size={24} color="#FFFFFF" />
       </TouchableOpacity>
 
@@ -166,6 +166,7 @@ const LoginScreen = ({ navigation }) => {
           onChangeText={setEmail}
           keyboardType="email-address"
           autoCapitalize="none"
+          testID="emailInput"
         />
         <View style={styles.passwordContainer}>
           <TextInput 
@@ -175,6 +176,7 @@ const LoginScreen = ({ navigation }) => {
             secureTextEntry={!passwordVisible}
             value={password}
             onChangeText={setPassword}
+            testID="passwordInput"
           />
           <TouchableOpacity onPress={togglePasswordVisibility} style={styles.eyeIcon}>
             <Icon name={passwordVisible ? "eye-off" : "eye"} size={20} color="#FFFFFF" />
@@ -191,7 +193,7 @@ const LoginScreen = ({ navigation }) => {
         {loading ? (
           <ActivityIndicator size="large" color={Colors.white500} />
         ) : (
-          <TouchableOpacity style={styles.signInButton} onPress={handleSignIn}>
+          <TouchableOpacity style={styles.signInButton} onPress={handleSignIn} testID="signInButton">
             <Text style={styles.signInText}>SIGN IN</Text>
           </TouchableOpacity>
         )}
@@ -287,11 +289,3 @@ const styles = StyleSheet.create({
 });
 
 export default LoginScreen;
-
-
-
-
-
-
-
-
