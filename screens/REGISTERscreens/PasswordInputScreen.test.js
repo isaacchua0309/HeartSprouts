@@ -36,12 +36,31 @@ describe('PassWordInputScreen', () => {
     jest.spyOn(Alert, 'alert');
   });
 
+
+//   Purpose:
+// To check if the component renders the expected elements correctly when it is loaded.
+// Verifies that the instructional text and the password input field are present.
+
+// What It Tests:
+// The presence of the text "What password would you like to secure your account with?".
+// The presence of a placeholder text "Password" in the password input field.
+
   it('should render correctly', () => {
     const { getByPlaceholderText, getByText } = renderComponent();
 
     expect(getByText('What password would you like to secure your account with?')).toBeTruthy();
     expect(getByPlaceholderText('Password')).toBeTruthy();
   });
+
+//   Purpose:
+// To check if the password validation indicators update correctly when the user enters a valid password.
+
+// What It Tests:
+// When the password "Password1" is entered:
+// The indicator for "8 CHARACTERS" should turn green (style { backgroundColor: '#28a745' }).
+// The indicator for "1 CAPITAL" should turn green.
+// The indicator for "1 LOWERCASE" should turn green.
+// The indicator for "1 NUMBER" should turn green.
 
   it('should update password validation state', () => {
     const { getByPlaceholderText, getByText } = renderComponent();
@@ -56,6 +75,14 @@ describe('PassWordInputScreen', () => {
     expect(getByText('✓ 1 NUMBER')).toHaveStyle({ backgroundColor: '#28a745' });
   });
 
+// Purpose:
+// To ensure that an alert is shown if the user tries to submit a password that does not meet the requirements.
+
+// What It Tests:
+// Entering a password "pass" which does not meet the requirements.
+// Pressing the register button triggers an alert with the message 'Password Requirements'.
+// Ensures the navigation does not occur if the password is invalid.
+
   it('should show an alert if password requirements are not met', () => {
     const { getByTestId, getByPlaceholderText } = renderComponent();
 
@@ -68,6 +95,16 @@ describe('PassWordInputScreen', () => {
     expect(Alert.alert).toHaveBeenCalledWith('Password Requirements', 'Please ensure your password meets all the requirements.');
     expect(navigate).not.toHaveBeenCalled();
   });
+
+//   Purpose:
+//   To verify that when a valid password is entered, the app successfully navigates to the "Account Creation Successful" screen.
+
+//   What It Tests:
+//   Mocks the Firebase createUserWithEmailAndPassword function to resolve successfully.
+//   Mocks the createUserDocumentWithFriends function to resolve successfully.
+//   Enters a valid password "Password1".
+//   Presses the register button.
+//   Checks if the navigation to 'Account Creation Successful' screen occurs with the correct email parameter.
 
   it('should navigate to Account Creation Successful screen if password meets requirements', async () => {
     createUserWithEmailAndPassword.mockResolvedValue({ user: { uid: '123' } });

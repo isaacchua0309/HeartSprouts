@@ -31,6 +31,17 @@ describe('AddFriendScreen', () => {
     },
   };
 
+// Purpose:
+// To verify that the AddFriendScreen component renders the necessary UI elements correctly.
+
+// What It Tests:
+// Checks for the presence of the main title "Add a new relationship profile".
+// Checks for the presence of the name input field with the placeholder "Enter name".
+// Checks for the presence of the birthday input field labeled "Friend's Birthday".
+
+// Expected Outcome:
+// The component renders the main title, name input field, and birthday input field correctly.
+
   it('renders correctly', () => {
     const { getByText, getByPlaceholderText, getByLabelText } = render(
       <NavigationContainer>
@@ -42,6 +53,16 @@ describe('AddFriendScreen', () => {
     expect(getByPlaceholderText('Enter name')).toBeTruthy();
     expect(getByLabelText("Friend's Birthday")).toBeTruthy();
   });
+
+// Purpose:
+// To ensure that the component correctly handles the case where the user tries to add a friend without providing a name and birthday.
+
+// What It Tests:
+// Simulates a button press on the "Add Friend" button without entering a name.
+// Verifies that an alert is shown with the message "Please enter both name and birthday".
+
+// Expected Outcome:
+// The alert is displayed with the correct error message, indicating that the name and birthday fields are required.
 
   it('shows an error alert when trying to add a friend with missing name', async () => {
     const { getByText } = render(
