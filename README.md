@@ -212,49 +212,67 @@ HeartSprouts follows a modular architecture, separating concerns into distinct c
 
 ![Entity-Relationship Diagram](assets/ReadMe/FlowDiagrams/flowdiagrams/Entity.jpeg)
 
+Sure! Here’s the revised version formatted for a README section:
+
+---
+
 ## Installation
 
 To run HeartSprouts locally, follow these steps:
 
+### Prerequisites
+
+Make sure you have the following installed on your computer:
+
+- **npm**: [Download and install npm](https://www.npmjs.com/get-npm)
+- **Node.js**: [Download and install Node.js](https://nodejs.org/)
+- **Git**: [Download and install Git](https://git-scm.com/)
+- **Xcode**: [Download and install Xcode](https://developer.apple.com/xcode/) from the Mac App Store
+
+Additionally, you needd either a macbook or a apple device to test due to our app targeting only IOS users
+
+### Steps
+
 1. **Clone the repository:**
    ```sh
-   git clone https://github.com/your-username/HeartSprouts.git
+   git clone https://github.com/isaacchua0309/HeartSprouts.git
    cd HeartSprouts
    ```
 
 2. **Install dependencies:**
    ```sh
-   npm install
+   npm install --force
    ```
 
-3. **Set up Firebase:**
-   - Create a Firebase project.
-   - Configure Authentication, Firestore, and Cloud Functions.
-   - Replace the Firebase configuration in `firebaseHelper.js` with your project’s configuration.
-
-4. **Run the app:**
+3. **Run the app:**
    ```sh
-   expo start
+   npm start
    ```
-
-## Usage
 
 ### Running the App
 
-1. **Start the development server:**
+1. **Ensure you have the Expo Go app:**
+   - Download and install the [Expo Go app](https://apps.apple.com/us/app/expo-go/id982107779) from the App Store on your iPhone.
+
+2. **Start the development server:**
    ```sh
    expo start
    ```
 
-2. **Launch the app on a simulator or physical device:**
-   - For iOS: Use the Expo Go app.
-   - For Android: Use the Expo Go app or an Android emulator.
+3. **Launch the app on a simulator or physical device:**
+   - **For iOS:**
+     - Open the Expo Go app on your iPhone and scan the QR code displayed in the terminal or browser.
+     - Alternatively, if you have Xcode installed, you can run the app on an iOS simulator.
 
-3. **Navigate through the app:**
+4. **Navigate through the app:**
    - **Login:** Sign in or create a new account.
    - **Home:** Track your mood and view motivational quotes.
    - **Journal:** Answer weekly prompts and track relationship satisfaction.
    - **Friends:** Add and manage friend profiles and events.
+
+---
+
+You can include this section in your README file to provide clear and concise instructions for installing and running the HeartSprouts app. If you need further adjustments or additional details, let me know!
 
 ## Testing
 
