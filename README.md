@@ -354,8 +354,8 @@ HeartSprouts uses continuous integration (CI) to automate testing and deployment
 
 #### Screenshots of Test Runs
 
-![Unit Test Results](screenshots/unit_test_results.png)
-![E2E Test Results](screenshots/e2e_test_results.png)
+![Test Results](assets\ReadMe\FlowDiagrams\screenshots\npmTest1.png)
+![Test Results](assets\ReadMe\FlowDiagrams\screenshots\npmTest2.png)
 
 ## User Research Samples and Examples
 
