@@ -256,7 +256,7 @@ Additionally, you needd either a macbook or a apple device to test due to our ap
 
 2. **Start the development server:**
    ```sh
-   expo start
+   npm start
    ```
 
 3. **Launch the app on a simulator or physical device:**
@@ -271,8 +271,6 @@ Additionally, you needd either a macbook or a apple device to test due to our ap
    - **Friends:** Add and manage friend profiles and events.
 
 ---
-
-You can include this section in your README file to provide clear and concise instructions for installing and running the HeartSprouts app. If you need further adjustments or additional details, let me know!
 
 ## Testing
 
