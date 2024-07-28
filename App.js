@@ -24,6 +24,9 @@ import RelationshipSatisfiedScreen from './screens/JOURNALscreens/RelationshipSa
 import { FriendsProvider } from './utils/FriendsContext';
 import { JournalProvider } from './utils/JournalContext';
 import ResetPasswordScreen from './screens/REGISTERscreens/ResetPasswordScreen';
+import { LogBox } from 'react-native';
+
+LogBox.ignoreAllLogs(true);
 
 const Stack = createStackNavigator();
 
